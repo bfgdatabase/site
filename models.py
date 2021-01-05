@@ -1,5 +1,6 @@
 from app import db
 from app import ma
+from marshmallow import fields
 
 class EnterpriseDB(db.Model):
     __tablename__ = 'enterprise'
@@ -40,18 +41,39 @@ class GatesDB(db.Model):
     gain = db.Column(db.Float()) 
     anchor = db.relationship("AnchorsDB", backref=db.backref('gates'), lazy=True)
 
+
 class AnchorsDB(db.Model):
     __tablename__ = 'anchors'
-    id_anchor = db.Column(db.Integer(), primary_key=True)
-    mac = db.Column(db.Text())
+    id_anchor = db.Column(db.Integer, primary_key=True)
+    mac = db.Column(db.String(250))
     gain = db.Column(db.Float())
     id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
-    name = db.Column(db.Text())
-    x_pos = db.Column(db.Float())
-    y_pos = db.Column(db.Float())
+    name = db.Column(db.String(500))
+    x_pos = db.Column(db.Float)
+    y_pos = db.Column(db.Float)
     id_gate = db.Column(db.Integer, db.ForeignKey('gates.id_gate'))
     zones = db.relationship("ZonesDB", backref=db.backref('anchors'), lazy=True)
     
+
+class TstDB(db.Model):
+    __tablename__ = 'tst'
+    id_anchor = db.Column(db.Integer, primary_key=True)
+    mac = db.Column(db.String(250))
+    gain = db.Column(db.Float)
+    name = db.Column(db.String(500))
+    x_pos = db.Column(db.Float)
+    y_pos = db.Column(db.Float)
+    id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
+    id_gate = db.Column(db.Integer, db.ForeignKey('gates.id_gate'))
+
+class Video(db.Model):
+    __tablename__ = 'videos'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    name = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.String(500), nullable=False)
+
+
 class ZonesDB(db.Model):
     __tablename__ = 'zones'
     id_zone = db.Column(db.Integer(), primary_key=True)
@@ -143,12 +165,11 @@ class LocationsSchema(ma.SQLAlchemyAutoSchema):
         model = LocationsDB
         include_fk = True
         include_relationships = True
-        
+       
 class AnchorsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = AnchorsDB
         include_fk = True
-        include_relationships = True
         
 class GatesSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -197,3 +218,15 @@ class UsersSchema(ma.SQLAlchemyAutoSchema):
         model = UsersDB
         include_fk = True
         include_relationships = True
+        
+
+class VideoSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Video
+        include_fk = True
+
+class TstSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model =TstDB
+        include_fk = True
+

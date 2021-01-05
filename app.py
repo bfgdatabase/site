@@ -4,14 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
 from flask_marshmallow import Marshmallow
-from apispec.ext.marshmallow import MarshmallowPlugin
-from apispec import APISpec
-from flask_apispec import FlaskApiSpec
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timezone
-from flask_apispec import FlaskApiSpec
-from flask_swagger import swagger
 
+from apispec import APISpec
+from flask_apispec.extension import FlaskApiSpec
+from apispec.ext.marshmallow import MarshmallowPlugin
 
 DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=Configuration.POSTGRES_USER,pw=Configuration.POSTGRES_PW,url=Configuration.POSTGRES_URL,db=Configuration.POSTGRES_DB)
 
@@ -26,21 +24,20 @@ app.config.from_object(Configuration)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
-docs = FlaskApiSpec(app)
 
 with app.app_context():
     db.create_all()
 
-
 app.config.update({
     'APISPEC_SPEC': APISpec(
-        title='bfg',
+        title='bfg-database',
         version='v1',
         openapi_version='2.0',
         plugins=[MarshmallowPlugin()],
     ),
     'APISPEC_SWAGGER_URL': '/swagger/'
 })
+docs = FlaskApiSpec(app)
 
 
 from models import *
