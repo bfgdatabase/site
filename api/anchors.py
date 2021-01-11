@@ -5,37 +5,40 @@ from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with
 from utils import responses as resp
-from flask_apispec import use_kwargs, marshal_with
+from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/anchors', methods=['GET'])
+@app.route('/api/anchors', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get all anchors', tags=['anchor'])
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'GET')
 def get_ancors():
     query = AnchorsDB.query.all()
     query_schema = AnchorsSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_ancors)
 
-@app.route('/api/anchor/<int:id>/', methods=['DELETE'])
+@app.route('/api/anchor/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
+@doc(description='Delete anchor by id', tags=['anchor'])
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'DELETE')
 def delete_ancor(id):
-    """Annotate the decorated view function or class with the specified Swagger
-    attributes.
-
-    Usage:
-
-    .. code-block:: python
-
-        @doc(tags=['pet'], description='a pet store')
-        def get_pet(pet_id):
-            return Pet.query.filter(Pet.id == pet_id).one()
-
-    :param inherit: Inherit Swagger documentation from parent classes
-    """
     query = AnchorsDB.query.get_or_404(id)
     db.session.delete(query)
     db.session.commit()  
     return response_with(resp.SUCCESS_200)
 docs.register(delete_ancor)
 
-@app.route('/api/anchor/<int:id>/', methods=['GET'])
+@app.route('/api/ancor_in_lication/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get anchors in location', tags=['anchor'])
+@marshal_with(AnchorsSchema(many=True))
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'GET')
+def get_ancor_in_lication(id):
+    query = AnchorsDB.query.filter_by(id_location = id)
+    query_schema = AnchorsSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_ancor_in_lication)
+
+@app.route('/api/anchor/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get anchor by id', tags=['anchor'])
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'GET')
 @marshal_with(AnchorsSchema())
 def get_ancor(id):
     query = AnchorsDB.query.get_or_404(id)
@@ -43,119 +46,37 @@ def get_ancor(id):
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_ancor)
 
-@app.route('/api/anchor', methods=['POST'])
+@app.route('/api/anchor', methods=['POST'], provide_automatic_options=False)
+@doc(description='Create anchor', tags=['anchor'])
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'PUT')
+@marshal_with(AnchorsSchema)
+@use_kwargs(AnchorsSchema(only=("gain","id_gate", "id_location", "mac", "name", "x_pos", "y_pos")))
+def create_ancor(**kwargs):  
+    query = AnchorsDB()
+    for key, value in kwargs.items():
+        setattr(query, key, value)
+    db.session.add(query)
+    db.session.commit()   
+    schema = AnchorsSchema()
+    return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
+docs.register(create_ancor)
+
+@app.route('/api/anchor', methods=['PUT'], provide_automatic_options=False)
+@doc(description='Update anchor by id', tags=['anchor'])
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'PUT')
 @marshal_with(AnchorsSchema)
 @use_kwargs(AnchorsSchema)
-def update_ancor(**kwargs):
-    ddd = kwargs
-    data = request.get_json()
-    query.id_gate = data['id_gate']
-    query.name = data['name']
-    query.gain = data['gain']
-    db.session.add(query)
+def update_ancor(**kwargs):  
+    try:
+        id = kwargs['id_anchor']
+    except:
+        return response_with(resp.MISSING_PARAMETERS_422)
+    query = AnchorsDB.query.get_or_404(id)
+    for key, value in kwargs.items():
+        setattr(query, key, value)
     db.session.commit()
     schema = AnchorsSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(update_ancor)
 
-@app.route('/anhcors')
-def ancors():
-    return render_template('anchorsTable.html')
 
-@app.route('/')
-def test():
-    with app.test_client() as c:
-        rv = c.get('/api/anchors')
-        json_data = rv.get_json()
-        print(json_data)
-    return json_data
-
-
-@app.route('/tst', methods=['POST'])
-@use_kwargs(TstSchema)
-@marshal_with(TstSchema)
-def update_tst(**kwargs):
-    new_one = kwargs
-    '''
-    user_id = get_jwt_identity()
-    new_one = Video(user_id=user_id, **kwargs)
-    session.add(new_one)
-    session.commit()
-    '''
-    return 1
-docs.register(update_tst)
-
-@app.route('/tutorials', methods=['POST'])
-@use_kwargs(VideoSchema)
-@marshal_with(VideoSchema)
-def update_list(**kwargs):
-    new_one = kwargs
-    '''
-    user_id = get_jwt_identity()
-    new_one = Video(user_id=user_id, **kwargs)
-    session.add(new_one)
-    session.commit()
-    '''
-    return 1
-docs.register(update_list)
-
-
-'''
-@book_routes.route('/<int:id>', methods=['DELETE'])
-@jwt_required
-def delete_book(id):
-    get_book = Book.query.get_or_404(id)
-    db.session.delete(get_book)
-    db.session.commit()
-    return response_with(resp.SUCCESS_204)
-
-
-@book_routes.route('/api/anchors/<id>', methods=['PUT'])
-@jwt_required
-def update_book_detail(id):
-    data = request.get_json()
-    get_book = Book.query.get_or_404(id)
-    get_book.title = data['title']
-    get_book.year = data['year']
-    db.session.add(get_book)
-    db.session.commit()
-    book_schema = BookSchema()
-    book, error = book_schema.dump(get_book)
-    return response_with(resp.SUCCESS_200, value={"book": book})
-
-@book_routes.route('/<int:id>', methods=['PUT'])
-@jwt_required
-def update_book_detail(id):
-    data = request.get_json()
-    get_book = Book.query.get_or_404(id)
-    get_book.title = data['title']
-    get_book.year = data['year']
-    db.session.add(get_book)
-    db.session.commit()
-    book_schema = BookSchema()
-    book, error = book_schema.dump(get_book)
-    return response_with(resp.SUCCESS_200, value={"book": book})
-
-@book_routes.route('/<int:id>', methods=['PATCH'])
-@jwt_required
-def modify_book_detail(id):
-    data = request.get_json()
-    get_book = Book.query.get_or_404(id)
-    if data.get('title'):
-        get_book.title = data['title']
-    if data.get('year'):
-        get_book.year = data['year']
-    db.session.add(get_book)
-    db.session.commit()
-    book_schema = BookSchema()
-    book, error = book_schema.dump(get_book)
-    return response_with(resp.SUCCESS_200, value={"book": book})
-
-@book_routes.route('/<int:id>', methods=['DELETE'])
-@jwt_required
-def delete_book(id):
-    get_book = Book.query.get_or_404(id)
-    db.session.delete(get_book)
-    db.session.commit()
-    return response_with(resp.SUCCESS_204)
-'''

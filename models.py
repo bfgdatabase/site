@@ -1,6 +1,26 @@
-from app import db
-from app import ma
+from flask import Flask, session
+from app import *
 from marshmallow import fields
+from flask_jwt_extended import create_access_token
+from datetime import timedelta
+from flask_bcrypt import Bcrypt
+
+
+editableTables = ['EnterpriseDB', 'DepartmentDB', 'LocationsDB', 'GatesDB', 'AnchorsDB', 'ZonesDB', 'EquipmentDB', 'TagsDB', 'MarksDB', 'SpecDB', 'TechDB', 'UsersDB']
+
+class PermissionsDB(db.Model):
+    __tablename__ = 'userPermissions'
+    id_permission= db.Column(db.Integer(), primary_key=True)
+    table = db.Column(db.Text())
+    role = db.Column(db.Text())
+    get = db.Column(db.Boolean())
+    put = db.Column(db.Boolean())
+    delete = db.Column(db.Boolean())
+
+class RolesDB(db.Model):
+    __tablename__ = 'userRoles'
+    id_role= db.Column(db.Integer(), primary_key=True)
+    role = db.Column(db.Text(), unique=True)
 
 class EnterpriseDB(db.Model):
     __tablename__ = 'enterprise'
@@ -41,7 +61,6 @@ class GatesDB(db.Model):
     gain = db.Column(db.Float()) 
     anchor = db.relationship("AnchorsDB", backref=db.backref('gates'), lazy=True)
 
-
 class AnchorsDB(db.Model):
     __tablename__ = 'anchors'
     id_anchor = db.Column(db.Integer, primary_key=True)
@@ -54,26 +73,6 @@ class AnchorsDB(db.Model):
     id_gate = db.Column(db.Integer, db.ForeignKey('gates.id_gate'))
     zones = db.relationship("ZonesDB", backref=db.backref('anchors'), lazy=True)
     
-
-class TstDB(db.Model):
-    __tablename__ = 'tst'
-    id_anchor = db.Column(db.Integer, primary_key=True)
-    mac = db.Column(db.String(250))
-    gain = db.Column(db.Float)
-    name = db.Column(db.String(500))
-    x_pos = db.Column(db.Float)
-    y_pos = db.Column(db.Float)
-    id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
-    id_gate = db.Column(db.Integer, db.ForeignKey('gates.id_gate'))
-
-class Video(db.Model):
-    __tablename__ = 'videos'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    name = db.Column(db.String(250), nullable=False)
-    description = db.Column(db.String(500), nullable=False)
-
-
 class ZonesDB(db.Model):
     __tablename__ = 'zones'
     id_zone = db.Column(db.Integer(), primary_key=True)
@@ -99,9 +98,7 @@ class EquipmentDB(db.Model):
     equipment_model = db.Column(db.Text())
     equipment_type = db.Column(db.Text())
     equipment_name = db.Column(db.Text())
-    created = db.Column(db.DateTime())
-    modified = db.Column(db.DateTime())
-    tech = db.relationship("TechDB", backref=db.backref('equipment'), lazy=True)
+    created = db.Column(db.DateTime(), unique=True)
 
 class TagsDB(db.Model):
     __tablename__ = 'tags'
@@ -139,32 +136,40 @@ class UsersDB(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.Text())
-    username = db.Column(db.Text(), unique=True)
-    email = db.Column(db.Text(), unique=True)
-    password_hash = db.Column(db.Text(), unique=True)
-    created = db.Column(db.DateTime())
-    updated = db.Column(db.DateTime())
+    username = db.Column(db.Text(), unique=True, nullable = False)
+    email = db.Column(db.Text())
+    password_hash = db.Column(db.Text())
     phone = db.Column(db.Text())
     role = db.Column(db.Text())
     info = db.Column(db.Text())
+    
+    @classmethod
+    def authentificate(cls, username, password):
+        query = cls.query.filter_by(username = username)
+        if((query.count()) == 0):
+            return
+        encoded_hash = query[0].password_hash
+        if not (bcrypt.check_password_hash(encoded_hash, password)):
+            return
+        session["username"] = query[0].username
+        session["user"] = query[0].name
+        session["role"] = query[0].role
+        return query[0]
 
 class EnterpriseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = EnterpriseDB
         include_fk = True
-        include_relationships = True
         
 class DepartmentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = DepartmentDB
         include_fk = True
-        include_relationships = True
         
 class LocationsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = LocationsDB
         include_fk = True
-        include_relationships = True
        
 class AnchorsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -175,58 +180,49 @@ class GatesSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = GatesDB
         include_fk = True
-        include_relationships = True
 
 class ZonesSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ZonesDB
         include_fk = True
-        include_relationships = True
 
 class TagsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = TagsDB
         include_fk = True
-        include_relationships = True
 
 class MarksSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = MarksDB
         include_fk = True
-        include_relationships = True
 
 class EquipmentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = EquipmentDB
         include_fk = True
-        include_relationships = True
 
 class SpecSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = SpecDB
         include_fk = True
-        include_relationships = True
 
 class TechSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = TechDB
         include_fk = True
-        include_relationships = True
 
 class UsersSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = UsersDB
         include_fk = True
-        include_relationships = True
+
+class PermissionsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = PermissionsDB
+        include_fk = True
+
+class RolesSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = RolesDB
+        include_fk = True
         
-
-class VideoSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Video
-        include_fk = True
-
-class TstSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model =TstDB
-        include_fk = True
-

@@ -1,4 +1,6 @@
 from flask import make_response, jsonify
+from flask import Flask, session
+from models import *
 
 INVALID_FIELD_NAME_SENT_422 = {
     "http_code": 422,
@@ -89,3 +91,34 @@ def response_with(response, value=None, message=None, error=None, headers={}, pa
     headers.update({'server': 'Flask REST API'})
 
     return make_response(jsonify(result), response['http_code'], headers)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):        
+        return f(*args, **kwargs)
+    return decorated_function
+
+def check_user_permission(dbName, method):
+    def inner_decorator(f):
+        def wrapped(*args, **kwargs):
+            if("user" in session) == False:
+                return response_with(FORBIDDEN_403)
+            if(session["role"] == 'administrator'):                
+                response = f(*args, **kwargs)
+                return response                
+            query = PermissionsDB.query.filter_by(table = dbName , role = session["role"]).one()        
+            if(method == 'GET'):
+                if (query.get == False):
+                    return response_with(FORBIDDEN_403) 
+            elif(method == 'PUT'):
+                if (query.put == False):
+                    return response_with(FORBIDDEN_403) 
+            elif(method == 'DELETE'):
+                if (query.delete == False):
+                    return response_with(FORBIDDEN_403)                    
+            response = f(*args, **kwargs)
+            return response
+        wrapped.__name__ = f.__name__
+        return wrapped
+    return inner_decorator
+
