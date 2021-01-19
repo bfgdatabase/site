@@ -7,16 +7,16 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/enterprise', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get all enterprise', tags=['enterprise'])
+@app.route('/api/enterprises/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get all enterprises', tags=['enterprise'])
 @resp.check_user_permission(dbName = "EnterpriseDB", method = 'GET')
-def get_enterprise():
+def enterprises():
     query = EnterpriseDB.query.all()
     query_schema = EnterpriseSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_enterprise)
+docs.register(enterprises)
 
-@app.route('/api/enterprise', methods=['POST'], provide_automatic_options=False)
+@app.route('/api/enterprise/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create enterprise', tags=['enterprise'])
 @marshal_with(EnterpriseSchema)
 @use_kwargs(EnterpriseSchema(exclude=("id",)))
@@ -31,11 +31,22 @@ def create_enterprise(**kwargs):
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(create_enterprise)
 
+@app.route('/api/enterprises/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find enterprise with params', tags=['enterprise'])
+@marshal_with(EnterpriseSchema(many=True))
+@use_kwargs(EnterpriseSchema(exclude=("id",)))
+@resp.check_user_permission(dbName = "EnterpriseDB", method = 'GET')
+def find_enterprise(**kwargs):
+    query = EnterpriseDB.query.filter_by(**kwargs).all()
+    query_schema = EnterpriseSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_enterprise)
+
 @app.route('/api/enterprise/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update enterprise by id', tags=['enterprise'])
 @resp.check_user_permission(dbName = "EnterpriseDB", method = 'PUT')
 @marshal_with(EnterpriseSchema)
-@use_kwargs(EnterpriseSchema)
+@use_kwargs(EnterpriseSchema(exclude=("id",)))
 def update_enterprise(**kwargs):  
     query = EnterpriseDB.query.get_or_404(id)
     for key, value in kwargs.items():
@@ -55,7 +66,15 @@ def delete_enterprise(id):
     return response_with(resp.SUCCESS_200)
 docs.register(delete_enterprise)
 
-
+@app.route('/api/enterprise/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get enterprise by id', tags=['enterprise'])
+@resp.check_user_permission(dbName = "EnterpriseDB", method = 'GET')
+@marshal_with(EnterpriseSchema())
+def get_enterprise(id):
+    query = EnterpriseDB.query.get_or_404(id)
+    query_schema = EnterpriseSchema()
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_enterprise)
 
 
 

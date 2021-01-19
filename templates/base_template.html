@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %} {% endblock %}
+    <meta charset="UTF-8">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- MDB icon -->
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='libs/mdb/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='libs/mdb/css/mdb.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='libs/mdb/css/style.css') }}">
+    <style>
+        body,
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <title>{% block title %} {% endblock %} </title>
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-primary mb-3">
+        <svg width="90px" height="30px" viewBox="0 0 169.94 64.42">
+            <defs>
+                <style>
+                    .cls-1 {
+                        fill: #ffffff;
+                    }
+                </style>
+            </defs>
+            <title>9Ресурс 1</title>
+            <g id="Слой_2" data-name="Слой 2">
+                <g id="Слой_1-2" data-name="Слой 1">
+                    <path class="cls-1" d="M92.47,30.52a8,8,0,0,1-2.42-6,7.86,7.86,0,0,1,2.45-5.94,8.46,8.46,0,0,1,6.13-2.36,8.9,8.9,0,0,1,5,1.37v2.49a8.58,8.58,0,0,0-4.87-1.5,6,6,0,0,0-4.38,1.66,5.77,5.77,0,0,0-1.72,4.3,5.76,5.76,0,0,0,1.67,4.3,5.87,5.87,0,0,0,4.18,1.62,5.56,5.56,0,0,0,3.93-1.35V23.32H105v6.86a8.68,8.68,0,0,1-6.5,2.68,8.46,8.46,0,0,1-6.07-2.34"></path>
+                    <path class="cls-1" d="M110.07,23.58h4.71c1.86,0,3-.85,3-2.38s-1.1-2.33-3-2.33h-4.71Zm-2.56,9v-16h7.43a5.72,5.72,0,0,1,3.94,1.26,4.18,4.18,0,0,1,1.45,3.29,4.36,4.36,0,0,1-3.54,4.41l5.12,7h-3.1l-4.92-6.77h-3.82v6.77Z"></path>
+                    <path class="cls-1" d="M130.7,30.5a5.43,5.43,0,0,0,4.05-1.69,5.89,5.89,0,0,0,1.66-4.25,5.81,5.81,0,0,0-1.66-4.23,5.66,5.66,0,0,0-8.11,0A5.79,5.79,0,0,0,125,24.56a5.87,5.87,0,0,0,1.63,4.25,5.47,5.47,0,0,0,4.06,1.69m0,2.36a8.1,8.1,0,0,1-8.33-8.3,8.41,8.41,0,0,1,14.29-5.9,8,8,0,0,1,2.38,5.9,8.13,8.13,0,0,1-8.34,8.3"></path>
+                    <path class="cls-1" d="M141.14,16.56h2.56v9.32c0,3,1.68,4.62,4.27,4.62s4.29-1.62,4.29-4.62V16.56h2.56v9.23A6.89,6.89,0,0,1,152.91,31,6.79,6.79,0,0,1,148,32.86,6.88,6.88,0,0,1,143,31a7,7,0,0,1-1.89-5.24Z"></path>
+                    <path class="cls-1" d="M160,23.65h4.24c1.93,0,3.08-.87,3.08-2.41s-1.15-2.37-3.08-2.37H160Zm-2.57,8.91v-16h7a5.72,5.72,0,0,1,4,1.3,4.24,4.24,0,0,1,1.46,3.34,4.46,4.46,0,0,1-1.46,3.43,5.64,5.64,0,0,1-4,1.32H160v6.61Z"></path>
+                    <path class="cls-1" d="M66.2,24.09a25,25,0,0,1,18.09-7.82V25a16.79,16.79,0,0,0-11.9,4.65Z"></path>
+                    <path class="cls-1" d="M20.91,55.05H9.49V43.58H20.91c4.95,0,6.87,2.77,6.87,5.73s-1.72,5.74-6.87,5.74M9.49,25.44H19.6c5.37,0,6.33,2.9,6.33,5.06s-1.24,5.06-6.33,5.06H9.49ZM29.7,39.27c3.46-2.2,5.17-4.79,5.17-10.05,0-4.66-2.34-12.55-16.3-12.55H0V63.88H18.91c13.55,0,17.82-6.06,17.82-13.55,0-5.6-2.18-9.16-7-11.06"></path>
+                    <path class="cls-1" d="M84.08,37.85v7h8.8V53a15.13,15.13,0,0,1-8.66,2.63c-8.4,0-15-6.27-15-15.31a16.83,16.83,0,0,1,.23-2.5H52.91A31.47,31.47,0,0,1,84.46,9.28V0C62,0,43.77,17.7,43.36,39.59l0,.06v.69h0V63.88h9.49V46.61h7.87A24.33,24.33,0,0,0,84.22,64.42a25,25,0,0,0,18.15-7.82V37.85Z"></path>
+                </g>
+            </g>
+            </svg>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+            <ul class="navbar-nav mr-auto">
+                {% block navbarlinks %}
+
+                <div class="dropdown">
+                    <!--Trigger-->
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Модуль ввода данных</button>
+
+                    <!--Menu-->
+                    <div class="dropdown-menu dropdown-primary">
+                        <a class="dropdown-item" href="/enterprise/0/0/">Структура предприятия</a>
+                        <a class="dropdown-item" href="/specs">Технологии</a>
+                        <a class="dropdown-item" href="/markers">Производство</a>
+                        <a class="dropdown-item" href="/equipment">Оборудование</a>
+                        <a class="dropdown-item" href="/markers">Метки</a>
+                        <a class="dropdown-item" href="/tags">Тэги</a>
+                        <a class="dropdown-item" href="/zones">Зоны</a>
+                        <a class="dropdown-item" href="/anhcors">Анкеры</a>
+                        <a class="dropdown-item" href="/gates">Шлюзы</a>
+                        <a class="dropdown-item" href="/gates">Импорт и экспорт</a>
+                    </div>
+                </div>
+
+
+                <div class="dropdown">
+                    <!--Trigger-->
+                    <button class="btn btn-primary btn-sm  type=" button " id="dropdownMenu1 " aria-haspopup="true " aria-expanded="false " href="/adminka " >Администрирование БД</button>
+
+</div>
+
+{% endblock %}
+
+            </ul>
+
+            <ul class="navbar-nav ml-auto nav-flex-icons ">
+                <li class="nav-item avatar ">
+                    <a class="nav-link p-0 " href="# ">
+                        <img src="{{ url_for( 'static',filename='images/admin.svg' ) }} " class="rounded-circle z-depth-0 " alt="avatar image " height="35 ">
+                    </a>
+
+                </li>
+            </ul>
+
+            <ul class="navbar-nav mr-0 ">
+                <li class="nav-item ">
+                    <a class="nav-link " href="# ">Привет, {{username}}!</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav mr-0 ">
+                <a class="btn btn-primary btn-sm " href="/logout ">Выйти</a>
+            </ul>
+        </div>
+
+    </nav>
+
+
+    {% block body %} {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js " integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js " integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo " crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js " integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6 " crossorigin="anonymous "></script>
+
+</body>
+
+</html>

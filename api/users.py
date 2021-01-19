@@ -10,7 +10,7 @@ from flask_apispec import use_kwargs, marshal_with, doc
 @app.route('/api/regiser', methods = ['POST'], provide_automatic_options=False)
 @doc(description='User registration', tags=['users'])
 @marshal_with(UsersSchema)
-@use_kwargs(UsersSchema(only=("name","username","email","password_hash","phone","info",)))
+@use_kwargs(UsersSchema(only=("login","username","email","password_hash","phone","info",)))
 def registration(**kwargs):
     query = UsersDB()
     for key, value in kwargs.items():
@@ -27,7 +27,7 @@ def registration(**kwargs):
 docs.register(registration)
 
 
-@app.route('/api/permissions', methods=['GET'], provide_automatic_options=False)
+@app.route('/api/permissions/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get all user permissions', tags=['users'])
 def get_permissions():
     query = PermissionsDB.query.all()
@@ -35,15 +35,11 @@ def get_permissions():
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_permissions)
 
-@app.route('/api/permissions', methods=['PUT'], provide_automatic_options=False)
+@app.route('/api/permissions/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update permission by id', tags=['users'])
 @marshal_with(PermissionsSchema)
-@use_kwargs(PermissionsSchema(exclude=("table", "role")))
+@use_kwargs(PermissionsSchema(exclude=("table", "role", "id_permission")))
 def update_permission(**kwargs):  
-    try:
-        id = kwargs['id_permission']
-    except:
-        return response_with(resp.MISSING_PARAMETERS_422)
     query = PermissionsDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -75,6 +71,7 @@ def delete_role(id):
     for q in query:
         db.session.delete(q)
         db.session.commit()  
+        
     return response_with(resp.SUCCESS_200)
 docs.register(delete_role)
 
@@ -89,5 +86,22 @@ def create_role(**kwargs):
     db.session.add(query)
     db.session.commit()
     schema = RolesSchema()
+
+    roles = RolesDB.query.all()
+    for role in roles:
+        for table in editableTables:
+            query = PermissionsDB.query.all()
+            permissions = PermissionsDB.query.filter_by(table = table, role = role.role)
+            if(permissions.count() == 0):
+                item = PermissionsDB(
+                    table = table, 
+                    role = role.role,
+                    get = False,
+                    put = False,
+                    delete = False,
+                    )
+                db.session.add(item)
+                db.session.commit()   
+
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(create_role)

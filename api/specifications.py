@@ -7,7 +7,7 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/specifications', methods=['GET'], provide_automatic_options=False)
+@app.route('/api/specifications/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get all specifications', tags=['specifications'])
 @resp.check_user_permission(dbName = "SpecDB", method = 'GET')
 def get_specifications():
@@ -16,7 +16,7 @@ def get_specifications():
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_specifications)
 
-@app.route('/api/specifications', methods=['POST'], provide_automatic_options=False)
+@app.route('/api/specifications/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create specification', tags=['specifications'])
 @marshal_with(SpecSchema)
 @use_kwargs(SpecSchema(exclude=("id_spec",)))
@@ -31,11 +31,22 @@ def create_specifications(**kwargs):
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(create_specifications)
 
+@app.route('/api/specification/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find specifications with params', tags=['specifications'])
+@marshal_with(SpecSchema(many=True))
+@use_kwargs(SpecSchema(exclude=("id_spec",)))
+@resp.check_user_permission(dbName = "SpecDB", method = 'GET')
+def find_specifications(**kwargs):
+    query = SpecDB.query.filter_by(**kwargs).all()
+    query_schema = SpecSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_specifications)
+
 @app.route('/api/specifications/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update specification by id', tags=['specifications'])
 @resp.check_user_permission(dbName = "SpecDB", method = 'PUT')
 @marshal_with(SpecSchema)
-@use_kwargs(SpecSchema)
+@use_kwargs(SpecSchema(exclude=("id_spec",)))
 def update_specifications(**kwargs):  
     query = SpecDB.query.get_or_404(id)
     for key, value in kwargs.items():
@@ -54,6 +65,16 @@ def delete_specifications(id):
     db.session.commit()  
     return response_with(resp.SUCCESS_200)
 docs.register(delete_specifications)
+
+@app.route('/api/specification/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get specification by id', tags=['specifications'])
+@resp.check_user_permission(dbName = "SpecDB", method = 'GET')
+@marshal_with(SpecSchema())
+def get_specification(id):
+    query = SpecDB.query.get_or_404(id)
+    query_schema = SpecSchema()
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_specification)
 
 
 

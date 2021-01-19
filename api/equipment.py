@@ -7,16 +7,16 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/equipment', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get all equipment', tags=['equipment'])
+@app.route('/api/equipments/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get all equipments', tags=['equipment'])
 @resp.check_user_permission(dbName = "EquipmentDB", method = 'GET')
-def get_equipment():
+def get_equipments():
     query = EquipmentDB.query.all()
     query_schema = EquipmentSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_equipment)
+docs.register(get_equipments)
 
-@app.route('/api/equipment', methods=['POST'], provide_automatic_options=False)
+@app.route('/api/equipment/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create equipment', tags=['equipment'])
 @marshal_with(EquipmentSchema)
 @use_kwargs(EquipmentSchema(exclude=("equipment_id",)))
@@ -30,6 +30,17 @@ def create_equipment(**kwargs):
     schema = EquipmentSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(create_equipment)
+
+@app.route('/api/equipments/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find equipment with params', tags=['equipment'])
+@marshal_with(EquipmentSchema(many=True))
+@use_kwargs(EquipmentSchema(exclude=("equipment_id",)))
+@resp.check_user_permission(dbName = "EquipmentDB", method = 'GET')
+def find_equipment(**kwargs):
+    query = EquipmentDB.query.filter_by(**kwargs).all()
+    query_schema = EquipmentSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_equipment)
 
 @app.route('/api/equipment/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update equipment by id', tags=['equipment'])
@@ -55,7 +66,15 @@ def delete_equipment(id):
     return response_with(resp.SUCCESS_200)
 docs.register(delete_equipment)
 
-
+@app.route('/api/equipment/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get equipment by id', tags=['equipment'])
+@resp.check_user_permission(dbName = "EquipmentDB", method = 'GET')
+@marshal_with(EquipmentSchema())
+def get_equipment(id):
+    query = EquipmentDB.query.get_or_404(id)
+    query_schema = EquipmentSchema()
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_equipment)
 
 
 

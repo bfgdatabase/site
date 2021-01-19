@@ -7,7 +7,7 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/markers', methods=['GET'], provide_automatic_options=False)
+@app.route('/api/markers/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get all markers', tags=['markers'])
 @resp.check_user_permission(dbName = "MarksDB", method = 'GET')
 def get_markers():
@@ -16,7 +16,18 @@ def get_markers():
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_markers)
 
-@app.route('/api/markers', methods=['POST'], provide_automatic_options=False)
+@app.route('/api/markers/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find gates with params', tags=['markers'])
+@marshal_with(MarksSchema(many=True))
+@use_kwargs(MarksSchema(exclude=("id_mark",)))
+@resp.check_user_permission(dbName = "MarksDB", method = 'GET')
+def find_markers(**kwargs):
+    query = MarksDB.query.filter_by(**kwargs).all()
+    query_schema = MarksSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_markers)
+
+@app.route('/api/marker/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create marker', tags=['markers'])
 @marshal_with(MarksSchema)
 @use_kwargs(MarksSchema(exclude=("id_mark",)))
@@ -35,7 +46,7 @@ docs.register(create_markers)
 @doc(description='Update marker by id', tags=['markers'])
 @resp.check_user_permission(dbName = "MarksDB", method = 'PUT')
 @marshal_with(MarksSchema)
-@use_kwargs(MarksSchema)
+@use_kwargs(MarksSchema(exclude=("id_mark",)))
 def update_markers(**kwargs):  
     query = MarksDB.query.get_or_404(id)
     for key, value in kwargs.items():
@@ -55,6 +66,15 @@ def delete_markers(id):
     return response_with(resp.SUCCESS_200)
 docs.register(delete_markers)
 
+@app.route('/api/markers/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get marker by id', tags=['markers'])
+@resp.check_user_permission(dbName = "MarksDB", method = 'GET')
+@marshal_with(MarksSchema())
+def get_marker(id):
+    query = MarksDB.query.get_or_404(id)
+    query_schema = MarksSchema()
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_marker)
 
 
 

@@ -7,7 +7,7 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/zones', methods=['GET'], provide_automatic_options=False)
+@app.route('/api/zones/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get all zones', tags=['zone'])
 @resp.check_user_permission(dbName = "ZonesDB", method = 'GET')
 def get_zones():
@@ -26,19 +26,9 @@ def delete_zone(id):
     return response_with(resp.SUCCESS_200)
 docs.register(delete_zone)
 
-@app.route('/api/zone_in_lication/<int:id>/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get zones in location', tags=['zone'])
-@marshal_with(ZonesSchema(many=True))
-@resp.check_user_permission(dbName = "ZonesDB", method = 'GET')
-def get_zone_in_lication(id):
-    query = ZonesDB.query.filter_by(id_location = id)
-    query_schema = ZonesSchema(many=True)
-    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_zone_in_lication)
-
 @app.route('/api/zone/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get zone by id', tags=['zone'])
-@marshal_with(ZonesSchema())
+@use_kwargs(ZonesSchema(exclude=("id_zone",)))
 @resp.check_user_permission(dbName = "ZonesDB", method = 'GET')
 def get_zone(id):
     query = ZonesDB.query.get_or_404(id)
@@ -46,10 +36,21 @@ def get_zone(id):
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_zone)
 
+@app.route('/api/zones/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find zone with params', tags=['zone'])
+@marshal_with(ZonesSchema(many=True))
+@use_kwargs(ZonesSchema(exclude=("id_zone",)))
+@resp.check_user_permission(dbName = "ZonesDB", method = 'GET')
+def get_zone_filter(**kwargs):
+    query = ZonesDB.query.filter_by(**kwargs).all()
+    query_schema = ZonesSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_zone_filter)
+
 @app.route('/api/zone/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update zone by id', tags=['zone'])
 @marshal_with(ZonesSchema)
-@use_kwargs(ZonesSchema)
+@use_kwargs(ZonesSchema(exclude=("id_zone",)))
 @resp.check_user_permission(dbName = "ZonesDB", method = 'PUT')
 def update_zone(**kwargs):  
     query = ZonesDB.query.get_or_404(id)

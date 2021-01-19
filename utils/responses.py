@@ -1,6 +1,7 @@
 from flask import make_response, jsonify
 from flask import Flask, session
 from models import *
+from flask import render_template, request, redirect, url_for, flash, session, jsonify
 
 INVALID_FIELD_NAME_SENT_422 = {
     "http_code": 422,
@@ -122,3 +123,14 @@ def check_user_permission(dbName, method):
         return wrapped
     return inner_decorator
 
+
+def check_user_authorization():
+    def inner_decorator(f):
+        def wrapped(*args, **kwargs):
+            if("user" in session) == False:
+                return redirect(url_for('login_page'))               
+            response = f(*args, **kwargs)
+            return response
+        wrapped.__name__ = f.__name__
+        return wrapped
+    return inner_decorator

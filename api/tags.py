@@ -7,8 +7,7 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-
-@app.route('/api/tags', methods=['GET'], provide_automatic_options=False)
+@app.route('/api/tags/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get all tags', tags=['tags'])
 @resp.check_user_permission(dbName = "TagsDB", method = 'GET')
 def get_tags():
@@ -16,6 +15,17 @@ def get_tags():
     query_schema = TagsSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_tags)
+
+@app.route('/api/tags/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find tags with params', tags=['tags'])
+@marshal_with(TagsSchema(many=True))
+@use_kwargs(TagsSchema(exclude=("id_tag",)))
+@resp.check_user_permission(dbName = "TagsDB", method = 'GET')
+def find_tags(**kwargs):
+    query = TagsDB.query.filter_by(**kwargs).all()
+    query_schema = TagsSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_tags)
 
 @app.route('/api/tags/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update tag by id', tags=['tags'])

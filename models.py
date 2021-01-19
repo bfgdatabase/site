@@ -135,24 +135,24 @@ class TechDB(db.Model):
 class UsersDB(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.Text())
-    username = db.Column(db.Text(), unique=True, nullable = False)
+    login = db.Column(db.Text(), unique=True, nullable = False)
+    username = db.Column(db.Text())
     email = db.Column(db.Text())
-    password_hash = db.Column(db.Text())
+    password_hash = db.Column(db.Text(), nullable = False)
     phone = db.Column(db.Text())
     role = db.Column(db.Text())
     info = db.Column(db.Text())
     
     @classmethod
-    def authentificate(cls, username, password):
-        query = cls.query.filter_by(username = username)
+    def authentificate(cls, login, password):
+        query = cls.query.filter_by(login = login)
         if((query.count()) == 0):
             return
         encoded_hash = query[0].password_hash
         if not (bcrypt.check_password_hash(encoded_hash, password)):
             return
         session["username"] = query[0].username
-        session["user"] = query[0].name
+        session["login"] = query[0].login
         session["role"] = query[0].role
         return query[0]
 

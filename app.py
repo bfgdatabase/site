@@ -43,7 +43,6 @@ docs = FlaskApiSpec(app)
 
 from models import *
 
-# rmake role table
 roles = RolesDB.query.all()
 for role in roles:
     for table in editableTables:
@@ -60,12 +59,12 @@ for role in roles:
             db.session.add(item)
             db.session.commit()   
 
-users = UsersDB.query.all()
+users = UsersDB.query.filter_by(role = 'administrator').all()
 if(len(users) == 0):
     pass_hash = bcrypt.generate_password_hash('pass', 10)  
     pass_hash_decoded = pass_hash.decode('utf-8')   
     admin = UsersDB(
-            name = 'root',
+            login = 'root',
             username = 'administrator',
             password_hash = pass_hash_decoded,
             role = 'administrator')
