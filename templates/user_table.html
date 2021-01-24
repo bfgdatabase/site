@@ -1,0 +1,48 @@
+{% extends 'base_template.html' %} {% block title %} Администрирование {% endblock %} {% block head %}
+
+<head>
+    <script type="module" src="{{ url_for('static', filename='js/users.js') }}"></script>
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col md-12">
+
+                        <div class="jumbotron p-3 ">
+                            <h2> Пользователи
+                            </h2>
+                            <br>
+                            <table class="table ">
+                                <thead class="thead-dark ">
+                                    <tr>
+                                        <th scope="col ">Логин</th>
+                                        <th scope="col ">ФИО</th>
+                                        <th scope="col ">e-mail</th>
+                                        <th scope="col ">телефон</th>
+                                        <th scope="col ">Роль</th>
+                                        <th scope="col ">Информация</th>
+                                        <th scope="col "></th>
+                                        <th scope="col "></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBtns">
+                                </tbody>
+                                <tbody id="tableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>{% endblock %}

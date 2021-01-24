@@ -22,7 +22,7 @@ docs.register(get_locations)
 @use_kwargs(LocationsSchema(exclude=("dept_id",)))
 @resp.check_user_permission(dbName = "LocationsDB", method = 'PUT')
 def create_location(**kwargs):  
-    query = LocationsDB.query()
+    query = LocationsDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
@@ -44,10 +44,10 @@ docs.register(find_locations)
 
 @app.route('/api/locations/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update location by id', tags=['locations'])
-@resp.check_user_permission(dbName = "LocationsDB", method = 'PUT')
 @marshal_with(LocationsSchema)
 @use_kwargs(LocationsSchema(exclude=("dept_id",)))
-def update_location(**kwargs):  
+@resp.check_user_permission(dbName = "LocationsDB", method = 'PUT')
+def update_location(id, **kwargs):  
     query = LocationsDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -68,8 +68,8 @@ docs.register(delete_location)
 
 @app.route('/api/locations/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get location by id', tags=['locations'])
-@resp.check_user_permission(dbName = "LocationsDB", method = 'GET')
 @marshal_with(LocationsSchema())
+@resp.check_user_permission(dbName = "LocationsDB", method = 'GET')
 def get_location(id):
     query = LocationsDB.query.get_or_404(id)
     query_schema = LocationsSchema()

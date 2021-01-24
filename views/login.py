@@ -100,3 +100,4 @@ def user_registration():
                 flash(u'ошибка', 'info')
 
     return render_template('registration.html')
+

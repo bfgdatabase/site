@@ -22,7 +22,7 @@ docs.register(get_technologies)
 @use_kwargs(TechSchema(exclude=("id_techop",)))
 @resp.check_user_permission(dbName = "TechDB", method = 'PUT')
 def create_technology(**kwargs):  
-    query = TechDB.query()
+    query = TechDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
@@ -44,10 +44,10 @@ docs.register(find_technologies)
 
 @app.route('/api/technologies/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update technology by id', tags=['technologies'])
-@resp.check_user_permission(dbName = "TechDB", method = 'PUT')
 @marshal_with(TechSchema)
 @use_kwargs(TechSchema(exclude=("id_techop",)))
-def update_technology(**kwargs):  
+@resp.check_user_permission(dbName = "TechDB", method = 'PUT')
+def update_technology(id, **kwargs):  
     query = TechDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -68,8 +68,8 @@ docs.register(delete_technology)
 
 @app.route('/api/technology/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get technology by id', tags=['technologies'])
-@resp.check_user_permission(dbName = "TechDB", method = 'GET')
 @marshal_with(TechSchema())
+@resp.check_user_permission(dbName = "TechDB", method = 'GET')
 def get_technology(id):
     query = TechDB.query.get_or_404(id)
     query_schema = TechSchema()

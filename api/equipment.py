@@ -22,7 +22,7 @@ docs.register(get_equipments)
 @use_kwargs(EquipmentSchema(exclude=("equipment_id",)))
 @resp.check_user_permission(dbName = "EquipmentDB", method = 'PUT')
 def create_equipment(**kwargs):  
-    query = EquipmentDB.query()
+    query = EquipmentDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
@@ -44,10 +44,10 @@ docs.register(find_equipment)
 
 @app.route('/api/equipment/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update equipment by id', tags=['equipment'])
-@resp.check_user_permission(dbName = "EquipmentDB", method = 'PUT')
 @marshal_with(EquipmentSchema)
 @use_kwargs(EquipmentSchema(exclude=("equipment_id",)))
-def update_equipment(**kwargs):  
+@resp.check_user_permission(dbName = "EquipmentDB", method = 'PUT')
+def update_equipment(id, **kwargs):  
     query = EquipmentDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -68,8 +68,8 @@ docs.register(delete_equipment)
 
 @app.route('/api/equipment/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get equipment by id', tags=['equipment'])
-@resp.check_user_permission(dbName = "EquipmentDB", method = 'GET')
 @marshal_with(EquipmentSchema())
+@resp.check_user_permission(dbName = "EquipmentDB", method = 'GET')
 def get_equipment(id):
     query = EquipmentDB.query.get_or_404(id)
     query_schema = EquipmentSchema()

@@ -33,7 +33,7 @@ docs.register(find_markers)
 @use_kwargs(MarksSchema(exclude=("id_mark",)))
 @resp.check_user_permission(dbName = "MarksDB", method = 'PUT')
 def create_markers(**kwargs):  
-    query = MarksDB.query()
+    query = MarksDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
@@ -42,12 +42,12 @@ def create_markers(**kwargs):
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(create_markers)
 
-@app.route('/api/markers/<int:id>/', methods=['PUT'], provide_automatic_options=False)
+@app.route('/api/marker/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update marker by id', tags=['markers'])
-@resp.check_user_permission(dbName = "MarksDB", method = 'PUT')
 @marshal_with(MarksSchema)
 @use_kwargs(MarksSchema(exclude=("id_mark",)))
-def update_markers(**kwargs):  
+@resp.check_user_permission(dbName = "MarksDB", method = 'PUT')
+def update_markers(id, **kwargs):  
     query = MarksDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -56,7 +56,7 @@ def update_markers(**kwargs):
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(update_markers)
 
-@app.route('/api/markers/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
+@app.route('/api/marker/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
 @doc(description='Delete markers by id', tags=['markers'])
 @resp.check_user_permission(dbName = "MarksDB", method = 'DELETE')
 def delete_markers(id):
@@ -66,10 +66,10 @@ def delete_markers(id):
     return response_with(resp.SUCCESS_200)
 docs.register(delete_markers)
 
-@app.route('/api/markers/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@app.route('/api/marker/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get marker by id', tags=['markers'])
-@resp.check_user_permission(dbName = "MarksDB", method = 'GET')
 @marshal_with(MarksSchema())
+@resp.check_user_permission(dbName = "MarksDB", method = 'GET')
 def get_marker(id):
     query = MarksDB.query.get_or_404(id)
     query_schema = MarksSchema()

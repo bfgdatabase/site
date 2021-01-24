@@ -5,54 +5,54 @@ from flask import render_template, request, redirect, url_for, flash, session, j
 
 INVALID_FIELD_NAME_SENT_422 = {
     "http_code": 422,
-    "code": "invalidField",
+    "code": 422,
     "message": "Invalid fields found"
 }
 
 INVALID_INPUT_422 = {
     "http_code": 422,
-    "code": "invalidInput",
+    "code": 422,
     "message": "Invalid input"
 }
 
 MISSING_PARAMETERS_422 = {
     "http_code": 422,
-    "code": "missingParameter",
+    "code": 422,
     "message": "Missing parameters."
 }
 
 BAD_REQUEST_400 = {
     "http_code": 400,
-    "code": "badRequest",
+    "code": 400,
     "message": "Bad request"
 }
 
 SERVER_ERROR_500 = {
     "http_code": 500,
-    "code": "serverError",
+    "code": 500,
     "message": "Server error"
 }
 
 SERVER_ERROR_404 = {
     "http_code": 404,
-    "code": "notFound",
+    "code": 404,
     "message": "Resource not found"
 }
 
 FORBIDDEN_403 = {
     "http_code": 403,
-    "code": "notAuthorized",
+    "code": 403,
     "message": "You are not authorised to execute this."
 }
 UNAUTHORIZED_401 = {
     "http_code": 401,
-    "code": "notAuthorized",
+    "code": 401,
     "message": "Invalid authentication."
 }
 
 NOT_FOUND_HANDLER_404 = {
     "http_code": 404,
-    "code": "notFound",
+    "code": 404,
     "message": "route not found"
 }
 
@@ -102,7 +102,7 @@ def login_required(f):
 def check_user_permission(dbName, method):
     def inner_decorator(f):
         def wrapped(*args, **kwargs):
-            if("user" in session) == False:
+            if("login" in session) == False:
                 return response_with(FORBIDDEN_403)
             if(session["role"] == 'administrator'):                
                 response = f(*args, **kwargs)
@@ -123,11 +123,23 @@ def check_user_permission(dbName, method):
         return wrapped
     return inner_decorator
 
+def admin_require():
+    def inner_decorator(f):
+        def wrapped(*args, **kwargs):
+            if("login" in session) == False:
+                return response_with(FORBIDDEN_403)
+            if(session["role"] != 'administrator'):                
+                return response_with(FORBIDDEN_403)                     
+            response = f(*args, **kwargs)
+            return response
+        wrapped.__name__ = f.__name__
+        return wrapped
+    return inner_decorator
 
 def check_user_authorization():
     def inner_decorator(f):
         def wrapped(*args, **kwargs):
-            if("user" in session) == False:
+            if("login" in session) == False:
                 return redirect(url_for('login_page'))               
             response = f(*args, **kwargs)
             return response

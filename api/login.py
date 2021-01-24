@@ -10,13 +10,13 @@ from flask_bcrypt import Bcrypt
 
 @app.route('/api/login', methods = ['POST'], provide_automatic_options=False)
 @doc(description='User login', tags=['login'])
-@use_kwargs(UsersSchema(only=("username", "password_hash",)))
+@use_kwargs(UsersSchema(only=("login", "password_hash",)))
 def login(**kwargs):
-    query = UsersDB.authentificate(username = kwargs['username'] ,password =  kwargs['password_hash'])
+    query = UsersDB.authentificate(login = kwargs['login'] ,password =  kwargs['password_hash'])
     if(not query):
         return response_with(resp.UNAUTHORIZED_401)
     session["username"] = query.username
-    session["name"] = query.name
+    session["login"] = query.login
     session["role"] = query.role
     return response_with(resp.SUCCESS_200)
 docs.register(login)
@@ -26,7 +26,7 @@ docs.register(login)
 @doc(description='User logout', tags=['login'])
 def logout():
     session.pop("username", None)
-    session.pop("user", None)
+    session.pop("login", None)
     session.pop("role", None)
     return response_with(resp.SUCCESS_200)
 docs.register(logout)

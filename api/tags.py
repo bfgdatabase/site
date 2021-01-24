@@ -32,7 +32,7 @@ docs.register(find_tags)
 @marshal_with(TagsSchema)
 @use_kwargs(TagsSchema(exclude=("id_tag",)))
 @resp.check_user_permission(dbName = "TagsDB", method = 'PUT')
-def update_tag(**kwargs):  
+def update_tag(id, **kwargs):  
     query = TagsDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)

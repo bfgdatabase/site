@@ -32,7 +32,7 @@ docs.register(find_gates)
 @marshal_with(GatesSchema)
 @use_kwargs(GatesSchema(exclude=("id_gate",)))
 @resp.check_user_permission(dbName = "GatesDB", method = 'PUT')
-def update_gate(**kwargs):  
+def update_gate(id, **kwargs):  
     query = GatesDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)

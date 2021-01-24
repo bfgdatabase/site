@@ -22,7 +22,7 @@ docs.register(enterprises)
 @use_kwargs(EnterpriseSchema(exclude=("id",)))
 @resp.check_user_permission(dbName = "EnterpriseDB", method = 'PUT')
 def create_enterprise(**kwargs):  
-    query = EnterpriseDB.query()
+    query = EnterpriseDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
@@ -44,10 +44,10 @@ docs.register(find_enterprise)
 
 @app.route('/api/enterprise/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update enterprise by id', tags=['enterprise'])
-@resp.check_user_permission(dbName = "EnterpriseDB", method = 'PUT')
 @marshal_with(EnterpriseSchema)
 @use_kwargs(EnterpriseSchema(exclude=("id",)))
-def update_enterprise(**kwargs):  
+@resp.check_user_permission(dbName = "EnterpriseDB", method = 'PUT')
+def update_enterprise(id, **kwargs):  
     query = EnterpriseDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -68,8 +68,8 @@ docs.register(delete_enterprise)
 
 @app.route('/api/enterprise/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get enterprise by id', tags=['enterprise'])
-@resp.check_user_permission(dbName = "EnterpriseDB", method = 'GET')
 @marshal_with(EnterpriseSchema())
+@resp.check_user_permission(dbName = "EnterpriseDB", method = 'GET')
 def get_enterprise(id):
     query = EnterpriseDB.query.get_or_404(id)
     query_schema = EnterpriseSchema()

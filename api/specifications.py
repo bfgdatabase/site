@@ -22,7 +22,7 @@ docs.register(get_specifications)
 @use_kwargs(SpecSchema(exclude=("id_spec",)))
 @resp.check_user_permission(dbName = "SpecDB", method = 'PUT')
 def create_specifications(**kwargs):  
-    query = SpecDB.query()
+    query = SpecDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
@@ -44,10 +44,10 @@ docs.register(find_specifications)
 
 @app.route('/api/specifications/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update specification by id', tags=['specifications'])
-@resp.check_user_permission(dbName = "SpecDB", method = 'PUT')
 @marshal_with(SpecSchema)
 @use_kwargs(SpecSchema(exclude=("id_spec",)))
-def update_specifications(**kwargs):  
+@resp.check_user_permission(dbName = "SpecDB", method = 'PUT')
+def update_specifications(id, **kwargs):  
     query = SpecDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -68,8 +68,8 @@ docs.register(delete_specifications)
 
 @app.route('/api/specification/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get specification by id', tags=['specifications'])
-@resp.check_user_permission(dbName = "SpecDB", method = 'GET')
 @marshal_with(SpecSchema())
+@resp.check_user_permission(dbName = "SpecDB", method = 'GET')
 def get_specification(id):
     query = SpecDB.query.get_or_404(id)
     query_schema = SpecSchema()

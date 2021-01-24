@@ -21,12 +21,24 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='libs/mdb/css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='libs/mdb/css/style.css') }}">
     <style>
-        body,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
         html {
             height: 100%;
             overflow: hidden;
         }
+        
+        tr td {
+            padding: 0 !important;
+            margin: 0 !important;
+            height: 40px;
+        }
     </style>
+
+
     <title>{% block title %} {% endblock %} </title>
 </head>
 
@@ -69,57 +81,67 @@
 
                     <!--Menu-->
                     <div class="dropdown-menu dropdown-primary">
+                        <a class="dropdown-item" href="/tables/tags">Тэги</a>
+                        <a class="dropdown-item" href="/tables/gates">Шлюзы</a>
+                        <a class="dropdown-item" href="/tables/marks">Метки</a>
+                        <a class="dropdown-item" href="/tables/anchors">Анкеры</a>
                         <a class="dropdown-item" href="/enterprise/0/0/">Структура предприятия</a>
                         <a class="dropdown-item" href="/specs">Технологии</a>
                         <a class="dropdown-item" href="/markers">Производство</a>
                         <a class="dropdown-item" href="/equipment">Оборудование</a>
-                        <a class="dropdown-item" href="/markers">Метки</a>
-                        <a class="dropdown-item" href="/tags">Тэги</a>
                         <a class="dropdown-item" href="/zones">Зоны</a>
                         <a class="dropdown-item" href="/anhcors">Анкеры</a>
-                        <a class="dropdown-item" href="/gates">Шлюзы</a>
                         <a class="dropdown-item" href="/gates">Импорт и экспорт</a>
                     </div>
                 </div>
 
-
                 <div class="dropdown">
                     <!--Trigger-->
-                    <button class="btn btn-primary btn-sm  type=" button " id="dropdownMenu1 " aria-haspopup="true " aria-expanded="false " href="/adminka " >Администрирование БД</button>
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Администрирование БД</button>
 
-</div>
+                    <!--Menu-->
+                    <div class="dropdown-menu dropdown-primary">
+                        <a class="dropdown-item" href="/admin/users">Пользователи</a>
+                        <a class="dropdown-item" href="/admin/permission">Права</a>
+                        <a class="dropdown-item" href="/admin/roles">Роли</a>
+                    </div>
+                </div>
 
-{% endblock %}
 
-            </ul>
+        </div>
 
-            <ul class="navbar-nav ml-auto nav-flex-icons ">
-                <li class="nav-item avatar ">
-                    <a class="nav-link p-0 " href="# ">
-                        <img src="{{ url_for( 'static',filename='images/admin.svg' ) }} " class="rounded-circle z-depth-0 " alt="avatar image " height="35 ">
-                    </a>
+        {% endblock %}
 
-                </li>
-            </ul>
+        </ul>
 
-            <ul class="navbar-nav mr-0 ">
-                <li class="nav-item ">
-                    <a class="nav-link " href="# ">Привет, {{username}}!</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav mr-0 ">
-                <a class="btn btn-primary btn-sm " href="/logout ">Выйти</a>
-            </ul>
+        <ul class="navbar-nav ml-auto nav-flex-icons ">
+            <li class="nav-item avatar ">
+                <a class="nav-link p-0 " href="# ">
+                    <img src="{{ url_for( 'static',filename='images/admin.svg' ) }} " class="rounded-circle z-depth-0 " alt="avatar image " height="35 ">
+                </a>
+
+            </li>
+        </ul>
+
+        <ul class="navbar-nav mr-0 ">
+            <li class="nav-item ">
+                <a class="nav-link " href="# ">Привет, {{username}}!</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-0 ">
+            <a class="btn btn-primary btn-sm " href="/logout ">Выйти</a>
+        </ul>
         </div>
 
     </nav>
 
-
     {% block body %} {% endblock %}
 
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js " integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n " crossorigin="anonymous "></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js " integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo " crossorigin="anonymous "></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js " integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6 " crossorigin="anonymous "></script>
+
 
 </body>
 

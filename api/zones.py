@@ -52,7 +52,7 @@ docs.register(get_zone_filter)
 @marshal_with(ZonesSchema)
 @use_kwargs(ZonesSchema(exclude=("id_zone",)))
 @resp.check_user_permission(dbName = "ZonesDB", method = 'PUT')
-def update_zone(**kwargs):  
+def update_zone(id, **kwargs):  
     query = ZonesDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
@@ -67,7 +67,7 @@ docs.register(update_zone)
 @use_kwargs(ZonesSchema(exclude=("id_zone",)))
 @resp.check_user_permission(dbName = "ZonesDB", method = 'PUT')
 def create_zone(**kwargs):  
-    query = ZonesDB.query()
+    query = ZonesDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)

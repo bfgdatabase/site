@@ -47,11 +47,11 @@ def delete_ancor(id):
     return response_with(resp.SUCCESS_200)
 docs.register(delete_ancor)
 
-@app.route('/api/anchor', methods=['POST'], provide_automatic_options=False)
+@app.route('/api/anchor/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create anchor', tags=['anchor'])
-@resp.check_user_permission(dbName = "AnchorsDB", method = 'PUT')
 @marshal_with(AnchorsSchema)
 @use_kwargs(AnchorsSchema(exclude=("id_anchor",)))
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'PUT')
 def create_ancor(**kwargs):  
     query = AnchorsDB()
     for key, value in kwargs.items():
@@ -64,10 +64,10 @@ docs.register(create_ancor)
 
 @app.route('/api/anchor/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update anchor by id', tags=['anchor'])
-@resp.check_user_permission(dbName = "AnchorsDB", method = 'PUT')
 @marshal_with(AnchorsSchema)
 @use_kwargs(AnchorsSchema(exclude=("id_anchor",)))
-def update_ancor(**kwargs):  
+@resp.check_user_permission(dbName = "AnchorsDB", method = 'PUT')
+def update_ancor(id, **kwargs):  
     query = AnchorsDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)

@@ -4,14 +4,47 @@
 jQuery.noConflict()
 
 
+let location_names = []
+let location_ids = []
+let anchor_name = []
+let id_anchors = []
+
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
-$(document).ready(createPage());
+
+$(document).ready(function() {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/locations/', false);
+    xhr.send();
+    if (xhr.status != 200) {
+        showMessage(xhr.response, "danger");
+    } else {
+        var res = JSON.parse(xhr.responseText);
+        for (var i = 0; i < res.query.length; i++) {
+            location_ids.push(res.query[i].id_location)
+            location_names.push(res.query[i].name)
+        }
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/anchors/', false);
+    xhr.send();
+    if (xhr.status != 200) {
+        showMessage(xhr.response, "danger");
+    } else {
+        var obj = JSON.parse(xhr.responseText);
+        for (var i = 0; i < obj.query.length; i++) {
+            id_anchors.push(obj.query[i].id_anchor)
+            anchor_name.push(obj.query[i].name)
+        }
+    }
+    createPage()
+});
 
 function createPage() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/anchors/', false);
+    xhr.open('GET', '/api/zones/', false);
     xhr.send();
     if (xhr.status != 200) {
         showMessage(xhr.response, "danger");
@@ -28,48 +61,15 @@ function createTableBtns(obj) {
     let table = document.getElementById('tableBtns');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
-
     let tr = document.createElement('tr');
     let bt = createSortButton(obj, "name", createSortedTable)
     tr.appendChild(bt);
+    let bt1 = createSortButton(obj, "id_location", createSortedTable)
+    tr.appendChild(bt1);
     table.appendChild(tr);
 }
 
 function createSortedTable(obj) {
-
-    let mac = []
-    let id_gates = []
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/gates/', false);
-    xhr.send();
-    if (xhr.status != 200) {
-        showMessage(xhr.response, "danger");
-    } else {
-        var res = JSON.parse(xhr.responseText);
-        for (var i = 0; i < res.query.length; i++) {
-            id_gates.push(res.query[i].id_gate)
-            mac.push(res.query[i].mac)
-        }
-    }
-
-    let location_names = []
-    let location_ids = []
-        /*
-        id_location
-        name*/
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/locations/', false);
-    xhr.send();
-    if (xhr.status != 200) {
-        showMessage(xhr.response, "danger");
-    } else {
-        var res = JSON.parse(xhr.responseText);
-        for (var i = 0; i < res.query.length; i++) {
-            location_ids.push(res.query[i].id_location)
-            location_names.push(res.query[i].name)
-        }
-    }
-
     let table = document.getElementById('tableBody');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
@@ -77,7 +77,7 @@ function createSortedTable(obj) {
     for (var i = 0; i < obj.length; i++) {
 
         let tr = document.createElement('tr');
-        let id_anchor = obj[i]["id_anchor"];
+        let id_zone = obj[i]["id_zone"];
 
         let name = createInput(obj[i]["name"], "any")
         tr.appendChild(name);
@@ -85,11 +85,23 @@ function createSortedTable(obj) {
         let id_location = createTextSw(obj[i]["id_location"], location_names, location_ids)
         tr.appendChild(id_location);
 
-        let gain = createInput(obj[i]["gain"], "any")
-        tr.appendChild(gain);
+        let weight = createInput(obj[i]["weight"], "any")
+        tr.appendChild(weight);
 
-        let id_gate = createDropdownMenu(obj[i]["id_gate"], mac, id_gates);
-        tr.appendChild(id_gate);
+        let sharp = createInput(obj[i]["sharp"], "any")
+        tr.appendChild(sharp);
+
+        let type = createInput(obj[i]["type"], "any")
+        tr.appendChild(type);
+
+        let threshold_in = createInput(obj[i]["threshold_in"], "any")
+        tr.appendChild(threshold_in);
+
+        let threshold_out = createInput(obj[i]["threshold_out"], "any")
+        tr.appendChild(threshold_out);
+
+        let anchor = createDropdownMenu(obj[i]["id_anchor"], anchor_name, id_anchors);
+        tr.appendChild(anchor);
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
@@ -97,11 +109,14 @@ function createSortedTable(obj) {
             let params = {}
             if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
             if (id_location.firstChild.id != '') { params["id_location"] = id_location.firstChild.id; }
-            if (gain.firstChild.value != '') { params["gain"] = gain.firstChild.value; }
-            if (id_gate.firstChild.id != '') { params["id_gate"] = id_gate.firstChild.id; }
-
+            if (weight.firstChild.value != '') { params["weight"] = weight.firstChild.value; }
+            if (sharp.firstChild.value != '') { params["sharp"] = sharp.firstChild.value; }
+            if (type.firstChild.value != '') { params["type"] = type.firstChild.value; }
+            if (threshold_in.firstChild.value != '') { params["threshold_in"] = threshold_in.firstChild.value; }
+            if (threshold_out.firstChild.value != '') { params["threshold_out"] = threshold_out.firstChild.value; }
+            if (anchor.firstChild.id != '') { params["id_anchor"] = anchor.firstChild.id; }
             var xhr = new XMLHttpRequest();
-            xhr.open('PUT', '/api/anchor/' + id_anchor + '/', true);
+            xhr.open('PUT', '/api/zone/' + id_zone + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
@@ -110,12 +125,11 @@ function createSortedTable(obj) {
             }
             xhr.send(json);
         });
-
         let btn_delete = createButton("Удалить", "btn-danger");
         tr.appendChild(btn_delete);
         btn_delete.addEventListener("click", function() {
             var xhr = new XMLHttpRequest();
-            xhr.open('DELETE', '/api/anchor/' + id_anchor + '/', true);
+            xhr.open('DELETE', '/api/zone/' + id_zone + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify();
             xhr.onload = function() {

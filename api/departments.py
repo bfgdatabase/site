@@ -18,8 +18,8 @@ docs.register(get_departments)
 
 @app.route('/api/department/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get department by id', tags=['department'])
-@resp.check_user_permission(dbName = "DepartmentDB", method = 'GET')
 @marshal_with(DepartmentSchema())
+@resp.check_user_permission(dbName = "DepartmentDB", method = 'GET')
 def get_department(id):
     query = DepartmentDB.query.get_or_404(id)
     query_schema = DepartmentSchema()
@@ -43,7 +43,7 @@ docs.register(find_departments)
 @use_kwargs(DepartmentSchema(exclude=("dept_id",)))
 @resp.check_user_permission(dbName = "DepartmentDB", method = 'PUT')
 def create_department(**kwargs):  
-    query = DepartmentDB.query()
+    query = DepartmentDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
@@ -54,10 +54,10 @@ docs.register(create_department)
 
 @app.route('/api/department/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update department by id', tags=['department'])
-@resp.check_user_permission(dbName = "DepartmentDB", method = 'PUT')
 @marshal_with(DepartmentSchema)
 @use_kwargs(DepartmentSchema(exclude=("dept_id",)))
-def update_department(**kwargs):  
+@resp.check_user_permission(dbName = "DepartmentDB", method = 'PUT')
+def update_department(id, **kwargs):  
     query = DepartmentDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
