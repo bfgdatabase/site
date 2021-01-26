@@ -60,7 +60,6 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
                 if (xhr.readyState == 4 && xhr.status == "200") {} else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
@@ -70,7 +69,6 @@ function createSortedTable(obj) {
 
     let tr = document.createElement('tr');
     let btn_save = createButton("Сохранить все", "btn-secondary");
-    let btn_save1 = createButton("Сохранить все", "btn-secondary");
     let d = document.createElement('td');
     let d1 = document.createElement('td');
     let d2 = document.createElement('td');
@@ -98,7 +96,6 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
                 if (xhr.readyState == 4 && xhr.status == "200") {} else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);

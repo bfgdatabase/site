@@ -1,0 +1,69 @@
+{% extends 'base_template.html' %} {% block title %} Спецификации {% endblock %} {% block head %}
+
+<head>
+
+    <script type="module" src="{{ url_for('static', filename='js/specs.js') }}"></script>
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+            <div class="jumbotron p-3 ">
+                <h2> Спецификации
+                </h2>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">Код</th>
+                            <th scope="col ">Наименование</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBtns">
+                    </tbody>
+                    <tbody id="tableBody">
+                    </tbody>
+                    <tbody id="tableAdd">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="jumbotron p-3 ">
+                <h2> Технология
+                </h2>
+                <h6 id="techName">
+                </h6>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">№</th>
+                            <th scope="col ">Код</th>
+                            <th scope="col ">Наименование</th>
+                            <th scope="col ">Оборудование</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tech_tableBtns">
+                    </tbody>
+                    <tbody id="tech_tableBody">
+                    </tbody>
+                    <tbody id="tech_tableAdd">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

@@ -3,10 +3,10 @@
 })(jQuery);
 jQuery.noConflict()
 
+var tags = []
 
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
-
 $(document).ready(createPage());
 
 function createPage() {
@@ -16,9 +16,9 @@ function createPage() {
     if (xhr.status != 200) {
         showMessage(xhr.response, "danger");
     } else {
-        var obj = JSON.parse(xhr.responseText);
-        createTableBtns(obj.query)
-        createSortedTable(obj.query)
+        tags = JSON.parse(xhr.responseText).query;
+        createTableBtns(tags)
+        createSortedTable(tags)
     }
 }
 
@@ -47,6 +47,8 @@ function createSortedTable(obj) {
 
     for (var i = 0; i < obj.length; i++) {
 
+        let objRef = obj[i];
+
         let tr = document.createElement('tr');
         let id_tag = obj[i]["id_tag"];
 
@@ -72,8 +74,10 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") {} else { showMessage(xhr.response, "danger"); }
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let res = JSON.parse(xhr.response).query
+                    objRef.tag_gain = res.tag_gain;
+                } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
 

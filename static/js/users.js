@@ -74,7 +74,6 @@ function createSortedTable(obj) {
             xhr.open('DELETE', '/api/user/' + user_id + '/', false);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
                 if (xhr.readyState == 4 && xhr.status == "200") {
                     createPage();
                 } else { showMessage(xhr.response, "danger"); }
@@ -96,7 +95,6 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
                 if (xhr.readyState == 4 && xhr.status == "200") {} else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);

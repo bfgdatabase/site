@@ -1,8 +1,7 @@
-{% extends 'base_template.html' %} {% block title %} Зоны {% endblock %} {% block head %}
+{% extends 'base_template.html' %} {% block title %} Заказы {% endblock %} {% block head %}
 
 <head>
-
-    <script type="module" src="{{ url_for('static', filename='js/zones.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/orders.js') }}"></script>
 </head>
 {% endblock %} {% block body %}
 
@@ -15,20 +14,20 @@
             <div id="messages">
             </div>
             <div class="jumbotron p-3 ">
-                <h2> Зоны
+                <h2> Пользователи
                 </h2>
                 <br>
                 <table class="table ">
                     <thead class="thead-dark ">
                         <tr>
                             <th scope="col ">Наименование</th>
-                            <th scope="col ">Локация</th>
-                            <th scope="col ">weight</th>
-                            <th scope="col ">sharp</th>
-                            <th scope="col ">type</th>
-                            <th scope="col ">threshold_in</th>
-                            <th scope="col ">threshold_out</th>
-                            <th scope="col ">Анкер</th>
+                            <th scope="col ">Количество</th>
+                            <th scope="col ">Заказчик</th>
+                            <th scope="col ">Спецификация</th>
+                            <th scope="col ">Наименование продукта</th>
+                            <th scope="col ">Дата создания</th>
+                            <th scope="col ">Начало изготовления</th>
+                            <th scope="col ">Окончание изготовления</th>
                             <th scope="col "></th>
                             <th scope="col "></th>
                         </tr>
@@ -43,5 +42,4 @@
             </div>
         </main>
     </div>
-</div>
-{% endblock %}
+</div>{% endblock %}

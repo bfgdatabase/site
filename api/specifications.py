@@ -16,7 +16,7 @@ def get_specifications():
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_specifications)
 
-@app.route('/api/specifications/', methods=['POST'], provide_automatic_options=False)
+@app.route('/api/specification/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create specification', tags=['specifications'])
 @marshal_with(SpecSchema)
 @use_kwargs(SpecSchema(exclude=("id_spec",)))
@@ -31,7 +31,7 @@ def create_specifications(**kwargs):
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(create_specifications)
 
-@app.route('/api/specification/', methods=['POST'], provide_automatic_options=False)
+@app.route('/api/specifications/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Find specifications with params', tags=['specifications'])
 @marshal_with(SpecSchema(many=True))
 @use_kwargs(SpecSchema(exclude=("id_spec",)))
@@ -42,7 +42,7 @@ def find_specifications(**kwargs):
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(find_specifications)
 
-@app.route('/api/specifications/<int:id>/', methods=['PUT'], provide_automatic_options=False)
+@app.route('/api/specification/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update specification by id', tags=['specifications'])
 @marshal_with(SpecSchema)
 @use_kwargs(SpecSchema(exclude=("id_spec",)))
@@ -56,13 +56,17 @@ def update_specifications(id, **kwargs):
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(update_specifications)
 
-@app.route('/api/specifications/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
-@doc(description='Delete specifications by id', tags=['specifications'])
+@app.route('/api/specification/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
+@doc(description='Delete specification by id', tags=['specifications'])
 @resp.check_user_permission(dbName = "SpecDB", method = 'DELETE')
 def delete_specifications(id):
     query = SpecDB.query.get_or_404(id)
     db.session.delete(query)
     db.session.commit()  
+    query = TechDB.query.filter_by(id_spec = id).all()
+    for item in query:
+        db.session.delete(item)
+        db.session.commit()  
     return response_with(resp.SUCCESS_200)
 docs.register(delete_specifications)
 

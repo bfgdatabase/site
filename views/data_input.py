@@ -33,3 +33,17 @@ def anchors_table():
 def zones_table():
     return render_template('zones_table.html', username = session["username"])
     
+@app.route('/tables/equipments')
+@resp.check_user_authorization()
+def equipment_table():
+    return render_template('equipment_table.html', username = session["username"])
+
+@app.route('/tables/specs')
+@resp.check_user_authorization()
+def spec_table():
+    return render_template('spec_table.html', username = session["username"])
+
+@app.route('/tables/orders')
+@resp.check_user_authorization()
+def order_table():
+    return render_template('order_table.html', username = session["username"])

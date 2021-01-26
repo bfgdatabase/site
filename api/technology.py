@@ -42,7 +42,7 @@ def find_technologies(**kwargs):
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(find_technologies)
 
-@app.route('/api/technologies/<int:id>/', methods=['PUT'], provide_automatic_options=False)
+@app.route('/api/technology/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update technology by id', tags=['technologies'])
 @marshal_with(TechSchema)
 @use_kwargs(TechSchema(exclude=("id_techop",)))
@@ -56,7 +56,7 @@ def update_technology(id, **kwargs):
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(update_technology)
 
-@app.route('/api/technologies/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
+@app.route('/api/technology/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
 @doc(description='Delete technologies by id', tags=['technologies'])
 @resp.check_user_permission(dbName = "TechDB", method = 'DELETE')
 def delete_technology(id):

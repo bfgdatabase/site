@@ -4,6 +4,8 @@
 jQuery.noConflict()
 
 
+let anchors = [] ///////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
@@ -16,9 +18,9 @@ function createPage() {
     if (xhr.status != 200) {
         showMessage(xhr.response, "danger");
     } else {
-        var obj = JSON.parse(xhr.responseText);
-        createTableBtns(obj.query)
-        createSortedTable(obj.query)
+        anchors = JSON.parse(xhr.responseText).query; ///////////////////////////////////////////////////////////
+        createTableBtns(anchors) ///////////////////////////////////////////////////////////
+        createSortedTable(anchors) ///////////////////////////////////////////////////////////                               
     }
 }
 
@@ -54,9 +56,6 @@ function createSortedTable(obj) {
 
     let location_names = []
     let location_ids = []
-        /*
-        id_location
-        name*/
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/locations/', false);
     xhr.send();
@@ -75,6 +74,8 @@ function createSortedTable(obj) {
     table.innerHTML = "";
 
     for (var i = 0; i < obj.length; i++) {
+
+        let objRef = obj[i];
 
         let tr = document.createElement('tr');
         let id_anchor = obj[i]["id_anchor"];
@@ -105,8 +106,13 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") {} else { showMessage(xhr.response, "danger"); }
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let res = JSON.parse(xhr.response).query
+                    objRef.name = res.name;
+                    objRef.id_location = res.id_location;
+                    objRef.gain = res.gain;
+                    objRef.id_gate = res.id_gate;
+                } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
         });
@@ -119,8 +125,11 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify();
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") { tr.remove() } else { showMessage(xhr.response, "danger"); }
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let idx = anchors.indexOf(objRef)
+                    anchors.splice(idx, 1);
+                    tr.remove();
+                } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
         });

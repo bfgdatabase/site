@@ -3,23 +3,40 @@
 })(jQuery);
 jQuery.noConflict()
 
-let markers = []
+let id_zones = []
+let zone_names = []
+let equipments = []
 
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
-$(document).ready(createPage());
+$(document).ready(function() {
 
-function createPage() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/markers/', false);
+    xhr.open('GET', '/api/zones/', false);
     xhr.send();
     if (xhr.status != 200) {
         showMessage(xhr.response, "danger");
     } else {
-        markers = JSON.parse(xhr.responseText).query;
-        createTableBtns(markers)
-        createSortedTable(markers)
+        var res = JSON.parse(xhr.responseText);
+        for (var i = 0; i < res.query.length; i++) {
+            id_zones.push(res.query[i].id_zone)
+            zone_names.push(res.query[i].name)
+        }
+    }
+    createPage()
+});
+
+function createPage() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/equipments/', false);
+    xhr.send();
+    if (xhr.status != 200) {
+        showMessage(xhr.response, "danger");
+    } else {
+        var equipments = JSON.parse(xhr.responseText).query;
+        createTableBtns(equipments)
+        createSortedTable(equipments)
     }
 }
 
@@ -28,32 +45,15 @@ function createTableBtns(obj) {
     let table = document.getElementById('tableBtns');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
-
     let tr = document.createElement('tr');
-    let bt = createSortButton(obj, "name", createSortedTable)
+    let bt = createSortButton(obj, "equipment_name", createSortedTable)
     tr.appendChild(bt);
-    let bt1 = createSortButton(obj, "id_tag", createSortedTable)
+    let bt1 = createSortButton(obj, "id_zone", createSortedTable)
     tr.appendChild(bt1);
     table.appendChild(tr);
 }
 
 function createSortedTable(obj) {
-
-    let tag_uuid = []
-    let tag_id = []
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/tags/', false);
-    xhr.send();
-    if (xhr.status != 200) {
-        showMessage(xhr.response, "danger");
-    } else {
-        var res = JSON.parse(xhr.responseText);
-        for (var i = 0; i < res.query.length; i++) {
-            tag_id.push(res.query[i].id_tag)
-            tag_uuid.push(res.query[i].uuid)
-        }
-    }
-
     let table = document.getElementById('tableBody');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
@@ -63,46 +63,44 @@ function createSortedTable(obj) {
         let objRef = obj[i];
 
         let tr = document.createElement('tr');
-        let id_mark = obj[i]["id_mark"];
+        let equipment_id = obj[i]["equipment_id"];
 
-        let name = createInput(obj[i]["name"], "any")
-        tr.appendChild(name);
+        let equipment_name = createInput(obj[i]["equipment_name"], "any")
+        tr.appendChild(equipment_name);
 
-        let id_tag = createDropdownMenu(obj[i]["id_tag"], tag_uuid, tag_id);
-        tr.appendChild(id_tag);
+        let id_zone = createDropdownMenu(obj[i]["id_zone"], zone_names, id_zones);
+        tr.appendChild(id_zone);
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
         btn_save.addEventListener("click", function() {
             let params = {}
-            if (id_tag.firstChild.id != '') { params["id_tag"] = id_tag.firstChild.id; }
-            if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
-
+            if (equipment_name.firstChild.value != '') { params["equipment_name"] = equipment_name.firstChild.value; }
+            if (id_zone.firstChild.id != '') { params["id_zone"] = id_zone.firstChild.id; }
             var xhr = new XMLHttpRequest();
-            xhr.open('PUT', '/api/marker/' + id_mark + '/', true);
+            xhr.open('PUT', '/api/equipment/' + equipment_id + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
                 if (xhr.readyState == 4 && xhr.status == "200") {
                     let res = JSON.parse(xhr.response).query
-                    objRef.name = res.name;
-                    objRef.id_tag = res.id_tag;
+                    objRef.equipment_name = res.equipment_name;
+                    objRef.id_zone = res.id_zone;
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
         });
-
         let btn_delete = createButton("Удалить", "btn-danger");
         tr.appendChild(btn_delete);
         btn_delete.addEventListener("click", function() {
             var xhr = new XMLHttpRequest();
-            xhr.open('DELETE', '/api/marker/' + id_mark + '/', true);
+            xhr.open('DELETE', '/api/equipment/' + equipment_id + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify();
             xhr.onload = function() {
                 if (xhr.readyState == 4 && xhr.status == "200") {
-                    let idx = markers.indexOf(objRef)
-                    markers.splice(idx, 1);
+                    let idx = equipments.indexOf(objRef)
+                    equipments.splice(idx, 1);
                     tr.remove();
                 } else { showMessage(xhr.response, "danger"); }
             }
@@ -117,55 +115,57 @@ function createSortedTable(obj) {
     tableAdd.innerHTML = "";
 
     let tr = document.createElement('tr');
-    let name = createInput("", "any")
-    tr.appendChild(name);
 
-    let id_tag = createDropdownMenu("", tag_uuid, tag_id);
-    tr.appendChild(id_tag);
+    let equipment_name = createInput("", "any")
+    tr.appendChild(equipment_name);
+
+    let id_zone = createDropdownMenu("", zone_names, id_zones);
+    tr.appendChild(id_zone);
 
     let btn_save = createButton("Добавить", "btn-secondary");
     tr.appendChild(btn_save);
+
     btn_save.addEventListener("click", function() {
         let params = {}
-        if (id_tag.firstChild.id != '') { params["id_tag"] = id_tag.firstChild.id; }
-        if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
+        if (equipment_name.firstChild.value != '') { params["equipment_name"] = equipment_name.firstChild.value; }
+        if (id_zone.firstChild.id != '') { params["id_zone"] = id_zone.firstChild.id; }
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/marker/', true);
+        xhr.open('POST', '/api/equipment/', true);
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         let json = JSON.stringify(params);
         xhr.onload = function() {
-            var result = JSON.parse(xhr.responseText);
             if (xhr.readyState == 4 && xhr.status == "200") {
+                var result = JSON.parse(xhr.responseText);
 
                 obj.push(result.query);
                 let objRef = obj[obj.length - 1];
 
                 let tr_new = document.createElement('tr');
-                let id_mark = result.query["id_mark"];
+                let equipment_id = result.query["equipment_id"];
 
-                let name = createInput(result.query["name"], "any")
-                tr_new.appendChild(name);
+                let equipment_name_new = createInput(result.query["equipment_name"], "any")
+                tr_new.appendChild(equipment_name_new);
 
-                let id_tag = createDropdownMenu(result.query["id_tag"], tag_uuid, tag_id);
-                tr_new.appendChild(id_tag);
+                let id_zone_new = createDropdownMenu(result.query["id_zone"], zone_names, id_zones);
+                tr_new.appendChild(id_zone_new);
 
                 let btn_save = createButton("Сохранить", "btn-warning");
                 tr_new.appendChild(btn_save);
                 btn_save.addEventListener("click", function() {
                     let params = {}
-                    if (id_tag.firstChild.id != '') { params["id_tag"] = id_tag.firstChild.id; }
-                    if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
+                    if (id_zone_new.firstChild.id != '') { params["id_zone"] = id_zone_new.firstChild.id; }
+                    if (equipment_name_new.firstChild.value != '') { params["equipment_name"] = equipment_name_new.firstChild.value; }
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('PUT', '/api/markers/' + id_mark + '/', true);
+                    xhr.open('PUT', '/api/equipment/' + equipment_id + '/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     let json = JSON.stringify(params);
                     xhr.onload = function() {
                         if (xhr.readyState == 4 && xhr.status == "200") {
                             let res = JSON.parse(xhr.response).query
-                            objRef.id_tag = res.id_tag;
-                            objRef.name = res.name;
+                            objRef.equipment_name = res.equipment_name;
+                            objRef.id_zone = res.id_zone;
                         } else { showMessage(xhr.response, "danger"); }
                     }
                     xhr.send(json);
@@ -175,13 +175,13 @@ function createSortedTable(obj) {
                 tr_new.appendChild(btn_delete);
                 btn_delete.addEventListener("click", function() {
                     var xhr = new XMLHttpRequest();
-                    xhr.open('DELETE', '/api/marker/' + id_mark + '/', true);
+                    xhr.open('DELETE', '/api/equipment/' + equipment_id + '/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     let json = JSON.stringify();
                     xhr.onload = function() {
                         if (xhr.readyState == 4 && xhr.status == "200") {
-                            let idx = markers.indexOf(objRef)
-                            markers.splice(idx, 1);
+                            let idx = equipments.indexOf(objRef)
+                            equipments.splice(idx, 1);
                             tr_new.remove()
                         } else { showMessage(xhr.response, "danger"); }
                     }
@@ -189,12 +189,10 @@ function createSortedTable(obj) {
                 });
 
                 table.appendChild(tr_new);
-
             } else { showMessage(xhr.response, "danger"); }
         }
         xhr.send(json);
     });
 
     tableAdd.appendChild(tr);
-
 }

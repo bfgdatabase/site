@@ -17,7 +17,7 @@ def get_markers():
 docs.register(get_markers)
 
 @app.route('/api/markers/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Find gates with params', tags=['markers'])
+@doc(description='Find markers with params', tags=['markers'])
 @marshal_with(MarksSchema(many=True))
 @use_kwargs(MarksSchema(exclude=("id_mark",)))
 @resp.check_user_permission(dbName = "MarksDB", method = 'GET')

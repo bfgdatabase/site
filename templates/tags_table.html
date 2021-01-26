@@ -1,4 +1,4 @@
-{% extends 'base_template.html' %} {% block title %} Администрирование {% endblock %} {% block head %}
+{% extends 'base_template.html' %} {% block title %} Тэги {% endblock %} {% block head %}
 
 <head>
     <script type="module" src="{{ url_for('static', filename='js/tags.js') }}"></script>
@@ -13,32 +13,25 @@
             </table>
             <div id="messages">
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col md-12">
-
-                        <div class="jumbotron p-3 ">
-                            <h2> Тэги
-                            </h2>
-                            <br>
-                            <table class="table ">
-                                <thead class="thead-dark ">
-                                    <tr>
-                                        <th scope="col ">uuid</th>
-                                        <th scope="col ">mac</th>
-                                        <th scope="col ">Дата создания</th>
-                                        <th scope="col ">gain</th>
-                                        <th scope="col "></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBtns">
-                                </tbody>
-                                <tbody id="tableBody">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            <div class="jumbotron p-3 ">
+                <h2> Тэги
+                </h2>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">uuid</th>
+                            <th scope="col ">mac</th>
+                            <th scope="col ">Дата создания</th>
+                            <th scope="col ">gain</th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBtns">
+                    </tbody>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
             </div>
         </main>
     </div>

@@ -4,6 +4,8 @@
 jQuery.noConflict()
 
 
+let zones = []
+
 let location_names = []
 let location_ids = []
 let anchor_name = []
@@ -49,9 +51,9 @@ function createPage() {
     if (xhr.status != 200) {
         showMessage(xhr.response, "danger");
     } else {
-        var obj = JSON.parse(xhr.responseText);
-        createTableBtns(obj.query)
-        createSortedTable(obj.query)
+        zones = JSON.parse(xhr.responseText).query;
+        createTableBtns(zones)
+        createSortedTable(zones)
     }
 }
 
@@ -75,6 +77,8 @@ function createSortedTable(obj) {
     table.innerHTML = "";
 
     for (var i = 0; i < obj.length; i++) {
+
+        let objRef = obj[i];
 
         let tr = document.createElement('tr');
         let id_zone = obj[i]["id_zone"];
@@ -120,8 +124,17 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") {} else { showMessage(xhr.response, "danger"); }
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let res = JSON.parse(xhr.response).query
+                    objRef.name = res.name;
+                    objRef.id_location = res.id_location;
+                    objRef.weight = res.weight;
+                    objRef.sharp = res.sharp;
+                    objRef.type = res.type;
+                    objRef.threshold_in = res.threshold_in;
+                    objRef.threshold_out = res.threshold_out;
+                    objRef.id_anchor = res.id_anchor;
+                } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
         });
@@ -133,8 +146,11 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify();
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") { tr.remove() } else { showMessage(xhr.response, "danger"); }
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let idx = equipments.indexOf(objRef)
+                    equipments.splice(idx, 1);
+                    tr.remove();
+                } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
         });

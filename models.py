@@ -6,7 +6,7 @@ from datetime import timedelta
 from flask_bcrypt import Bcrypt
 
 
-editableTables = ['EnterpriseDB', 'DepartmentDB', 'LocationsDB', 'GatesDB', 'AnchorsDB', 'ZonesDB', 'EquipmentDB', 'TagsDB', 'MarksDB', 'SpecDB', 'TechDB', 'UsersDB']
+editableTables = ['EnterpriseDB', 'DepartmentDB', 'LocationsDB', 'GatesDB', 'AnchorsDB', 'ZonesDB', 'EquipmentDB', 'TagsDB', 'MarksDB', 'SpecDB', 'OrdersDB', 'TechDB', 'UsersDB']
 
 class PermissionsDB(db.Model):
     __tablename__ = 'userPermissions'
@@ -132,6 +132,18 @@ class TechDB(db.Model):
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.equipment_id')) 
     nop = db.Column(db.Integer())
 
+class OrdersDB(db.Model):
+    __tablename__ = 'orders'
+    id_order = db.Column(db.Integer(), primary_key=True)
+    order_num = db.Column(db.Integer())
+    order_name = db.Column(db.Text())
+    customer = db.Column(db.Text())
+    code_spec = db.Column(db.Integer, db.ForeignKey('spec.id_spec')) 
+    product_name = db.Column(db.Text())
+    created = db.Column(db.DateTime())
+    started = db.Column(db.DateTime())
+    closed = db.Column(db.DateTime())
+
 class UsersDB(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer(), primary_key=True)
@@ -226,3 +238,7 @@ class RolesSchema(ma.SQLAlchemyAutoSchema):
         model = RolesDB
         include_fk = True
         
+class OrdersSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = OrdersDB
+        include_fk = True

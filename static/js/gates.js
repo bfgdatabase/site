@@ -4,8 +4,9 @@
 jQuery.noConflict()
 
 
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
+let gates = []
+    ///////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
 
 $(document).ready(createPage());
 
@@ -16,9 +17,9 @@ function createPage() {
     if (xhr.status != 200) {
         showMessage(xhr.response, "danger");
     } else {
-        var obj = JSON.parse(xhr.responseText);
-        createTableBtns(obj.query)
-        createSortedTable(obj.query)
+        gates = JSON.parse(xhr.responseText).query;
+        createTableBtns(gates)
+        createSortedTable(gates)
     }
 }
 
@@ -44,6 +45,8 @@ function createSortedTable(obj) {
 
     for (var i = 0; i < obj.length; i++) {
 
+        let objRef = obj[i];
+
         let tr = document.createElement('tr');
         let id_gate = obj[i]["id_gate"];
 
@@ -66,8 +69,10 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
-                if (xhr.readyState == 4 && xhr.status == "200") {} else { showMessage(xhr.response, "danger"); }
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let res = JSON.parse(xhr.response).query
+                    objRef.gain = res.gain;
+                } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
 

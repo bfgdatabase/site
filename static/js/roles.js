@@ -43,7 +43,6 @@ function createSortedTable(obj) {
             xhr.open('DELETE', '/api/role/' + id_role + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
                 if (xhr.readyState == 4 && xhr.status == "200") { createPage(); } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send();
@@ -71,7 +70,6 @@ function createSortedTable(obj) {
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
-                var result = JSON.parse(xhr.responseText);
                 if (xhr.readyState == 4 && xhr.status == "200") { createPage(); } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
