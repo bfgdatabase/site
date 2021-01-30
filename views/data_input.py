@@ -47,3 +47,8 @@ def spec_table():
 @resp.check_user_authorization()
 def order_table():
     return render_template('order_table.html', username = session["username"])
+
+@app.route('/tables/structure')
+@resp.check_user_authorization()
+def structure_table():
+    return render_template('structure_table.html', username = session["username"])

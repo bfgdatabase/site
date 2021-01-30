@@ -60,13 +60,13 @@ docs.register(update_specifications)
 @doc(description='Delete specification by id', tags=['specifications'])
 @resp.check_user_permission(dbName = "SpecDB", method = 'DELETE')
 def delete_specifications(id):
-    query = SpecDB.query.get_or_404(id)
-    db.session.delete(query)
-    db.session.commit()  
     query = TechDB.query.filter_by(id_spec = id).all()
     for item in query:
         db.session.delete(item)
         db.session.commit()  
+    query = SpecDB.query.get_or_404(id)
+    db.session.delete(query)
+    db.session.commit()  
     return response_with(resp.SUCCESS_200)
 docs.register(delete_specifications)
 

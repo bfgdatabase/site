@@ -73,6 +73,10 @@ def delete_department(id):
     query = DepartmentDB.query.get_or_404(id)
     db.session.delete(query)
     db.session.commit()  
+    query = LocationsDB.query.filter_by(dept_id = id).all()
+    for item in query:
+        db.session.delete(item)
+        db.session.commit() 
     return response_with(resp.SUCCESS_200)
 docs.register(delete_department)
 

@@ -19,5 +19,4 @@ class Configuration(object):
     UPLOAD_FOLDER = 'static/images/maps'
     ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-
     USER_PASSWORD_HASH             = 'bfg-bcrypt' 

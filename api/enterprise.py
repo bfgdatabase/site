@@ -60,6 +60,14 @@ docs.register(update_enterprise)
 @doc(description='Delete enterprise by id', tags=['enterprise'])
 @resp.check_user_permission(dbName = "EnterpriseDB", method = 'DELETE')
 def delete_enterprise(id):
+    query = DepartmentDB.query.filter_by(ent_id = id).all()
+    for item in query:
+        l_query = LocationsDB.query.filter_by(dept_id = item.dept_id).all()
+        for l_item in l_query:
+            db.session.delete(l_item)
+            db.session.commit() 
+        db.session.delete(item)
+        db.session.commit() 
     query = EnterpriseDB.query.get_or_404(id)
     db.session.delete(query)
     db.session.commit()  
