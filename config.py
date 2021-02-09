@@ -20,3 +20,11 @@ class Configuration(object):
     ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
     USER_PASSWORD_HASH             = 'bfg-bcrypt' 
+
+    # email server
+    MAIL_SERVER = 'smtp.yandex.ru'
+    MAIL_PORT = 25
+    MAIL_USE_SSL = False
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'bfgdatabase.server'
+    MAIL_PASSWORD = 'cizktdbvizcpddnx'
