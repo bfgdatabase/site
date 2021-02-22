@@ -147,8 +147,8 @@ function createSortedTable(obj) {
             let json = JSON.stringify();
             xhr.onload = function() {
                 if (xhr.readyState == 4 && xhr.status == "200") {
-                    let idx = equipments.indexOf(objRef)
-                    equipments.splice(idx, 1);
+                    let idx = zones.indexOf(objRef)
+                    zones.splice(idx, 1);
                     tr.remove();
                 } else { showMessage(xhr.response, "danger"); }
             }

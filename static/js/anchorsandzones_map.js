@@ -27,6 +27,7 @@ $(document).ready(createPage());
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 function editAnchor(x, y, name, id) {
+
     let filtered = markers.findIndex(function(el, index) {
         if (el.id == id) {
             el.obj._latlng.lat = y / scale;
@@ -58,7 +59,7 @@ function addZoneToMap(zone) {
         array = str.match(/\d+(?:\.\d+)?/g).map(Number)
     var ans = [];
     for (var j = 0; j < array.length; j = j + 2) {
-        ans.push([array[j] / scale, array[j + 1] / scale]);
+        ans.push([array[j + 1] / scale, array[j] / scale]);
     }
     var polygon = L.polygon(ans).addTo(editableLayers).bindPopup(zone.name).on('click', onClick);
     zonesPoly.push(new mapObj(polygon, zone.id_zone, zone.name));
@@ -316,13 +317,16 @@ function createAnchorTable() {
 
 function newAnchorTable() {
     {
+        let explandTable = document.getElementById('explandTable');
+        explandTable.innerHTML = "";
+
         let table = document.getElementById('editTableHead');
         table.className = "thead-dark";
         table.innerHTML = "";
 
         let tr = document.createElement('tr');
 
-        let name = createText("Имя")
+        let name = createText("Анкер")
         tr.appendChild(name);
 
         let x_pos = createText("X")
@@ -392,6 +396,18 @@ function newAnchorTable() {
 }
 
 function editAnchorTable(odj) {
+
+    let filtered = markers.findIndex(function(el, index) {
+        if (el.id == odj.id_anchor) {
+
+            if (selectedFeature)
+                selectedFeature.editing.disable();
+            selectedFeature = el.obj;
+            selectedFeature.editing.enable();
+            selectedFeature.openPopup();
+        }
+    });
+
     {
         let table = document.getElementById('editTableHead');
         table.className = "thead-dark";
@@ -399,7 +415,7 @@ function editAnchorTable(odj) {
 
         let tr = document.createElement('tr');
 
-        let name = createText("Имя")
+        let name = createText("Анкер")
         tr.appendChild(name);
 
         let x_pos = createText("X")
@@ -553,7 +569,7 @@ function newZoneTable() {
 
         let tr = document.createElement('tr');
 
-        let name = createText("Имя")
+        let name = createText("Зона")
         tr.appendChild(name);
 
         let x_pos = createText("X")
@@ -722,6 +738,18 @@ function newZoneTable() {
 }
 
 function editZoneTable(odj) {
+
+    let filtered = zonesPoly.findIndex(function(el, index) {
+        if (el.id == odj.id_zone) {
+
+            if (selectedFeature)
+                selectedFeature.editing.disable();
+            selectedFeature = el.obj;
+            selectedFeature.editing.enable();
+            selectedFeature.openPopup();
+        }
+    });
+
     let id_zone = odj.id_zone; {
         let table = document.getElementById('editTableHead');
         table.className = "thead-dark";
@@ -729,7 +757,7 @@ function editZoneTable(odj) {
 
         let tr = document.createElement('tr');
 
-        let name = createText("Имя")
+        let name = createText("Зона")
         tr.appendChild(name);
 
         let x_pos = createText("X")
@@ -892,7 +920,7 @@ function onClick(e) {
     if (selectedFeature)
         selectedFeature.editing.disable();
     selectedFeature = e.target;
-    e.target.editing.enable();
+    selectedFeature.editing.enable();
 
     if (selectedFeature instanceof L.Marker) {
         markers.findIndex(function(el, index) {
