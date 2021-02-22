@@ -1,6 +1,6 @@
 __all__ = [
     "admin",
-    "anchors", 
-    "data_input",      
+    "interactive_input", 
+    "table_input",      
     "login"
     ]

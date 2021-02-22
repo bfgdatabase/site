@@ -534,9 +534,11 @@ function createLocSortedTable(obj, id) {
             })
         }
 
-        let btn_select = createButton("Редактировать", "btn-secondary");
+        let btn_select = createButton("Карта", "btn-secondary");
         tr.appendChild(btn_select);
-        btn_select.addEventListener("click", function() {});
+        btn_select.addEventListener("click", function() {
+            window.location.replace('/anchorsandzones/' + id_location + '/');
+        });
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
@@ -685,9 +687,11 @@ function createLocSortedTable(obj, id) {
                     })
                 }
 
-                let btn_select = createButton("Редактировать", "btn-secondary");
+                let btn_select = createButton("Карта", "btn-secondary");
                 tr_new.appendChild(btn_select);
-                btn_select.addEventListener("click", function() {});
+                btn_select.addEventListener("click", function() {
+                    window.location.replace('/anchorsandzones/' + id_location + '/');
+                });
 
                 let btn_save = createButton("Сохранить", "btn-warning");
                 tr_new.appendChild(btn_save);
@@ -745,3 +749,10 @@ function createLocSortedTable(obj, id) {
 
     tableAdd.appendChild(tr);
 }
+
+var redirect = function(url, method) {
+    var form = document.createElement('form');
+    form.method = method;
+    form.action = url;
+    form.submit();
+};

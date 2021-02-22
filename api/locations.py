@@ -34,7 +34,7 @@ def create_location(**kwargs):
 docs.register(create_location)
 
 @app.route('/api/locations/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Find gates with params', tags=['locations'])
+@doc(description='Find location with params', tags=['locations'])
 @marshal_with(LocationsSchema(many=True))
 @use_kwargs(LocationsSchema(exclude=("id_location",)))
 @resp.check_user_permission(dbName = "LocationsDB", method = 'GET')

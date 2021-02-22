@@ -1,0 +1,71 @@
+{% extends 'base_template.html' %} {% block title %} Анкеры и зоны {% endblock %} {% block head %}
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+    <script type="module" src="{{ url_for('static', filename='js/anchorsandzones_map.js') }}"></script>
+
+    <script type="text/javascript">
+        var id_location = '{{id_location}}'
+    </script>
+
+    <style>
+        #map {
+            height: 60vh;
+        }
+        
+        .top-offset {
+            margin-top: 80px;
+        }
+        
+        tr td {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    </style>
+</head>
+
+
+{% endblock %} {% block body %}
+<div class="container-fluid" id="my_content">
+    <div class="row vh-100 ">
+
+        <div class=" sidebar-offcanvas h-100 overflow-auto pl-0 top-offset">
+
+            <div class="jumbotron p-3 ">
+                <h5 id="tableName"> Анкеры и зоны
+                </h5>
+                <div id="selectBtns"></div>
+                <div id="selectTable"></div>
+
+            </div>
+        </div>
+
+        <div class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+            <div class="jumbotron p-3 ">
+                <h2 id="location_name" align="center"> Локация
+                </h2>
+                <div id="map"></div>
+            </div>
+            <div class="jumbotron p-3 ">
+                <table class="table ">
+                    <thead id="editTableHead" class="thead-dark ">
+                    </thead>
+                    <tbody id="editTable">
+                    </tbody>
+                    <tbody id="explandTable">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

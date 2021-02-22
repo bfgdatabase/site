@@ -6,8 +6,8 @@ from app import db
 from utils.responses import response_with
 from utils import responses as resp
 
-@app.route('/anhcors')
-@resp.check_user_authorization()
-def ancors():
-    return render_template('anchorsTable.html', user = session["username"])
 
+@app.route('/anchorsandzones/<int:id_location>/')
+@resp.check_user_authorization()
+def anchorsandzones(id_location):
+    return render_template('anchorsandzones_map.html', user = session["username"], id_location = id_location)
