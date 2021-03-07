@@ -7,6 +7,7 @@ from flask_bcrypt import Bcrypt
 from utils.responses import response_with
 from utils import responses as resp
 from api.login import login
+from flask import send_file
 
 @app.route('/admin/users')
 @resp.admin_require()
@@ -22,3 +23,18 @@ def permission_table():
 @resp.admin_require()
 def roles_table():
     return render_template('roles_table.html', username = session["username"])
+
+
+@app.route('/download')
+def downloadFile ():
+    import csv
+    path = "dump.csv"
+    outfile = open(path, 'w')
+    outcsv = csv.writer(outfile)
+    records = MarksDB.query.all()
+    [outcsv.writerow([column.name for column in MarksDB.__mapper__.columns])]
+    [outcsv.writerow([getattr(curr, column.name) for column in MarksDB.__mapper__.columns]) for curr in records]
+    outfile.close()
+    filename = app.root_path + '/' +  path
+    if os.path.isfile(filename):
+        return send_file(path, as_attachment=True)

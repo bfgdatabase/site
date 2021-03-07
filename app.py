@@ -12,6 +12,8 @@ from flask_apispec import FlaskApiSpec
 from apispec_webframeworks.flask import FlaskPlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
 
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 
 DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=Configuration.POSTGRES_USER,pw=Configuration.POSTGRES_PW,url=Configuration.POSTGRES_URL,db=Configuration.POSTGRES_DB)
 
@@ -24,7 +26,14 @@ app.config['UPLOAD_FOLDER'] = Configuration.UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER'] = Configuration.ALLOWED_EXTENSIONS
 app.config.from_object(Configuration)
 
+
 db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+
 db.create_all()
 db.session.commit()
 
@@ -73,4 +82,3 @@ if(len(users) == 0):
     db.session.add(admin)
     db.session.commit()       
 
- 
