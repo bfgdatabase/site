@@ -5,12 +5,11 @@ from flask_jwt_extended import create_access_token
 from datetime import timedelta
 from flask_bcrypt import Bcrypt
 
-
 editableTables = ['EnterpriseDB', 'DepartmentDB', 'LocationsDB', 'GatesDB', 'AnchorsDB', 'ZonesDB', 'EquipmentDB', 'TagsDB', 'MarksDB', 'SpecDB', 'OrdersDB', 'TechDB', 'UsersDB']
 
 class PermissionsDB(db.Model):
     __tablename__ = 'userPermissions'
-    id_permission= db.Column(db.Integer(), primary_key=True)
+    id_permission= db.Column(db.Integer(), primary_key=True, autoincrement=True)
     table = db.Column(db.Text())
     role = db.Column(db.Text())
     get = db.Column(db.Boolean())
@@ -19,25 +18,25 @@ class PermissionsDB(db.Model):
 
 class RolesDB(db.Model):
     __tablename__ = 'userRoles'
-    id_role= db.Column(db.Integer(), primary_key=True)
+    id_role= db.Column(db.Integer(), primary_key=True, autoincrement=True)
     role = db.Column(db.Text(), unique=True)
 
 class EnterpriseDB(db.Model):
     __tablename__ = 'enterprise'
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     ent_name = db.Column(db.Text())
     department = db.relationship("DepartmentDB", backref=db.backref('enterprise'), lazy=True)
 
 class DepartmentDB(db.Model):
     __tablename__ = 'department'
-    dept_id = db.Column(db.Integer(), primary_key=True)
+    dept_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     ent_id = db.Column(db.Integer, db.ForeignKey('enterprise.id'))
     dept_name = db.Column(db.Text())
     locations = db.relationship("LocationsDB", backref=db.backref('department'), lazy=True)
 
 class LocationsDB(db.Model):
     __tablename__ = 'locations'
-    id_location = db.Column(db.Integer(), primary_key=True)
+    id_location = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     name = db.Column(db.Text())
     map = db.Column(db.Text())
     longitude = db.Column(db.Float())
@@ -55,7 +54,7 @@ class LocationsDB(db.Model):
 
 class GatesDB(db.Model):
     __tablename__ = 'gates'
-    id_gate = db.Column(db.Integer(), primary_key=True)
+    id_gate = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     mac = db.Column(db.Text())
     created = db.Column(db.DateTime())    
     gain = db.Column(db.Float()) 
@@ -63,7 +62,7 @@ class GatesDB(db.Model):
 
 class AnchorsDB(db.Model):
     __tablename__ = 'anchors'
-    id_anchor = db.Column(db.Integer, primary_key=True)
+    id_anchor = db.Column(db.Integer, primary_key=True, autoincrement=True)
     mac = db.Column(db.String(250))
     gain = db.Column(db.Float())
     id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
@@ -75,7 +74,7 @@ class AnchorsDB(db.Model):
     
 class ZonesDB(db.Model):
     __tablename__ = 'zones'
-    id_zone = db.Column(db.Integer(), primary_key=True)
+    id_zone = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
     created = db.Column(db.DateTime())
     modified = db.Column(db.DateTime())
@@ -92,7 +91,7 @@ class ZonesDB(db.Model):
     
 class EquipmentDB(db.Model):
     __tablename__ = 'equipment'
-    equipment_id = db.Column(db.Integer(), primary_key=True)
+    equipment_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
     id_zone = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))
     equipment_model = db.Column(db.Text())
@@ -102,7 +101,7 @@ class EquipmentDB(db.Model):
 
 class TagsDB(db.Model):
     __tablename__ = 'tags'
-    id_tag = db.Column(db.Integer(), primary_key=True)
+    id_tag = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     uuid = db.Column(db.Text())
     mac = db.Column(db.Text())
     created = db.Column(db.DateTime())
@@ -111,7 +110,7 @@ class TagsDB(db.Model):
 
 class MarksDB(db.Model):
     __tablename__ = 'markers'
-    id_mark = db.Column(db.Integer(), primary_key=True)
+    id_mark = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_tag = db.Column(db.Integer, db.ForeignKey('tags.id_tag'))
     created = db.Column(db.DateTime())
     modified = db.Column(db.DateTime())
@@ -119,13 +118,13 @@ class MarksDB(db.Model):
     
 class SpecDB(db.Model):
     __tablename__ = 'spec'
-    id_spec = db.Column(db.Integer(), primary_key=True)
+    id_spec = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     code = db.Column(db.Integer())
     name = db.Column(db.Text())
 
 class TechDB(db.Model):
     __tablename__ = 'technology'
-    id_techop = db.Column(db.Integer(), primary_key=True)
+    id_techop = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_spec = db.Column(db.Integer())
     code = db.Column(db.Integer())
     name = db.Column(db.Text())
@@ -134,7 +133,7 @@ class TechDB(db.Model):
 
 class OrdersDB(db.Model):
     __tablename__ = 'orders'
-    id_order = db.Column(db.Integer(), primary_key=True)
+    id_order = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     order_num = db.Column(db.Integer())
     order_name = db.Column(db.Text())
     customer = db.Column(db.Text())
@@ -144,9 +143,14 @@ class OrdersDB(db.Model):
     started = db.Column(db.DateTime())
     closed = db.Column(db.DateTime())
 
+class TestDB(db.Model):
+    __tablename__ = 'tests'
+    id_test = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    test_int = db.Column(db.Integer())
+
 class UsersDB(db.Model):
     __tablename__ = 'users'
-    user_id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     login = db.Column(db.Text(), unique=True, nullable = False)
     username = db.Column(db.Text())
     email = db.Column(db.Text())

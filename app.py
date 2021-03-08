@@ -26,8 +26,8 @@ app.config['UPLOAD_FOLDER'] = Configuration.UPLOAD_FOLDER
 app.config['UPLOAD_FOLDER'] = Configuration.ALLOWED_EXTENSIONS
 app.config.from_object(Configuration)
 
-
 db = SQLAlchemy(app)
+
 
 migrate = Migrate(app, db)
 
@@ -53,6 +53,10 @@ app.config.update({
 docs = FlaskApiSpec(app)
 
 from models import *
+
+with app.app_context():
+    #db.drop_all()
+    db.create_all()
 
 roles = RolesDB.query.all()
 for role in roles:
