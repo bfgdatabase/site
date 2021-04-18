@@ -1,8 +1,8 @@
-{% extends 'base_template.html' %} {% block title %} Метки {% endblock %} {% block head %}
+{% extends 'base_template.html' %} {% block title %} Настройки {% endblock %} {% block head %}
 
 <head>
 
-    <script type="module" src="{{ url_for('static', filename='js/marks.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/settings_group.js') }}"></script>
 </head>
 {% endblock %} {% block body %}
 
@@ -15,14 +15,14 @@
             <div id="messages">
             </div>
             <div class="jumbotron p-3 ">
-                <h2> Метки
+                <h2> Группы
                 </h2>
                 <br>
                 <table class="table ">
                     <thead class="thead-dark ">
                         <tr>
                             <th scope="col ">Наименование</th>
-                            <th scope="col ">UUID</th>
+                            <th scope="col "></th>
                             <th scope="col "></th>
                             <th scope="col "></th>
                             <th scope="col "></th>
@@ -34,6 +34,27 @@
                     </tbody>
                     <tbody id="tableAdd">
                     </tbody>
+                </table>
+            </div>
+
+            <div class="jumbotron p-3 ">
+                <h2> Состав группы
+                </h2>
+                <h6 id="childTable">
+                </h6>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">Метка</th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody id="childtableBtns">
+                    </tbody>
+                    <tbody id="childtableBody">
+                    </tbody>
+                    <tbody id="childtableAdd">
                 </table>
             </div>
         </main>

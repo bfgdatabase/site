@@ -71,6 +71,9 @@ function createSortedTable(obj) {
         let id_tag = createDropdownMenu(obj[i]["id_tag"], tag_uuid, tag_id);
         tr.appendChild(id_tag);
 
+        let btn_fire = createButton("Подсветить", "btn-danger");
+        tr.appendChild(btn_fire);
+
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
         btn_save.addEventListener("click", function() {
@@ -150,6 +153,9 @@ function createSortedTable(obj) {
                 let id_tag = createDropdownMenu(result.query["id_tag"], tag_uuid, tag_id);
                 tr_new.appendChild(id_tag);
 
+                let btn_fire = createButton("Подсветить", "btn-danger");
+                tr_new.appendChild(btn_fire);
+
                 let btn_save = createButton("Сохранить", "btn-warning");
                 tr_new.appendChild(btn_save);
                 btn_save.addEventListener("click", function() {
@@ -158,7 +164,7 @@ function createSortedTable(obj) {
                     if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('PUT', '/api/markers/' + id_mark + '/', true);
+                    xhr.open('PUT', '/api/marker/' + id_mark + '/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     let json = JSON.stringify(params);
                     xhr.onload = function() {

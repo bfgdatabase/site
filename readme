@@ -1,5 +1,4 @@
-source env/bin/activate
-
+Генерация ключей
 openssl req -newkey rsa:4096 \
             -x509 \
             -sha256 \
@@ -8,9 +7,11 @@ openssl req -newkey rsa:4096 \
             -out bfg.crt \
             -keyout bfg.key
 
+Миграции
 python3 migrate.py db init
 python3 migrate.py db migrate
 python3 migrate.py db upgrade
 
+Сохранение бд
 pg_dump postgresql://timur:123456@127.0.0.1:5432/bfg > db_backup/dump_name.sql
 psql postgresql://timur:123456@127.0.0.1:5432/bfg < db_backup/dump_name.sql
