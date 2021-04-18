@@ -172,6 +172,27 @@ class UsersDB(db.Model):
         session["role"] = query[0].role
         return query[0]
 
+class MarkgroupDB(db.Model):
+    __tablename__ = 'markgroup'
+    markgroup_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    markgroup_name = db.Column(db.Text(), unique=True)
+
+class MarkgroupSettingsDB(db.Model):
+    __tablename__ = 'markgroupSetting'
+    setting_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    markgroup_id = db.Column(db.Integer, db.ForeignKey('markgroup.markgroup_id')) 
+    setting_name = db.Column(db.Text(), unique=True)
+    setting_type = db.Column(db.Text())
+    setting_script = db.Column(db.Text())
+    setting_params = db.Column(db.Text())
+
+class MarkgroupRelationsDB(db.Model):
+    __tablename__ = 'markgroupRelations'
+    markgroupTable_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    markers_id = db.Column(db.Integer, db.ForeignKey('markers.id_mark'), nullable=False)
+    markgroup_id = db.Column(db.Integer, db.ForeignKey('markgroup.markgroup_id'), nullable=False) 
+
+
 class EnterpriseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = EnterpriseDB
@@ -246,3 +267,19 @@ class OrdersSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = OrdersDB
         include_fk = True
+
+class MarkgroupSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = MarkgroupDB
+        include_fk = True
+
+class MarkgroupSettingsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = MarkgroupSettingsDB
+        include_fk = True
+
+class MarkgroupRelationsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = MarkgroupRelationsDB
+        include_fk = True
+

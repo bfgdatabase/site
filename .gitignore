@@ -1,2 +1,7 @@
 /env/*
 *.cpython-38.pyc
+*.crt
+*.key
+*_.py
+__pycache__
+*.sql

@@ -11,3 +11,6 @@ openssl req -newkey rsa:4096 \
 python3 migrate.py db init
 python3 migrate.py db migrate
 python3 migrate.py db upgrade
+
+pg_dump postgresql://timur:123456@127.0.0.1:5432/bfg > db_backup/dump_name.sql
+psql postgresql://timur:123456@127.0.0.1:5432/bfg < db_backup/dump_name.sql

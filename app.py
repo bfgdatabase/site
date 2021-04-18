@@ -28,14 +28,9 @@ app.config.from_object(Configuration)
 
 db = SQLAlchemy(app)
 
-
 migrate = Migrate(app, db)
-
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
-
-db.create_all()
-db.session.commit()
 
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
@@ -53,10 +48,9 @@ app.config.update({
 docs = FlaskApiSpec(app)
 
 from models import *
-
-with app.app_context():
-    #db.drop_all()
-    db.create_all()
+#db.drop_all()
+db.create_all()
+db.session.commit()
 
 roles = RolesDB.query.all()
 for role in roles:

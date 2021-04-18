@@ -75,5 +75,3 @@ def update_ancor(id, **kwargs):
     schema = AnchorsSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(update_ancor)
-
-

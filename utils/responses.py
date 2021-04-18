@@ -44,6 +44,7 @@ FORBIDDEN_403 = {
     "code": 403,
     "message": "You are not authorised to execute this."
 }
+
 UNAUTHORIZED_401 = {
     "http_code": 401,
     "code": 401,
