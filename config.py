@@ -9,12 +9,17 @@ class Configuration(object):
     POSTGRES_PW = "bfgdatabase"
     POSTGRES_DB = "bfg"
     '''
-    
+    '''
     POSTGRES_URL = "127.0.0.1:5432"
     POSTGRES_USER = "timur"
     POSTGRES_PW = "123456"
     POSTGRES_DB = "bfg"
-    
+    '''
+    POSTGRES_URL = "127.0.0.1:5432"
+    POSTGRES_USER = "timur"
+    POSTGRES_PW = "123456"
+    POSTGRES_DB = "bbffgg"
+
     SEKRET_KEY = "bfg-group"
 
     UPLOAD_FOLDER = 'static/images/maps'

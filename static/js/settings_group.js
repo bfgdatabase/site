@@ -22,8 +22,9 @@ $(document).ready(function() {
     } else {
         var res = JSON.parse(xhr.responseText);
         for (var i = 0; i < res.query.length; i++) {
-            markers_names.push(res.query[i]['id_mark'])
-            markers_ids.push(res.query[i]['name'])
+            markers.push(res.query[i])
+            markers_names.push(res.query[i]['name'])
+            markers_ids.push(res.query[i]['id_mark'])
         }
     }
 
@@ -54,6 +55,7 @@ function createTableBtns(obj) {
     table.appendChild(tr);
 }
 
+// create group table
 function createSortedTable(obj) {
     let table = document.getElementById('tableBody');
     table.className = "table table-hover table-striped";
@@ -71,24 +73,27 @@ function createSortedTable(obj) {
         let btn_select = createButton("Редактировать", "btn-secondary");
         tr.appendChild(btn_select);
         btn_select.addEventListener("click", function() {
-            let childTable = document.getElementById('childTable');
-            childTable.innerHTML = markgroup_name.childNodes[0].value;
+
+            createSortedTable_group(markgroup_id);
+            let childTable_marks = document.getElementById('childTable_marks');
+            childTable_marks.innerHTML = "Состав группы " + markgroup_name.childNodes[0].value;
+
             let params = {}
             params["markgroup_id"] = markgroup_id;
             let json = JSON.stringify(params);
-
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/markgrouprelations/', true);
+            xhr.open('POST', '/api/markgroupSettings/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.onload = function() {
                 if (xhr.readyState == 4 && xhr.status == "200") {
-                    let group = JSON.parse(xhr.response).query
-                    createSortedTable_group(group, markgroup_id);
-                    createTableBtns_group(group);
-
+                    let childTable_params = document.getElementById('childTable_params');
+                    childTable_params.innerHTML = "Параметры группы " + markgroup_name.childNodes[0].value;;
+                    let settings = JSON.parse(xhr.response).query
+                    createSortedTable_params(settings, markgroup_id)
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
+
         });
 
         let btn_save = createButton("Сохранить", "btn-warning");
@@ -122,14 +127,14 @@ function createSortedTable(obj) {
                     let idx = groups.indexOf(objRef)
                     groups.splice(idx, 1);
                     tr.remove(); {
-                        let table = document.getElementById('childtableBody');
+                        let table = document.getElementById('childTable_marks_body');
                         table.innerHTML = '';
-                        let tableAdd = document.getElementById('childtableBtns');
+                        let tableAdd = document.getElementById('childTable_marks_btns');
                         tableAdd.innerHTML = '';
-                        let tableBtn = document.getElementById('childtableAdd');
+                        let tableBtn = document.getElementById('childTable_marks_add');
                         tableBtn.innerHTML = '';
-                        let childTable = document.getElementById('childTable');
-                        childTable.innerHTML = '';
+                        let childTable_marks = document.getElementById('childTable_marks');
+                        childTable_marks.innerHTML = '';
 
                     }
                 } else { showMessage(xhr.response, "danger"); }
@@ -177,22 +182,23 @@ function createSortedTable(obj) {
                 let btn_select = createButton("Редактировать", "btn-secondary");
                 tr_new.appendChild(btn_select);
                 btn_select.addEventListener("click", function() {
+                    createSortedTable_group(markgroup_id);
 
-                    let childTable = document.getElementById('childTable');
-                    childTable.innerHTML = markgroup_name.childNodes[0].value;
+                    let childTable_marks = document.getElementById('childTable_marks');
+                    childTable_marks.innerHTML = "Метки группы " + markgroup_name.childNodes[0].value;
+                    let childTable_params = document.getElementById('childTable_params');
+                    childTable_params.innerHTML = "Параметры группы " + markgroup_name.childNodes[0].value;
+
                     let params = {}
                     params["markgroup_id"] = markgroup_id;
                     let json = JSON.stringify(params);
-
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', '/api/markgrouprelations/', true);
+                    xhr.open('POST', '/api/markgroupSettings/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     xhr.onload = function() {
                         if (xhr.readyState == 4 && xhr.status == "200") {
-                            let group = JSON.parse(xhr.response).query
-                            createSortedTable_group(group, markgroup_id);
-                            createTableBtns_group(group);
-
+                            let settings = JSON.parse(xhr.response).query
+                            createSortedTable_params(settings, markgroup_id)
                         } else { showMessage(xhr.response, "danger"); }
                     }
                     xhr.send(json);
@@ -230,14 +236,14 @@ function createSortedTable(obj) {
                             let idx = groups.indexOf(objRef)
                             groups.splice(idx, 1);
                             tr_new.remove(); {
-                                let table = document.getElementById('childtableBody');
+                                let table = document.getElementById('childTable_marks_body');
                                 table.innerHTML = '';
-                                let tableAdd = document.getElementById('childtableBtns');
+                                let tableAdd = document.getElementById('childTable_marks_btns');
                                 tableAdd.innerHTML = '';
-                                let tableBtn = document.getElementById('childtableAdd');
+                                let tableBtn = document.getElementById('childTable_marks_add');
                                 tableBtn.innerHTML = '';
-                                let childTable = document.getElementById('childTable');
-                                childTable.innerHTML = '';
+                                let childTable_marks = document.getElementById('childTable_marks');
+                                childTable_marks.innerHTML = '';
                             }
                         } else { showMessage(xhr.response, "danger"); }
                     }
@@ -253,47 +259,44 @@ function createSortedTable(obj) {
     tableAdd.appendChild(tr);
 }
 
-function createTableBtns_group(obj) {
-    /*
-    let table = document.getElementById('tech_tableBtns');
-    table.className = "table table-hover table-striped";
-    table.innerHTML = "";
-    let tr = document.createElement('tr');
-    let bt = createSortButton(obj, "nop", createSortedTable_tech)
-    tr.appendChild(bt);
-    let bt1 = createSortButton(obj, "code", createSortedTable_tech)
-    tr.appendChild(bt1);
-    let bt2 = createSortButton(obj, "name", createSortedTable_tech)
-    tr.appendChild(bt2);
-    table.appendChild(tr);
-    */
+function findbyId(markers, id) {
+    for (var i = 0; i < markers.length; i++) {
+        if (markers[i].id_mark == id) return markers[i];
+    }
 }
 
-function createSortedTable_group(obj, id) {
+function createSortedTable_group(id) {
 
-    let table = document.getElementById('childtableBody');
+    let table = document.getElementById('childTable_marks_body');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
 
-    for (var i = 0; i < obj.length; i++) {
+    for (var i = 0; i < markers.length; i++) {
 
-        let objRef = obj[i];
-        let markGroupRelations_id = objRef.markGroupRelations_id;
+        if (markers[i].markgroup_id != id)
+            continue;
+
+        let MARK_ID = markers[i].id_mark
+        let mark = findbyId(markers, MARK_ID)
+        mark.markgroup_id = id;
 
         let tr = document.createElement('tr');
-        let markers_id = createDropdownMenu(obj[i].markers_id, markers_names, markers_ids);
+        let markers_id = createTextFromVariants(MARK_ID, markers_names, markers_ids);
         tr.appendChild(markers_id);
+
         let btn_delete = createButton("Удалить", "btn-danger");
         tr.appendChild(btn_delete);
         btn_delete.addEventListener("click", function() {
+            let params = {}
+            params["markgroup_id"] = null;
             var xhr = new XMLHttpRequest();
-            xhr.open('DELETE', '/api/markgrouprelation/' + markGroupRelations_id + '/', true);
+            xhr.open('PUT', '/api/marker/' + MARK_ID + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-            let json = JSON.stringify();
+            let json = JSON.stringify(params);
             xhr.onload = function() {
                 if (xhr.readyState == 4 && xhr.status == "200") {
-                    let idx = obj.indexOf(objRef)
-                    obj.splice(idx, 1);
+                    let mark = findbyId(markers, MARK_ID)
+                    mark.markgroup_id = null;
                     tr.remove();
                 } else { showMessage(xhr.response, "danger"); }
             }
@@ -303,7 +306,7 @@ function createSortedTable_group(obj, id) {
         table.appendChild(tr);
     }
 
-    let tableAdd = document.getElementById('childtableAdd');
+    let tableAdd = document.getElementById('childTable_marks_add');
     tableAdd.className = "table table-hover table-striped";
     tableAdd.innerHTML = "";
 
@@ -315,44 +318,216 @@ function createSortedTable_group(obj, id) {
     let btn_save = createButton("Добавить", "btn-secondary");
     tr.appendChild(btn_save);
     btn_save.addEventListener("click", function() {
+
+        if (markers_id.firstChild.id == '') return;
         let params = {}
         params["markgroup_id"] = id;
-        if (markers_id.firstChild.id != '') { params["markers_id"] = markers_id.firstChild.id; } else return;
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/markgrouprelation', true);
+        xhr.open('PUT', '/api/marker/' + markers_id.firstChild.id + '/', true);
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         let json = JSON.stringify(params);
 
         xhr.onload = function() {
             if (xhr.readyState == 4 && xhr.status == "200") {
                 var result = JSON.parse(xhr.responseText);
-                obj.push(result.query);
-                let objRef = obj[obj.length - 1];
-
-                let tr_new = document.createElement('tr');
-                let markers_id = createDropdownMenu(result.query.markers_id, markers_names, markers_ids);
-                tr_new.appendChild(markers_id);
-
-                let markGroupRelations_id = result.query["markGroupRelations_id"];
-
+                let MARK_ID = result.query.id_mark;
+                let mark = findbyId(markers, MARK_ID)
+                mark.markgroup_id = id;
+                let tr = document.createElement('tr');
+                let markers_id = createTextFromVariants(MARK_ID, markers_names, markers_ids);
+                tr.appendChild(markers_id);
 
                 let btn_delete = createButton("Удалить", "btn-danger");
-                tr_new.appendChild(btn_delete);
+                tr.appendChild(btn_delete);
                 btn_delete.addEventListener("click", function() {
+                    let params = {}
+                    params["markgroup_id"] = null;
                     var xhr = new XMLHttpRequest();
-                    xhr.open('DELETE', '/api/markgrouprelation/' + markGroupRelations_id + '/', true);
+                    xhr.open('PUT', '/api/marker/' + MARK_ID + '/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                    let json = JSON.stringify();
+                    let json = JSON.stringify(params);
                     xhr.onload = function() {
                         if (xhr.readyState == 4 && xhr.status == "200") {
-                            let idx = obj.indexOf(objRef)
-                            obj.splice(idx, 1);
-                            tr_new.remove();
+                            let mark = findbyId(markers, MARK_ID)
+                            mark.markgroup_id = null;
+                            tr.remove();
                         } else { showMessage(xhr.response, "danger"); }
                     }
                     xhr.send(json);
                 });
 
+                table.appendChild(tr);
+
+            } else { showMessage(xhr.response, "danger"); }
+        }
+        xhr.send(json);
+    });
+
+    tableAdd.appendChild(tr);
+}
+
+
+function createSortedTable_params(obj, id) {
+
+    let table = document.getElementById('childTable_params_body');
+    table.className = "table table-hover table-striped";
+    table.innerHTML = "";
+
+    for (var i = 0; i < obj.length; i++) {
+
+        let tr = document.createElement('tr');
+        let objRef = obj[i];
+
+        let setting_name = createInput(obj[i]["setting_name"], "any")
+        tr.appendChild(setting_name);
+
+        let setting_type = createInput(obj[i]["setting_type"], "any")
+        tr.appendChild(setting_type);
+
+        let setting_script = createInput(obj[i]["setting_script"], "any")
+        tr.appendChild(setting_script);
+
+        let setting_params = createInput(obj[i]["setting_params"], "any")
+        tr.appendChild(setting_params);
+
+        let setting_id = obj[i]["setting_id"];
+
+        let btn_save = createButton("Сохранить", "btn-warning");
+        tr.appendChild(btn_save);
+        btn_save.addEventListener("click", function() {
+            let params = {}
+            if (setting_name.firstChild.value != '') { params["setting_name"] = setting_name.firstChild.value; }
+            if (setting_type.firstChild.value != '') { params["setting_type"] = setting_type.firstChild.value; }
+            if (setting_script.firstChild.value != '') { params["setting_script"] = setting_script.firstChild.value; }
+            if (setting_params.firstChild.value != '') { params["setting_params"] = setting_params.firstChild.value; }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('PUT', '/api/markgroupSetting/' + setting_id + '/', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            let json = JSON.stringify(params);
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let res = JSON.parse(xhr.response).query
+                    objRef.setting_name = res.setting_name;
+                } else { showMessage(xhr.response, "danger"); }
+            }
+            xhr.send(json);
+        });
+
+        let btn_delete = createButton("Удалить", "btn-danger");
+        tr.appendChild(btn_delete);
+        btn_delete.addEventListener("click", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('DELETE', '/api/markgroupSetting/' + setting_id + '/', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            let json = JSON.stringify();
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    tr.remove();
+                } else { showMessage(xhr.response, "danger"); }
+            }
+            xhr.send(json);
+        });
+
+        table.appendChild(tr);
+    }
+
+    let tableAdd = document.getElementById('childTable_params_add');
+    tableAdd.className = "table table-hover table-striped";
+    tableAdd.innerHTML = "";
+
+    let tr = document.createElement('tr');
+
+    let setting_name = createInput("", "any")
+    tr.appendChild(setting_name);
+
+    let setting_type = createInput("", "any")
+    tr.appendChild(setting_type);
+
+    let setting_script = createInput("", "any")
+    tr.appendChild(setting_script);
+
+    let setting_params = createInput("", "any")
+    tr.appendChild(setting_params);
+
+    let btn_save = createButton("Добавить", "btn-secondary");
+    tr.appendChild(btn_save);
+    btn_save.addEventListener("click", function() {
+        let params = {}
+        if (setting_name.firstChild.value != '') { params["setting_name"] = setting_name.firstChild.value; }
+        if (setting_type.firstChild.value != '') { params["setting_type"] = setting_type.firstChild.value; }
+        if (setting_script.firstChild.value != '') { params["setting_script"] = setting_script.firstChild.value; }
+        if (setting_params.firstChild.value != '') { params["setting_params"] = setting_params.firstChild.value; }
+        params["markgroup_id"] = id;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/markgroupSetting', true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        let json = JSON.stringify(params);
+
+        xhr.onload = function() {
+
+            if (xhr.readyState == 4 && xhr.status == "200") {
+                var result = JSON.parse(xhr.responseText);
+
+                obj.push(result.query);
+                let objRef = obj[obj.length - 1];
+
+                let tr_new = document.createElement('tr');
+
+                let setting_name = createInput(result.query["setting_name"], "any")
+                tr_new.appendChild(setting_name);
+
+                let setting_type = createInput(result.query["setting_type"], "any")
+                tr_new.appendChild(setting_type);
+
+                let setting_script = createInput(result.query["setting_script"], "any")
+                tr_new.appendChild(setting_script);
+
+                let setting_params = createInput(result.query["setting_params"], "any")
+                tr_new.appendChild(setting_params);
+
+                let setting_id = result.query["setting_id"];
+
+
+                let btn_save = createButton("Сохранить", "btn-warning");
+                tr_new.appendChild(btn_save);
+                btn_save.addEventListener("click", function() {
+
+                    let params = {}
+                    if (setting_name.firstChild.value != '') { params["setting_name"] = setting_name.firstChild.value; }
+                    if (setting_type.firstChild.value != '') { params["setting_type"] = setting_type.firstChild.value; }
+                    if (setting_script.firstChild.value != '') { params["setting_script"] = setting_script.firstChild.value; }
+                    if (setting_params.firstChild.value != '') { params["setting_params"] = setting_params.firstChild.value; }
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('PUT', '/api/markgroupSetting/' + setting_id + '/', true);
+                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                    let json = JSON.stringify(params);
+                    xhr.onload = function() {
+                        if (xhr.readyState == 4 && xhr.status == "200") {
+                            let res = JSON.parse(xhr.response).query
+                            objRef.setting_name = res.setting_name;
+                        } else { showMessage(xhr.response, "danger"); }
+                    }
+                    xhr.send(json);
+                });
+
+                let btn_delete = createButton("Удалить", "btn-danger");
+                tr_new.appendChild(btn_delete);
+                btn_delete.addEventListener("click", function() {
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('DELETE', '/api/markgroupSetting/' + setting_id + '/', true);
+                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                    let json = JSON.stringify();
+                    xhr.onload = function() {
+                        if (xhr.readyState == 4 && xhr.status == "200") {
+                            tr_new.remove();
+                        } else { showMessage(xhr.response, "danger"); }
+                    }
+                    xhr.send(json);
+                });
                 table.appendChild(tr_new);
 
             } else { showMessage(xhr.response, "danger"); }

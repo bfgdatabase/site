@@ -137,6 +137,7 @@ function createTextSw(id, variants, ids) {
     return td;
 }
 
+
 function createDropdownMenu(id, variants, ids) {
 
     let td = document.createElement('td');
@@ -184,5 +185,27 @@ function createDropdownMenu(id, variants, ids) {
     }
     td.appendChild(buttonSelect);
     td.appendChild(menuSelect);
+    return td;
+}
+
+function createTextFromVariants(id, variants, ids) {
+
+    let td = document.createElement('td');
+    td.style = "vertical-align:middle";
+    td.className = "px-1";
+
+    let el = document.createElement('a');
+    el.style = "margin:0";
+    el.id = "";
+
+    for (let i = 0; i < variants.length; ++i) {
+        if (id == ids[i]) {
+
+            el.innerHTML = variants[i];
+            el.id = ids[i];
+        }
+    }
+    td.appendChild(el);
+
     return td;
 }

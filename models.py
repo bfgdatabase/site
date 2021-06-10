@@ -108,10 +108,26 @@ class TagsDB(db.Model):
     tag_gain = db.Column(db.Integer)
     marks = db.relationship("MarksDB", backref=db.backref('tags'), lazy=True)
 
+class MarkGroupDB(db.Model):
+    __tablename__ = 'markGroup'
+    markgroup_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    markgroup_name = db.Column(db.Text(), unique=True)
+
+class MarkSettingsDB(db.Model):
+    __tablename__ = 'markSettings'
+    setting_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    markgroup_id = db.Column(db.Integer, db.ForeignKey('markGroup.markgroup_id'))
+    setting_name = db.Column(db.Text())
+    setting_type = db.Column(db.Text())
+    setting_script = db.Column(db.Text())
+    setting_params = db.Column(db.Text())
+
 class MarksDB(db.Model):
     __tablename__ = 'markers'
     id_mark = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_tag = db.Column(db.Integer, db.ForeignKey('tags.id_tag'))
+    markgroup_id = db.Column(db.Integer, db.ForeignKey('markGroup.markgroup_id')) 
+    set_settings = db.Column(db.Boolean())
     created = db.Column(db.DateTime())
     modified = db.Column(db.DateTime())
     name = db.Column(db.Text())
@@ -171,31 +187,6 @@ class UsersDB(db.Model):
         session["login"] = query[0].login
         session["role"] = query[0].role
         return query[0]
-
-class MarkGroupDB(db.Model):
-    __tablename__ = 'markGroup'
-    markgroup_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    markgroup_name = db.Column(db.Text(), unique=True)
-
-class MarkSettingsDB(db.Model):
-    __tablename__ = 'markSettings'
-    setting_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    setting_name = db.Column(db.Text(), unique=True)
-    setting_type = db.Column(db.Text())
-    setting_script = db.Column(db.Text())
-    setting_params = db.Column(db.Text())
-
-class MarkSettingsRelationsDB(db.Model):
-    __tablename__ = 'markSettingsRelations'
-    markSettingsRelations_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    setting_id = db.Column(db.Integer, db.ForeignKey('markSettings.setting_id'))
-    markgroup_id = db.Column(db.Integer, db.ForeignKey('markGroup.markgroup_id')) 
-
-class MarkGroupRelationsDB(db.Model):
-    __tablename__ = 'markGroupRelations'
-    markGroupRelations_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    markers_id = db.Column(db.Integer, db.ForeignKey('markers.id_mark'))
-    markgroup_id = db.Column(db.Integer, db.ForeignKey('markGroup.markgroup_id')) 
 
 
 class EnterpriseSchema(ma.SQLAlchemyAutoSchema):
@@ -283,13 +274,8 @@ class MarkSettingSchema(ma.SQLAlchemyAutoSchema):
         model = MarkSettingsDB
         include_fk = True
 
-class MarkSettingsRelationsSchema(ma.SQLAlchemyAutoSchema):
+class MarkGroupSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = MarkSettingsRelationsDB
-        include_fk = True
-
-class MarkGroupRelationsSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = MarkGroupRelationsDB
+        model = MarkGroupDB
         include_fk = True
 
