@@ -1,0 +1,502 @@
+{% extends 'base_template.html' %} {% block title %} Настройки {% endblock %} {% block head %}
+
+<head>
+
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+
+
+            <div class="jumbotron p-3 ">
+                <h2 id="childTable_params"> Реестр маяков
+                </h2>
+                <br>
+                <table class="table table-bordered table-striped mb-0" height="10vh">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">П.П.</th>
+                            <th scope="col ">Уникальный идентификатор </th>
+                            <th scope="col ">Номер производственной партии </th>
+                            <th scope="col ">Версия архитектуры радиомаяка </th>
+                            <th scope="col ">Тип антенны </th>
+                            <th scope="col ">Дата производства </th>
+                            <th scope="col ">Дата производства батареи, производитель </th>
+                            <th scope="col ">Версия прошивки </th>
+                            <th scope="col ">Заводской ключ </th>
+                            <th scope="col ">Покупатель </th>
+                            <th scope="col ">Рекламации</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <th>62:66:dc:c1:de:fb</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>2</th>
+                            <th>a4:59:b0:20:45:81</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>3</th>
+                            <th>41:92:11:c2:a3:4c</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>2</th>
+                        </tr>
+                        <tr>
+                            <th>4</th>
+                            <th>95:39:6e:74:da:05</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>5</th>
+                            <th>67:3a:41:e0:44:5c</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>6</th>
+                            <th>17:78:21:51:9d:76</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>7</th>
+                            <th>b4:3b:c5:eb:32:75</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>8</th>
+                            <th>93:7f:38:8d:29:ed</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>9</th>
+                            <th> e8:8e:d9:ac:c0:18</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>10</th>
+                            <th> 20:01:12:20:48:bc</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>11</th>
+                            <th>1c:91:9d:b4:9d:da</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>01.20.Varta </th>
+                            <th>0.1.1 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>12</th>
+                            <th> 93:7f:38:8d:29:ed</th>
+                            <th>2</th>
+                            <th>0.1.1 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>13</th>
+                            <th> fa:ea:22:a3:bc:7c</th>
+                            <th>2</th>
+                            <th>0.1.1 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>14</th>
+                            <th> 20:09:06:10:4f:af</th>
+                            <th>2</th>
+                            <th>0.1.1 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>15</th>
+                            <th> c0:ad:64:1b:93:02</th>
+                            <th>2</th>
+                            <th>0.1.1 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>16</th>
+                            <th> c0:6b:3d:59:0a:63</th>
+                            <th>2</th>
+                            <th>0.1.1 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>17</th>
+                            <th> 00:00:ab:cf:a8:59</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>18</th>
+                            <th> c0:6b:3d:59:0a:63</th>
+                            <th>2</th>
+                            <th>0.1.1 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                        <tr>
+                            <th>19</th>
+                            <th> fa:ea:22:a3:bc:7c</th>
+                            <th>2</th>
+                            <th>0.1.1 </th>
+                            <th>50.CP </th>
+                            <th>10.06.21 </th>
+                            <th>08.20.Cam </th>
+                            <th>0.1.2 </th>
+                            <th>1</th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="jumbotron p-3 ">
+                <h2 id="childTable_params"> Реестр анкеров
+                </h2>
+                <br>
+                <table class="table table-bordered table-striped mb-0" height="10vh">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">П.П.</th>
+                            <th scope="col ">Уникальный идентификатор </th>
+                            <th scope="col ">Номер производственной партии </th>
+                            <th scope="col ">Версия архитектуры </th>
+                            <th scope="col ">Тип антенны </th>
+                            <th scope="col ">Дата производства </th>
+                            <th scope="col ">Версия прошивки </th>
+                            <th scope="col ">Покупатель </th>
+                            <th scope="col ">Рекламации</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <th>30:ae:a4:02:a6:b0</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>0.0.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>2</th>
+                            <th>12:42:49:22:ea:86</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>0.0.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>3</th>
+                            <th>12:42:7f:57:c4:e1</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>0.0.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>4</th>
+                            <th>12:42:8a:1b:12:88</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>0.0.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>2</th>
+                        </tr>
+                        <tr>
+                            <th>5</th>
+                            <th>12:42:e5:bc:32:50</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>0.0.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>6</th>
+                            <th>12:42:e8:e2:63:1b</th>
+                            <th>1</th>
+                            <th>0.1.0 </th>
+                            <th>35.CP </th>
+                            <th>5.06.20 </th>
+                            <th>0.0.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>7</th>
+                            <th>12:42:54:3a:5d:5b</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>8</th>
+                            <th>12:42:1f:5d:f1:92</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>9</th>
+                            <th>12:42:b8:57:1a:03</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>10</th>
+                            <th>12:42:08:ea:26:f2</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>11</th>
+                            <th>12:42:75:fb:cb:2a</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>12</th>
+                            <th>d9:d9:22:fa:95:fa</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>13</th>
+                            <th>b1:bc:f1:cd:22:32</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>14</th>
+                            <th>4f:82:68:3d:c8:16</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>15</th>
+                            <th>47:b5:29:8e:a1:46</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+                        <tr>
+                            <th>16</th>
+                            <th>0f:6c:52:2c:1d:8d</th>
+                            <th>2</th>
+                            <th>0.1.0 </th>
+                            <th>80.CP </th>
+                            <th>10.06.21 </th>
+                            <th>0.1.1 </th>
+                            <th>0.2.018.250.5.4.ОП </th>
+                            <th>0</th>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+</div>
+{% endblock %}

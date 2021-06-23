@@ -1,0 +1,218 @@
+{% extends 'base_template.html' %} {% block title %} Настройки {% endblock %} {% block head %}
+
+<head>
+
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+
+
+
+            <div class="jumbotron p-3 ">
+                <h2 id="childTable_params"> Данные движения партии
+                </h2>
+                <br>
+
+                <table class="table table-bordered table-striped mb-0" height="10vh">
+                    <thead class="thead-dark ">
+                        <tr align="center">
+                            <th rowspan="2">Партия № </th>
+                            <th rowspan="2">Номера этапов </th>
+                            <th rowspan="2">Наименование операции </th>
+                            <th rowspan="2">Оборудование</th>
+                            <th rowspan="2" colspan="2">События</th>
+                            <th rowspan="2">Дата/время</th>
+                            <th rowspan="2">Время фактическое, мин </th>
+                            <th colspan="2">Фильтр</th>
+                            <th rowspan="2 ">Выбрать</th>
+                        </tr>
+                        <tr align="center">
+                            <th><span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <a>
+                                        < </a><input style="width:60px " class="form-control " placeholder="5" name="firstname" type="text" />
+                                </div>
+                            </th>
+                            <th><span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <a>
+                                         > </a><input style="width:60px " class="form-control " placeholder="120" name="firstname" type="text" />
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr align="center">
+                            <th rowspan="2">112 </th>
+                            <th rowspan="2">10 </th>
+                            <th rowspan="2">Подрезка торца </th>
+                            <th rowspan="2">РТК№3 </th>
+                            <th rowspan="2">Зона 17</th>
+                            <th>вход</th>
+                            <th>20.02.21 8:32 </th>
+                            <th rowspan="2"> 68 </th>
+                            <th rowspan="2" colspan="2"> 68 </th>
+                            <th rowspan="2">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>выход</th>
+                            <th>20.02.21 9:40</th>
+                        </tr>
+
+                        <tr align="center">
+                            <th rowspan="2">112 </th>
+                            <th rowspan="2">11 </th>
+                            <th rowspan="2">Буфер </th>
+                            <th rowspan="2"> </th>
+                            <th>Зона 17</th>
+                            <th>вход</th>
+                            <th>20.02.21 9:40 </th>
+                            <th rowspan="2"> 83 </th>
+                            <th rowspan="2" colspan="2"> 83 </th>
+                            <th rowspan="2">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Зона 18</th>
+                            <th>выход</th>
+                            <th>20.02.21 11:03 </th>
+                        </tr>
+
+
+                        <tr align="center">
+                            <th rowspan="2">112 </th>
+                            <th rowspan="2">20 </th>
+                            <th rowspan="2">Шлифовальная </th>
+                            <th rowspan="2">Шлифовальный №42 </th>
+                            <th rowspan="2">Зона 18</th>
+                            <th>вход</th>
+                            <th>20.02.21 11:03 </th>
+                            <th rowspan="2"> 54 </th>
+                            <th rowspan="2" colspan="2"> 54 </th>
+                            <th rowspan="2">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>выход</th>
+                            <th>20.02.21 11:57 </th>
+                        </tr>
+
+                        <tr align="center">
+                            <th rowspan="2">112 </th>
+                            <th rowspan="2">21 </th>
+                            <th rowspan="2">Буфер </th>
+                            <th rowspan="2"> </th>
+                            <th>Зона 18</th>
+                            <th>вход</th>
+                            <th>20.02.21 11:57 </th>
+                            <th rowspan="2"> 1178 </th>
+                            <th rowspan="2" colspan="2"> 0 </th>
+                            <th rowspan="2">
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Зона 22</th>
+                            <th>выход</th>
+                            <th>21.02.20 7:35 </th>
+                        </tr>
+
+                        <tr align="center">
+                            <th rowspan="2">112 </th>
+                            <th rowspan="2">30 </th>
+                            <th rowspan="2">Обжатие </th>
+                            <th rowspan="2">EasyDUR </th>
+                            <th rowspan="2">Зона 22</th>
+                            <th>вход</th>
+                            <th>21.02.22 7:35 </th>
+                            <th rowspan="2"> 6 </th>
+                            <th rowspan="2" colspan="2"> 6 </th>
+                            <th rowspan="2">
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>выход</th>
+                            <th>21.02.22 7:41 </th>
+                        </tr>
+
+                        <tr align="center">
+                            <th rowspan="2">112 </th>
+                            <th rowspan="2">31 </th>
+                            <th rowspan="2">Буфер </th>
+                            <th rowspan="2"> </th>
+                            <th>Зона 22</th>
+                            <th>вход</th>
+                            <th>21.02.21 7:41 </th>
+                            <th rowspan="2"> 11 </th>
+                            <th rowspan="2" colspan="2"> 11 </th>
+                            <th rowspan="2">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Зона 31</th>
+                            <th>выход</th>
+                            <th>21.02.21 7:52 </th>
+                        </tr>
+
+                        <tr align="center">
+                            <th rowspan="2">112 </th>
+                            <th rowspan="2">40 </th>
+                            <th rowspan="2">Обжатие </th>
+                            <th rowspan="2">Гидропресс </th>
+                            <th rowspan="2">Зона 31</th>
+                            <th>вход</th>
+                            <th>21.02.22 7:52 </th>
+                            <th rowspan="2"> 44 </th>
+                            <th rowspan="2" colspan="2"> 44 </th>
+                            <th rowspan="2">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>выход</th>
+                            <th>21.02.22 8:36 </th>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+                <br>
+                <button style="margin:0" type="button" class="px-1 btn btn-sm btn-warning btn-block"> создать маршрут</button>
+
+
+
+        </main>
+        </div>
+    </div>
+    {% endblock %}

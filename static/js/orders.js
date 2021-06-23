@@ -140,6 +140,9 @@ function createSortedTable(obj) {
             xhr.send(json);
         });
 
+        let bb = createButton("Движение партии", "btn-secondary");
+        tr.appendChild(bb);
+
         table.appendChild(tr);
     }
 

@@ -45,6 +45,9 @@
                     <thead class="thead-dark ">
                         <tr>
                             <th scope="col ">Метка</th>
+                            <th scope="col ">Мас адрес</th>
+                            <th scope="col ">Мощность</th>
+                            <th scope="col ">Координаты</th>
                             <th scope="col "></th>
                         </tr>
                     </thead>
@@ -64,9 +67,11 @@
                     <thead class="thead-dark ">
                         <tr>
                             <th scope="col ">Наименование</th>
-                            <th scope="col ">Тип</th>
-                            <th scope="col ">Скрипт</th>
+                            <th scope="col ">Установка</th>
                             <th scope="col ">Параметры</th>
+                            <th scope="col ">Значение</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
                             <th scope="col "></th>
                             <th scope="col "></th>
                             <th scope="col "></th>
@@ -80,6 +85,128 @@
                     <tbody id="childTable_params_add">
                     </tbody>
                 </table>
+            </div>
+
+            <div class="jumbotron p-3 ">
+                <h2 id="childTable_params"> Настройки телеметрии группы
+                </h2>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">Наименование</th>
+                            <th scope="col ">Интервал сохранения в архив телеметрии</th>
+                            <th scope="col ">Условие определения события</th>
+                            <th scope="col ">Регистрация событий</th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="col "> Напряжение батареи</th>
+                            <th scope="col ">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <input style="width:1% " class="form-control " placeholder="" name="firstname" type="text" />
+                                    <a> дн </a>
+                                    <input style="width:1% " class="form-control " placeholder="" name="lastname" type="text" />
+                                    <a> час </a>
+                                    <input style="width:1% " class="form-control " placeholder="" name="lastname" type="text" />
+                                    <a> мин </a>
+                                </div>
+                            </th>
+                            <th scope="col ">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <a>
+                                        < </a><input style="width:1% " class="form-control " placeholder="2.8" name="firstname" type="text" />
+                                            <a> B </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="custom-control custom-checkbox checkbox-xl">
+                                    <input type="checkbox" class="custom-control-input" id="checkbox-3" checked="">
+                                    <label class="custom-control-label" for="checkbox-3">Включить</label>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> Температура</th>
+                            <th scope="col ">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <input style="width:1% " class="form-control " placeholder="" name="firstname" type="text" />
+                                    <a> дн </a>
+                                    <input style="width:1% " class="form-control " placeholder="" name="lastname" type="text" />
+                                    <a> час </a>
+                                    <input style="width:1% " class="form-control " placeholder="" name="lastname" type="text" />
+                                    <a> мин </a>
+                                </div>
+                            </th>
+                            <th scope="col ">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <a>
+                                        < </a><input style="width:1% " class="form-control " placeholder="0" name="firstname" type="text" />
+                                            <a>
+                                                <a> C<sup>0</sup>  </a> &emsp;>
+                                            </a><input style="width:1% " class="form-control " placeholder="50" name="lastname" type="text" />
+                                            <a> C<sup>0</sup> </a>
+
+                                </div>
+                            </th>
+                            <th>
+                                <div class="custom-control custom-checkbox checkbox-xl">
+                                    <input type="checkbox" class="custom-control-input" id="checkbox-3" checked="">
+                                    <label class="custom-control-label" for="checkbox-3">Включить</label>
+                                </div>
+                            </th>
+                        </tr>
+
+
+                        <tr>
+                            <th scope="col "> Опрокидывание</th>
+                            <th scope="col "> -
+                            </th>
+                            <th scope="col "> -
+                            </th>
+                            <th>
+                                <div class="custom-control custom-checkbox checkbox-xl">
+                                    <input type="checkbox" class="custom-control-input" id="checkbox-3" checked="">
+                                    <label class="custom-control-label" for="checkbox-3">Включить</label>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> Удар</th>
+                            <th scope="col "> -
+                            </th>
+                            <th scope="col "> -
+                            </th>
+                            <th>
+                                <div class="custom-control custom-checkbox checkbox-xl">
+                                    <input type="checkbox" class="custom-control-input" id="checkbox-3" checked="">
+                                    <label class="custom-control-label" for="checkbox-3">Включить</label>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> Движение</th>
+                            <th scope="col "> -
+                            </th>
+                            <th scope="col "> -
+                            </th>
+                            <th>
+                                <div class="custom-control custom-checkbox checkbox-xl">
+                                    <input type="checkbox" class="custom-control-input" id="checkbox-3" checked="">
+                                    <label class="custom-control-label" for="checkbox-3">Включить</label>
+                                </div>
+                            </th>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <button style="margin:0" data-toggle="dropdown" id="dropdownMenuButton" type="button" class="btn btn-primary btn-sm dropdown-toggle btn-block"> 
             </div>
 
         </main>

@@ -19,7 +19,7 @@ class Configuration(object):
     POSTGRES_USER = "timur"
     POSTGRES_PW = "123456"
     POSTGRES_DB = "bbffgg"
-
+    
     SEKRET_KEY = "bfg-group"
 
     UPLOAD_FOLDER = 'static/images/maps'

@@ -97,6 +97,15 @@ function createSortedTable(obj) {
             xhr.send(json);
         });
 
+        let b1 = createButton("Шаблон маршрута", "btn-secondary");
+        tr.appendChild(b1);
+
+        let b2 = createButton("Нормативы времени", "btn-secondary");
+        tr.appendChild(b2);
+
+        let b3 = createButton("Создать партию", "btn-primary");
+        tr.appendChild(b3);
+
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
         btn_save.addEventListener("click", function() {
@@ -186,6 +195,7 @@ function createSortedTable(obj) {
 
                 let name = createInput(result.query["name"], "any")
                 tr_new.appendChild(name);
+
 
                 let btn_select = createButton("Редактировать", "btn-secondary");
                 tr_new.appendChild(btn_select);

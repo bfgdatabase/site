@@ -11,3 +11,37 @@ from utils import responses as resp
 @resp.check_user_authorization()
 def anchorsandzones(id_location):
     return render_template('anchorsandzones_map.html', user = session["username"], id_location = id_location)
+
+
+@app.route('/times/')
+@resp.check_user_authorization()
+def times():
+    return render_template('time_norm.html', user = session["username"])
+
+@app.route('/routes/')
+@resp.check_user_authorization()
+def routes():
+    return render_template('rout_template.html', user = session["username"])
+
+@app.route('/logWidget/')
+@resp.check_user_authorization()
+def logWidget():
+    return render_template('logWidget.html', user = session["username"])
+
+@app.route('/reestr/')
+@resp.check_user_authorization()
+def reestr():
+    return render_template('reestr.html', user = session["username"])
+
+@app.route('/route_events/')
+@resp.check_user_authorization()
+def route_events():
+    return render_template('route_events.html', user = session["username"])
+
+@app.route('/export/')
+@resp.check_user_authorization()
+def export():
+    return render_template('export.html', user = session["username"])
+
+
+    

@@ -96,6 +96,9 @@ function createSortedTable(obj) {
 
         });
 
+        let bb = createButton(" Телеметрия", "btn-secondary");
+        tr.appendChild(bb);
+
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
         btn_save.addEventListener("click", function() {
@@ -284,6 +287,13 @@ function createSortedTable_group(id) {
         let markers_id = createTextFromVariants(MARK_ID, markers_names, markers_ids);
         tr.appendChild(markers_id);
 
+        let v1 = createInput("", "any")
+        tr.appendChild(v1);
+        let v2 = createInput("", "any")
+        tr.appendChild(v2);
+        let v3 = createInput("", "any")
+        tr.appendChild(v3);
+
         let btn_delete = createButton("Удалить", "btn-danger");
         tr.appendChild(btn_delete);
         btn_delete.addEventListener("click", function() {
@@ -381,14 +391,14 @@ function createSortedTable_params(obj, id) {
         let setting_name = createInput(obj[i]["setting_name"], "any")
         tr.appendChild(setting_name);
 
-        let setting_type = createInput(obj[i]["setting_type"], "any")
-        tr.appendChild(setting_type);
-
         let setting_script = createInput(obj[i]["setting_script"], "any")
         tr.appendChild(setting_script);
 
         let setting_params = createInput(obj[i]["setting_params"], "any")
         tr.appendChild(setting_params);
+
+        let setting_params1 = createInput("", "any")
+        tr.appendChild(setting_params1);
 
         let setting_id = obj[i]["setting_id"];
 
@@ -430,6 +440,15 @@ function createSortedTable_params(obj, id) {
         });
 
         table.appendChild(tr);
+
+        let btn_save2 = createButton("Установить", "btn-secondary");
+        tr.appendChild(btn_save2);
+
+        let element = document.createElement('input');
+        element.type = "checkbox";
+        element.className = "form-check-input";
+        tr.appendChild(element);
+
     }
 
     let tableAdd = document.getElementById('childTable_params_add');

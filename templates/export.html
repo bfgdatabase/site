@@ -1,0 +1,249 @@
+{% extends 'base_template.html' %} {% block title %} Настройки {% endblock %} {% block head %}
+
+<head>
+
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+
+
+
+            <div class="jumbotron p-3 ">
+                <h2 id="childTable_params"> Экспорт данных
+                </h2>
+                <br>
+
+                <table class="table table-bordered table-striped mb-0" height="10vh">
+                    <thead class="thead-dark ">
+                        <tr align="center">
+                            <th>Поле </th>
+                            <th>Выводить </th>
+                            <th>Группировать </th>
+                            <th>Сумма </th>
+                            <th>Среднее </th>
+                            <th>Мин </th>
+                            <th>Макс </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr align="center">
+                            <th>Номер партии </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Наименнование изделия </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Код изделия </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Время операции </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Время междуоперациями </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th>Дата создания партии </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <br>
+                <br>
+                <button style="margin:0" type="button" class="px-1 btn btn-sm btn-warning btn-block"> Создать запрос</button>
+                <br>
+
+                <th scope="col "> <input style="vertical-align:middle" class="form-control form-control-sm" value="/api/batchdata/batchnum_group/detailname_group/opertime_sum/datecreate_group?from='10-06-2021'&to='20-06-2021'&token='ut65jlh67l26h7hl'"></th>
+
+        </main>
+        </div>
+    </div>
+    {% endblock %}

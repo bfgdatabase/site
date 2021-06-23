@@ -1,0 +1,221 @@
+{% extends 'base_template.html' %} {% block title %} Настройки {% endblock %} {% block head %}
+
+<head>
+
+    <script type="module" src="{{ url_for('static', filename='js/settings_group.js') }}"></script>
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+
+
+
+            <div class="jumbotron p-3 ">
+                <h2 id="childTable_params"> Группа 1
+                </h2>
+                <br>
+
+                <table class="table table-bordered table-striped mb-0" height="10vh">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">Период</th>
+                            <th scope="col ">От
+                                <input id="datetime" type="datetime-local"> До
+                                <input id="datetime" type="datetime-local"> </th>
+
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-primary btn-block"> Показать </button> </th>
+
+                        </tr>
+                        <tr>
+                            <th scope="col "> Метка <button style="margin:0" type="button" class="px-1 btn btn-sm btn-warning btn-block"> Выбрать все</button> </th>
+                            <th scope="col ">Тип <button style="margin:0" type="button" class="px-1 btn btn-sm btn-warning btn-block"> Движение </button></th>
+                            <th scope="col ">Событие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col ">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                            <th scope="col "> 🔺 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "3" </th>
+                            <th scope="col ">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                            <th scope="col "></th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "4" </th>
+                            <th scope="col ">
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th scope="col "></th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "5" </th>
+                            <th scope="col ">
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                            </th>
+                            <th scope="col "> 🔺 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "6" </th>
+                            <th scope="col ">
+                                <div>
+                                    <input type="checkbox" checked>
+                                </div>
+                            </th>
+                            <th scope="col "> 🔺 </th>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+
+                <br>
+                <div class="table-wrapper-scroll-y my-custom-scrollbar"></div>
+                <table class="table table-bordered table-striped mb-0" height="10vh">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col "> Метка </th>
+                            <th scope="col "> Дата/Время </th>
+                            <th scope="col "> Тип </th>
+                            <th scope="col "> Значение </th>
+                        </tr>
+                    </thead>
+
+                    <tbody height="10vh">
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.10 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 0 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.11 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 0 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.12 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 0 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.13 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 0 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.14 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 1 🔺 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.15 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 1 🔺 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.16 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 1 🔺 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.17 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 1 🔺 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.18 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 1 🔺 </th>
+                        </tr>
+                        <tr>
+                            <th scope="col "> "1" </th>
+                            <th scope="col "> 04.03.2021 8.19 </th>
+                            <th scope="col "> Движение </th>
+                            <th scope="col "> 0 </th>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <br>
+
+                <div id="container" height="3000px"></div>
+
+                <script src="https://cdn.anychart.com/js/latest/anychart-bundle.min.js"></script>
+                <script>
+                    // AnyChart code here
+                    anychart.onDocumentLoad(function() {
+                        // create chart and set data
+                        // as Array of Objects
+                        // the biggest point is marked with individually conigured marker
+                        var chart = anychart.column([{
+                            x: "04.03.2021 8.10",
+                            value: 0
+                        }, {
+                            x: "04.03.2021 8.11",
+                            value: 0
+                        }, {
+                            x: "04.03.2021 8.12",
+                            value: 0
+                        }, {
+                            x: "04.03.2021 8.13",
+                            value: 0
+                        }, {
+                            x: "04.03.2021 8.14",
+                            value: 1
+                        }, {
+                            x: "04.03.2021 8.15",
+                            value: 1
+                        }, {
+                            x: "04.03.2021 8.16",
+                            value: 1
+                        }, {
+                            x: "04.03.2021 8.17",
+                            value: 1
+                        }, {
+                            x: "04.03.2021 8.18",
+                            value: 1
+                        }, {
+                            x: "04.03.2021 8.19",
+                            value: 0
+                        }]);
+                        chart.container("container").draw();
+                    });
+                </script>
+            </div>
+
+        </main>
+    </div>
+</div>
+{% endblock %}
