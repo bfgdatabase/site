@@ -1,0 +1,15 @@
+"Flask==1.1.4"
+"werkzeug==1.0.1"
+flask_sqlalchemy 
+flask_security 
+email_validator 
+flask_marshmallow 
+apispec 
+flask_apispec 
+apispec_webframeworks 
+flask_bcrypt 
+flask_script 
+flask_migrate 
+flask_jwt_extended
+marshmallow-sqlalchemy
+psycopg2-binary

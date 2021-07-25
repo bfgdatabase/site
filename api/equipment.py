@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with

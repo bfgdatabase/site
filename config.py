@@ -15,10 +15,11 @@ class Configuration(object):
     POSTGRES_PW = "123456"
     POSTGRES_DB = "bfg"
     '''
+
     POSTGRES_URL = "127.0.0.1:5432"
-    POSTGRES_USER = "timur"
+    POSTGRES_USER = "bfg"
     POSTGRES_PW = "123456"
-    POSTGRES_DB = "bbffgg"
+    POSTGRES_DB = "new"
     
     SEKRET_KEY = "bfg-group"
 

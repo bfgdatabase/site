@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with
@@ -28,7 +29,6 @@ docs.register(delete_zone)
 
 @app.route('/api/zone/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get zone by id', tags=['zone'])
-@use_kwargs(ZonesSchema(exclude=("id_zone",)))
 @resp.check_user_permission(dbName = "ZonesDB", method = 'GET')
 def get_zone(id):
     query = ZonesDB.query.get_or_404(id)

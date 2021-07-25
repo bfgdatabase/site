@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with
@@ -26,17 +27,6 @@ def get_department(id):
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_department)
 
-@app.route('/api/departments/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Find departments with params', tags=['department'])
-@marshal_with(DepartmentSchema(many=True))
-@use_kwargs(DepartmentSchema(exclude=("dept_id",)))
-@resp.check_user_permission(dbName = "DepartmentDB", method = 'GET')
-def find_departments(**kwargs):
-    query = DepartmentDB.query.filter_by(**kwargs).all()
-    query_schema = DepartmentSchema(many=True)
-    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(find_departments)
-
 @app.route('/api/department/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create department', tags=['department'])
 @marshal_with(DepartmentSchema)
@@ -51,6 +41,17 @@ def create_department(**kwargs):
     schema = DepartmentSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
 docs.register(create_department)
+
+@app.route('/api/departments/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find departments with params', tags=['department'])
+@marshal_with(DepartmentSchema(many=True))
+@use_kwargs(DepartmentSchema(exclude=("dept_id",)))
+@resp.check_user_permission(dbName = "DepartmentDB", method = 'GET')
+def find_departments(**kwargs):
+    query = DepartmentDB.query.filter_by(**kwargs).all()
+    query_schema = DepartmentSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_departments)
 
 @app.route('/api/department/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update department by id', tags=['department'])

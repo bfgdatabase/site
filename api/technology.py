@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with
@@ -19,7 +20,7 @@ docs.register(get_technologies)
 @app.route('/api/technology/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create technology', tags=['technologies'])
 @marshal_with(TechSchema)
-@use_kwargs(TechSchema(exclude=("id_techop",)))
+@use_kwargs(TechSchema(exclude=("tech_id",)))
 @resp.check_user_permission(dbName = "TechDB", method = 'PUT')
 def create_technology(**kwargs):  
     query = TechDB()
@@ -34,7 +35,7 @@ docs.register(create_technology)
 @app.route('/api/technologies/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Find technologies with params', tags=['technologies'])
 @marshal_with(TechSchema(many=True))
-@use_kwargs(TechSchema(exclude=("id_techop",)))
+@use_kwargs(TechSchema(exclude=("tech_id",)))
 @resp.check_user_permission(dbName = "TechDB", method = 'GET')
 def find_technologies(**kwargs):
     query = TechDB.query.filter_by(**kwargs).all()
@@ -45,7 +46,7 @@ docs.register(find_technologies)
 @app.route('/api/technology/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update technology by id', tags=['technologies'])
 @marshal_with(TechSchema)
-@use_kwargs(TechSchema(exclude=("id_techop",)))
+@use_kwargs(TechSchema(exclude=("tech_id",)))
 @resp.check_user_permission(dbName = "TechDB", method = 'PUT')
 def update_technology(id, **kwargs):  
     query = TechDB.query.get_or_404(id)

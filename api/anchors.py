@@ -1,11 +1,13 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
+
 
 @app.route('/api/anchors/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Get all anchors', tags=['anchor'])

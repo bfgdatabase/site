@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with
@@ -19,7 +20,7 @@ docs.register(get_specifications)
 @app.route('/api/specification/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create specification', tags=['specifications'])
 @marshal_with(SpecSchema)
-@use_kwargs(SpecSchema(exclude=("id_spec",)))
+@use_kwargs(SpecSchema(exclude=("spec_id",)))
 @resp.check_user_permission(dbName = "SpecDB", method = 'PUT')
 def create_specifications(**kwargs):  
     query = SpecDB()
@@ -34,7 +35,7 @@ docs.register(create_specifications)
 @app.route('/api/specifications/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Find specifications with params', tags=['specifications'])
 @marshal_with(SpecSchema(many=True))
-@use_kwargs(SpecSchema(exclude=("id_spec",)))
+@use_kwargs(SpecSchema(exclude=("spec_id",)))
 @resp.check_user_permission(dbName = "SpecDB", method = 'GET')
 def find_specifications(**kwargs):
     query = SpecDB.query.filter_by(**kwargs).all()
@@ -45,7 +46,7 @@ docs.register(find_specifications)
 @app.route('/api/specification/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update specification by id', tags=['specifications'])
 @marshal_with(SpecSchema)
-@use_kwargs(SpecSchema(exclude=("id_spec",)))
+@use_kwargs(SpecSchema(exclude=("spec_id",)))
 @resp.check_user_permission(dbName = "SpecDB", method = 'PUT')
 def update_specifications(id, **kwargs):  
     query = SpecDB.query.get_or_404(id)
@@ -60,7 +61,7 @@ docs.register(update_specifications)
 @doc(description='Delete specification by id', tags=['specifications'])
 @resp.check_user_permission(dbName = "SpecDB", method = 'DELETE')
 def delete_specifications(id):
-    query = TechDB.query.filter_by(id_spec = id).all()
+    query = TechDB.query.filter_by(spec_id = id).all()
     for item in query:
         db.session.delete(item)
         db.session.commit()  

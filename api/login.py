@@ -2,6 +2,7 @@ import os
 from app import *
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from utils.responses import response_with
 from utils import responses as resp

@@ -1,3 +1,11 @@
+
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    message="Multiple schemas resolved to the name "
+)
+
 from app import app
 
 from api import *

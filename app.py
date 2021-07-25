@@ -13,7 +13,7 @@ from apispec_webframeworks.flask import FlaskPlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
 
 from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
+from flask_migrate import Migrate
 
 DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=Configuration.POSTGRES_USER,pw=Configuration.POSTGRES_PW,url=Configuration.POSTGRES_URL,db=Configuration.POSTGRES_DB)
 
@@ -30,10 +30,13 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 manager = Manager(app)
-manager.add_command('db', MigrateCommand)
+
 
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
+
+from models import *
+from schemas import *
 
 app.config.update({
     'APISPEC_SPEC': APISpec(
@@ -47,19 +50,18 @@ app.config.update({
 
 docs = FlaskApiSpec(app)
 
-from models import *
 #db.drop_all()
 db.create_all()
 db.session.commit()
 
-roles = RolesDB.query.all()
+roles = UserRolesDB.query.all()
 for role in roles:
     for table in editableTables:
-        query = PermissionsDB.query.all()
-        permissions = PermissionsDB.query.filter_by(table = table, role = role.role)
-        if(permissions.count() == 0):
-            item = PermissionsDB(
-                table = table, 
+        query =  UserPermissionsDB.query.all()
+        permissions = UserPermissionsDB.query.filter_by(table = table[0], role = role.role).all()
+        if(len(permissions) == 0):
+            item = UserPermissionsDB(
+                table = table[0], 
                 role = role.role,
                 get = False,
                 put = False,

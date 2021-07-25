@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from models import *
+from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
 from utils.responses import response_with
@@ -43,7 +44,7 @@ docs.register(get_permissions)
 @app.route('/api/permissions/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update permission by id', tags=['users'])
 @marshal_with(PermissionsSchema)
-@use_kwargs(PermissionsSchema(exclude=("table", "role", "id_permission")))
+@use_kwargs(PermissionsSchema(exclude=("table", "role", "permission_id")))
 def update_permission(id, **kwargs):  
     if("login" in session) == False:
         return response_with(FORBIDDEN_403)
@@ -90,7 +91,7 @@ docs.register(delete_role)
 @app.route('/api/role/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create role', tags=['users'])
 @marshal_with(RolesSchema)
-@use_kwargs(RolesSchema(exclude=("id_role", )))
+@use_kwargs(RolesSchema(exclude=("role_id", )))
 def create_role(**kwargs):  
     if("login" in session) == False:
         return response_with(FORBIDDEN_403)
@@ -106,10 +107,10 @@ def create_role(**kwargs):
     for role in roles:
         for table in editableTables:
             query = PermissionsDB.query.all()
-            permissions = PermissionsDB.query.filter_by(table = table, role = role.role)
+            permissions = PermissionsDB.query.filter_by(table = table[0], role = role.role)
             if(permissions.count() == 0):
                 item = PermissionsDB(
-                    table = table, 
+                    table = table[0], 
                     role = role.role,
                     get = False,
                     put = False,
