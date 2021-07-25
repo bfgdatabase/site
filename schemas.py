@@ -1,7 +1,40 @@
 
 from app import *
 from models import *
-editableTables = ['EnterpriseDB', 'DepartmentDB', 'BatchDB', 'LocationsDB', 'GatesDB', 'AnchorsDB', 'ZonesDB', 'EquipmentDB', 'TagsDB', 'MarksDB', 'SpecDB', 'OrdersDB', 'TechDB', 'UsersDB']
+editableTables = ['TnotchDB',
+'SetnotchDB',
+'TmetricDB',
+'BatchDB', 
+'BatchlocDB', 
+'MarklocDB', 
+'OrdersDB', 
+'SpecDB',
+'RouteDB', 
+'TechDB',
+'BatchpauseDB', 
+'RmetricDB', 
+'BmetricDB', 
+'ZonesDB', 
+'LocationsDB', 
+'EquipmentDB', 
+'AnchorsDB'
+'NotchDB', 
+'TzonesDB', 
+'DepartmetsDB', 
+'MarkersDB', 
+'MarkGroupDB',
+'MarkSettingsDB', 
+'TaglogDB',
+'TagsDB', 
+'GatesDB', 
+'TelemetrDB', 
+'TelecodeDB', 
+'UserRolesDB', 
+'UserPermissionsDB', 
+'EnterpriseDB'
+'DepartmentDB', 
+'UsersDB', 
+]
 
 class BatchSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

@@ -8,17 +8,17 @@ from sqlalchemy.dialects.postgresql import ARRAY
 
 class TnotchDB(db.Model):
     __tablename__ = 'tnotch'
-    t_notch = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    tnotch_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     nametypenotch = db.Column(db.Text())
 
 class SetnotchDB(db.Model):
     __tablename__ = 'setnotch'
-    setnotch = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    setnotch_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     name_setnotch = db.Column(db.Text())
 
 class TmetricDB(db.Model):
     __tablename__ = 'tmetric'
-    t_metric = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    tmetric_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     nametmetric = db.Column(db.Text())
 
 '''
@@ -236,7 +236,7 @@ class NotchDB(db.Model):
     __tablename__ = 'notch'
     notch_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     t_notch = db.Column(db.Integer())  #[ref: > tnotch.t_notch]
-    setnotch = db.Column(db.Integer())  #[ref: > setnotch.setnotch]
+    setnotch_id = db.Column(db.Integer())  #[ref: > setnotch.setnotch]
     act = db.Column(db.Integer())  #[ref: > acts.act]
     equipment_id = db.Column(db.Integer())  #[ref: > equipment.equipment_id]
     namenotch = db.Column(db.Text())
@@ -313,7 +313,7 @@ class GatesDB(db.Model):
 
 class TelemetrDB(db.Model):
     __tablename__ = 'telemetr'
-    telemert_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    telemetr_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     timeis = db.Column(db.Text())
     id_mark = db.Column(db.Integer())  #[ref: > markers.id_mark]
     id_location = db.Column(db.Integer())  #[ref: > location.id_location]
@@ -383,103 +383,3 @@ class UsersDB(db.Model):
         session["login"] = query[0].login
         session["role"] = query[0].role
         return query[0]
-
-'''
-editableTables = ['EnterpriseDB', 'DepartmentDB', 'BatchDB', 'LocationsDB', 'GatesDB', 'AnchorsDB', 'ZonesDB', 'EquipmentDB', 'TagsDB', 'MarksDB', 'SpecDB', 'OrdersDB', 'TechDB', 'UsersDB']
-
-class BatchSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = BatchDB
-        include_fk = True
-
-class EnterpriseSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = EnterpriseDB
-        include_fk = True
-        
-class DepartmentSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = DepartmentDB
-        include_fk = True
-        
-class LocationsSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = LocationsDB
-        include_fk = True
-       
-class AnchorsSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = AnchorsDB
-        include_fk = True
-        
-class GatesSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = GatesDB
-        include_fk = True
-
-class ZonesSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = ZonesDB
-        include_fk = True
-
-class TagsSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = TagsDB
-        include_fk = True
-
-class MarksSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = MarksDB
-        include_fk = True
-
-class EquipmentSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = EquipmentDB
-        include_fk = True
-
-class SpecSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = SpecDB
-        include_fk = True
-
-class TechSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = TechDB
-        include_fk = True
-
-class UsersSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = UsersDB
-        include_fk = True
-
-class PermissionsSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = PermissionsDB
-        include_fk = True
-
-class RolesSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = RolesDB
-        include_fk = True
-        
-class OrdersSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = OrdersDB
-        include_fk = True
-
-class MarkGroupSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = MarkGroupDB
-        include_fk = True
-
-class MarkSettingSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = MarkSettingsDB
-        include_fk = True
-
-class MarkGroupSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = MarkGroupDB
-        include_fk = True
-
-'''

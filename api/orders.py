@@ -17,10 +17,20 @@ def get_orders():
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_orders)
 
+@app.route('/api/order/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get order by id', tags=['orders'])
+@marshal_with(OrdersSchema())
+@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
+def get_order(id):
+    query = OrdersDB.query.get_or_404(id)
+    query_schema = OrdersSchema()
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_order)
+
 @app.route('/api/orders/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Find orders with params', tags=['orders'])
 @marshal_with(OrdersSchema(many=True))
-@use_kwargs(OrdersSchema(exclude=("id_order",)))
+@use_kwargs(OrdersSchema(exclude=("order_id",)))
 @resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
 def find_orders(**kwargs):
     query = OrdersDB.query.filter_by(**kwargs).all()
@@ -31,7 +41,7 @@ docs.register(find_orders)
 @app.route('/api/order/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Create order', tags=['orders'])
 @marshal_with(OrdersSchema)
-@use_kwargs(OrdersSchema(exclude=("id_order","created","started","closed",)))
+@use_kwargs(OrdersSchema(exclude=("order_id","created","started","closed",)))
 @resp.check_user_permission(dbName = "OrdersDB", method = 'PUT')
 def create_orders(**kwargs):  
     query = OrdersDB()
@@ -47,7 +57,7 @@ docs.register(create_orders)
 @app.route('/api/order/<int:id>/', methods=['PUT'], provide_automatic_options=False)
 @doc(description='Update order by id', tags=['orders'])
 @marshal_with(OrdersSchema)
-@use_kwargs(OrdersSchema(exclude=("id_order",)))
+@use_kwargs(OrdersSchema(exclude=("order_id",)))
 @resp.check_user_permission(dbName = "OrdersDB", method = 'PUT')
 def update_orders(id, **kwargs):  
     query = OrdersDB.query.get_or_404(id)
@@ -67,16 +77,6 @@ def delete_orders(id):
     db.session.commit()  
     return response_with(resp.SUCCESS_200)
 docs.register(delete_orders)
-
-@app.route('/api/order/<int:id>/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get order by id', tags=['orders'])
-@marshal_with(OrdersSchema())
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def get_order(id):
-    query = OrdersDB.query.get_or_404(id)
-    query_schema = OrdersSchema()
-    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_order)
 
 
 

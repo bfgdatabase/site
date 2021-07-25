@@ -8,75 +8,75 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/orders/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get all orders', tags=['orders'])
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def get_orders():
-    query = OrdersDB.query.all()
-    query_schema = OrdersSchema(many=True)
+@app.route('/api/tnotchs/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get all tnotchs', tags=['tnotchs'])
+@resp.check_user_permission(dbName = "TnotchDB", method = 'GET')
+def get_tnotchs():
+    query = TnotchDB.query.all()
+    query_schema = TnotchSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_orders)
+docs.register(get_tnotchs)
 
-@app.route('/api/orders/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Find orders with params', tags=['orders'])
-@marshal_with(OrdersSchema(many=True))
-@use_kwargs(OrdersSchema(exclude=("id_order",)))
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def find_orders(**kwargs):
-    query = OrdersDB.query.filter_by(**kwargs).all()
-    query_schema = OrdersSchema(many=True)
+@app.route('/api/tnotch/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get tnotch by id', tags=['tnotchs'])
+@marshal_with(TnotchSchema())
+@resp.check_user_permission(dbName = "TnotchDB", method = 'GET')
+def get_tnotch(id):
+    query = TnotchDB.query.get_or_404(id)
+    query_schema = TnotchSchema()
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(find_orders)
+docs.register(get_tnotch)
 
-@app.route('/api/order/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Create order', tags=['orders'])
-@marshal_with(OrdersSchema)
-@use_kwargs(OrdersSchema(exclude=("id_order","created","started","closed",)))
-@resp.check_user_permission(dbName = "OrdersDB", method = 'PUT')
-def create_orders(**kwargs):  
-    query = OrdersDB()
+@app.route('/api/tnotchs/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find tnotchs with params', tags=['tnotchs'])
+@marshal_with(TnotchSchema(many=True))
+@use_kwargs(TnotchSchema(exclude=("tnotch_id",)))
+@resp.check_user_permission(dbName = "TnotchDB", method = 'GET')
+def find_tnotchs(**kwargs):
+    query = TnotchDB.query.filter_by(**kwargs).all()
+    query_schema = TnotchSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_tnotchs)
+
+@app.route('/api/tnotch/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Create tnotch', tags=['tnotchs'])
+@marshal_with(TnotchSchema)
+@use_kwargs(TnotchSchema(exclude=("tnotch_id",)))
+@resp.check_user_permission(dbName = "TnotchDB", method = 'PUT')
+def create_tnotchs(**kwargs):  
+    query = TnotchDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     query.created = datetime.now(timezone.utc)
     db.session.add(query)
     db.session.commit()
-    schema = OrdersSchema()
+    schema = TnotchSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
-docs.register(create_orders)
+docs.register(create_tnotchs)
 
-@app.route('/api/order/<int:id>/', methods=['PUT'], provide_automatic_options=False)
-@doc(description='Update order by id', tags=['orders'])
-@marshal_with(OrdersSchema)
-@use_kwargs(OrdersSchema(exclude=("id_order",)))
-@resp.check_user_permission(dbName = "OrdersDB", method = 'PUT')
-def update_orders(id, **kwargs):  
-    query = OrdersDB.query.get_or_404(id)
+@app.route('/api/tnotch/<int:id>/', methods=['PUT'], provide_automatic_options=False)
+@doc(description='Update tnotch by id', tags=['tnotchs'])
+@marshal_with(TnotchSchema)
+@use_kwargs(TnotchSchema(exclude=("tnotch_id",)))
+@resp.check_user_permission(dbName = "TnotchDB", method = 'PUT')
+def update_tnotchs(id, **kwargs):  
+    query = TnotchDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.commit()
-    schema = OrdersSchema()
+    schema = TnotchSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
-docs.register(update_orders)
+docs.register(update_tnotchs)
 
-@app.route('/api/order/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
-@doc(description='Delete order by id', tags=['orders'])
-@resp.check_user_permission(dbName = "OrdersDB", method = 'DELETE')
-def delete_orders(id):
-    query = OrdersDB.query.get_or_404(id)
+@app.route('/api/tnotch/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
+@doc(description='Delete tnotch by id', tags=['tnotchs'])
+@resp.check_user_permission(dbName = "TnotchDB", method = 'DELETE')
+def delete_tnotchs(id):
+    query = TnotchDB.query.get_or_404(id)
     db.session.delete(query)
     db.session.commit()  
     return response_with(resp.SUCCESS_200)
-docs.register(delete_orders)
-
-@app.route('/api/order/<int:id>/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get order by id', tags=['orders'])
-@marshal_with(OrdersSchema())
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def get_order(id):
-    query = OrdersDB.query.get_or_404(id)
-    query_schema = OrdersSchema()
-    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_order)
+docs.register(delete_tnotchs)
 
 
 

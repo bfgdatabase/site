@@ -9,32 +9,32 @@ from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
 
-@app.route('/api/markloc/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get all marklocs', tags=['markloc'])
-@resp.check_user_permission(dbName = "MarklocDB", method = 'GET')
-def get_marklocs():
-    query = MarklocDB.query.all()
-    query_schema = MarklocSchema(many=True)
+@app.route('/api/telemetr/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get all telemetrs', tags=['telemetr'])
+@resp.check_user_permission(dbName = "TelemetrDB", method = 'GET')
+def get_telemetrs():
+    query = TelemetrDB.query.all()
+    query_schema = TelemetrSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_marklocs)
+docs.register(get_telemetrs)
 
-@app.route('/api/markloc/<int:id>/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get markloc by id', tags=['markloc'])
-@resp.check_user_permission(dbName = "MarklocDB", method = 'GET')
-@marshal_with(MarklocSchema())
-def get_markloc(id):
-    query = MarklocDB.query.get_or_404(id)
-    query_schema = MarklocSchema()
+@app.route('/api/telemetr/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get telemetr by id', tags=['telemetr'])
+@resp.check_user_permission(dbName = "TelemetrDB", method = 'GET')
+@marshal_with(TelemetrSchema())
+def get_telemetr(id):
+    query = TelemetrDB.query.get_or_404(id)
+    query_schema = TelemetrSchema()
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_markloc)
+docs.register(get_telemetr)
 
-@app.route('/api/marklocs/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Find markloc with params', tags=['markloc'])
-@marshal_with(MarklocSchema(many=True))
-@use_kwargs(MarklocSchema(exclude=("markloc_id",)))
-@resp.check_user_permission(dbName = "MarklocDB", method = 'GET')
-def find_markloc(**kwargs):
-    query = MarklocDB.query.filter_by(**kwargs).all()
-    query_schema = MarklocSchema(many=True)
+@app.route('/api/telemetrs/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find telemetr with params', tags=['telemetr'])
+@marshal_with(TelemetrSchema(many=True))
+@use_kwargs(TelemetrSchema(exclude=("telemetr_id",)))
+@resp.check_user_permission(dbName = "TelemetrDB", method = 'GET')
+def find_telemetr(**kwargs):
+    query = TelemetrDB.query.filter_by(**kwargs).all()
+    query_schema = TelemetrSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(find_markloc)
+docs.register(find_telemetr)

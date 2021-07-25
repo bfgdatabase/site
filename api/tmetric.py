@@ -8,75 +8,75 @@ from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
 
-@app.route('/api/orders/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get all orders', tags=['orders'])
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def get_orders():
-    query = OrdersDB.query.all()
-    query_schema = OrdersSchema(many=True)
+@app.route('/api/tmetrics/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get all tmetrics', tags=['tmetrics'])
+@resp.check_user_permission(dbName = "TmetricDB", method = 'GET')
+def get_tmetrics():
+    query = TmetricDB.query.all()
+    query_schema = TmetricSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_orders)
+docs.register(get_tmetrics)
 
-@app.route('/api/orders/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Find orders with params', tags=['orders'])
-@marshal_with(OrdersSchema(many=True))
-@use_kwargs(OrdersSchema(exclude=("id_order",)))
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def find_orders(**kwargs):
-    query = OrdersDB.query.filter_by(**kwargs).all()
-    query_schema = OrdersSchema(many=True)
+@app.route('/api/tmetric/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get tmetric by id', tags=['tmetrics'])
+@marshal_with(TmetricSchema())
+@resp.check_user_permission(dbName = "TmetricDB", method = 'GET')
+def get_tmetric(id):
+    query = TmetricDB.query.get_or_404(id)
+    query_schema = TmetricSchema()
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(find_orders)
+docs.register(get_tmetric)
 
-@app.route('/api/order/', methods=['POST'], provide_automatic_options=False)
-@doc(description='Create order', tags=['orders'])
-@marshal_with(OrdersSchema)
-@use_kwargs(OrdersSchema(exclude=("id_order","created","started","closed",)))
-@resp.check_user_permission(dbName = "OrdersDB", method = 'PUT')
-def create_orders(**kwargs):  
-    query = OrdersDB()
+@app.route('/api/tmetrics/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Find tmetrics with params', tags=['tmetrics'])
+@marshal_with(TmetricSchema(many=True))
+@use_kwargs(TmetricSchema(exclude=("tmetric_id",)))
+@resp.check_user_permission(dbName = "TmetricDB", method = 'GET')
+def find_tmetrics(**kwargs):
+    query = TmetricDB.query.filter_by(**kwargs).all()
+    query_schema = TmetricSchema(many=True)
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(find_tmetrics)
+
+@app.route('/api/tmetric/', methods=['POST'], provide_automatic_options=False)
+@doc(description='Create tmetric', tags=['tmetrics'])
+@marshal_with(TmetricSchema)
+@use_kwargs(TmetricSchema(exclude=("tmetric_id",)))
+@resp.check_user_permission(dbName = "TmetricDB", method = 'PUT')
+def create_tmetrics(**kwargs):  
+    query = TmetricDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     query.created = datetime.now(timezone.utc)
     db.session.add(query)
     db.session.commit()
-    schema = OrdersSchema()
+    schema = TmetricSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
-docs.register(create_orders)
+docs.register(create_tmetrics)
 
-@app.route('/api/order/<int:id>/', methods=['PUT'], provide_automatic_options=False)
-@doc(description='Update order by id', tags=['orders'])
-@marshal_with(OrdersSchema)
-@use_kwargs(OrdersSchema(exclude=("id_order",)))
-@resp.check_user_permission(dbName = "OrdersDB", method = 'PUT')
-def update_orders(id, **kwargs):  
-    query = OrdersDB.query.get_or_404(id)
+@app.route('/api/tmetric/<int:id>/', methods=['PUT'], provide_automatic_options=False)
+@doc(description='Update tmetric by id', tags=['tmetrics'])
+@marshal_with(TmetricSchema)
+@use_kwargs(TmetricSchema(exclude=("tmetric_id",)))
+@resp.check_user_permission(dbName = "TmetricDB", method = 'PUT')
+def update_tmetrics(id, **kwargs):  
+    query = TmetricDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.commit()
-    schema = OrdersSchema()
+    schema = TmetricSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
-docs.register(update_orders)
+docs.register(update_tmetrics)
 
-@app.route('/api/order/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
-@doc(description='Delete order by id', tags=['orders'])
-@resp.check_user_permission(dbName = "OrdersDB", method = 'DELETE')
-def delete_orders(id):
-    query = OrdersDB.query.get_or_404(id)
+@app.route('/api/tmetric/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
+@doc(description='Delete tmetric by id', tags=['tmetrics'])
+@resp.check_user_permission(dbName = "TmetricDB", method = 'DELETE')
+def delete_tmetrics(id):
+    query = TmetricDB.query.get_or_404(id)
     db.session.delete(query)
     db.session.commit()  
     return response_with(resp.SUCCESS_200)
-docs.register(delete_orders)
-
-@app.route('/api/order/<int:id>/', methods=['GET'], provide_automatic_options=False)
-@doc(description='Get order by id', tags=['orders'])
-@marshal_with(OrdersSchema())
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def get_order(id):
-    query = OrdersDB.query.get_or_404(id)
-    query_schema = OrdersSchema()
-    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-docs.register(get_order)
+docs.register(delete_tmetrics)
 
 
 

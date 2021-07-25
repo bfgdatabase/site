@@ -19,14 +19,14 @@ __all__ = [
     "orders",
     "rmetric",
     "route",
-    "setnoch",
+    "setnotch",
     "specifications",
     "tags",
     "technology",
     "telecode",
     "telemetr",
     "tmetric",
-    "tnoch",
+    "tnotch",
     "users",
     "zones" 
     ]
