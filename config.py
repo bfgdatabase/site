@@ -2,6 +2,7 @@
 class Configuration(object):
 
     DEBUG = True
+    USE_RELOADER = False
     
     '''
     POSTGRES_URL = "ironside.hopto.org:5432"

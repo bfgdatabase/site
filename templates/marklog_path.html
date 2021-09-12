@@ -1,0 +1,102 @@
+{% extends 'base_template.html' %} {% block title %} Анкеры и зоны {% endblock %} {% block head %}
+
+<head>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script type="module" src="{{ url_for('static', filename='js/marklog_path.js') }}"></script>
+
+    <script type="text/javascript">
+        var id_location = '{{id_location}}'
+    </script>
+
+<!-- 1. Подключить CSS-файл Bootstrap 3 -->  
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
+<!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->  
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+
+<!-- 3. Подключить библиотеку jQuery -->
+<script src="js/jquery.min.js"></script>
+<!-- 4. Подключить библиотеку moment -->
+<script src="js/moment-with-locales.min.js"></script>
+<!-- 5. Подключить js-файл фреймворка Bootstrap 3 -->
+<script src="js/bootstrap.min.js"></script>
+<!-- 6. Подключить js-файл библиотеки Bootstrap 3 DateTimePicker -->
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+
+    <style>
+        #map {
+            height: 60vh;
+        }
+        
+        .top-offset {
+            margin-top: 80px;
+        }
+        
+        tr td {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    </style>
+</head>
+
+
+{% endblock %} {% block body %}
+<div class="container-fluid" id="my_content">
+    <div class="row vh-100 ">
+
+        <div class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+            
+
+
+            <div class="jumbotron p-3 ">
+                <table class="table table-borderless">
+                    <tr>
+                        <td class="align-middle"> 
+                          Группа
+                        </td>
+                      <td class="align-middle"><div id="group_select_btn"></div></td>
+                      <td class="align-middle"> 
+                        Метка
+                      </td>
+                      <td class="align-middle"><div id="marker_select_btn"></div></td>
+                      <td class="align-middle"> 
+                        От
+                      </td>
+                        <td class="align-middle"> 
+                        <input id="datetime_begin" type="datetime-local">
+                      </td>
+                      <td class="align-middle"> 
+                        До
+                      </td>
+                      <td class="align-middle">
+                        <input id="datetime_end" type="datetime-local">
+                      </td>
+                      <td class="align-middle"><div id="show_path_btn"></div></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                  </table>
+
+            </div>
+            <div class="jumbotron p-3 ">
+                <div style="display: flex; justify-content: flex-end">
+                    <div id="location_name"> 
+                    </div>
+                  </div>                         
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

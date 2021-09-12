@@ -43,5 +43,13 @@ def route_events():
 def export():
     return render_template('export.html', user = session["username"])
 
+@app.route('/marklog_path/')
+@resp.check_user_authorization()
+def marklog_path():
+    return render_template('marklog_path.html', user = session["username"])
 
+@app.route('/marklog_dynamic_path/')
+@resp.check_user_authorization()
+def marklog_dynamic_path():
+    return render_template('marklog_dynamic_path.html', user = session["username"])
     

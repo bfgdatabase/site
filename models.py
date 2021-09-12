@@ -70,10 +70,19 @@ class MarklocDB(db.Model):
     __tablename__ = 'markloc'
     markloc_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_mark = db.Column(db.Integer())  #[ref:> markers.id_mark]
-    timeis = db.Column(db.Text())
+    timeis = db.Column(db.DateTime())
     equipment_id = db.Column(db.Integer())  #[ref: > equipment.equipment_id]
     t_notch = db.Column(db.Integer())  #[ref: > notch.t_notch]
     arcive = db.Column(db.Boolean()) 
+
+class MarklogDB(db.Model):
+    __tablename__ = 'marklog'
+    marklog_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
+    id_mark = db.Column(db.Integer())  #[ref:> markers.id_mark]
+    pos_x = db.Column(db.Float())  
+    pos_y = db.Column(db.Float()) 
+    timeis = db.Column(db.Text())
 
 class OrdersDB(db.Model):
     __tablename__ = 'orders'
@@ -200,6 +209,7 @@ class LocationsDB(db.Model):
     dept_id = db.Column(db.Integer, db.ForeignKey('department.dept_id'))
     imageurl= db.Column(db.Text())
 
+    marklogs = db.relationship("MarklogDB", backref=db.backref('locations'), lazy=True)
     anchors = db.relationship("AnchorsDB", backref=db.backref('locations'), lazy=True)
     zones = db.relationship("ZonesDB", backref=db.backref('locations'), lazy=True)
     equipment = db.relationship("EquipmentDB", backref=db.backref('locations'), lazy=True)

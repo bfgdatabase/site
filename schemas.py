@@ -7,6 +7,7 @@ editableTables = ['TnotchDB',
 'BatchDB', 
 'BatchlocDB', 
 'MarklocDB', 
+'MarklogDB',
 'OrdersDB', 
 'SpecDB',
 'RouteDB', 
@@ -54,6 +55,11 @@ class BatchlocSchema(ma.SQLAlchemyAutoSchema):
 class MarklocSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = MarklocDB
+        include_fk = True
+
+class MarklogSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = MarklogDB
         include_fk = True
 
 class BmetricSchema(ma.SQLAlchemyAutoSchema):

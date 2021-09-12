@@ -6,7 +6,7 @@ warnings.filterwarnings(
     message="Multiple schemas resolved to the name "
 )
 
-from app import app
+from app import socketio, app
 
 from api import *
 from views import *
@@ -14,5 +14,5 @@ from views import *
 import os
 
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app, use_reloader=False)
 
