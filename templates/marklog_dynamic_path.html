@@ -12,23 +12,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script type="module" src="{{ url_for('static', filename='js/marklog_dynamic_path.js') }}"></script>
 
-    <script type="text/javascript">
-        var id_location = '{{id_location}}'
-    </script>
-
 <!-- 1. Подключить CSS-файл Bootstrap 3 -->  
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
 <!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->  
 <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
 
-<!-- 3. Подключить библиотеку jQuery -->
 <script src="js/jquery.min.js"></script>
-<!-- 4. Подключить библиотеку moment -->
 <script src="js/moment-with-locales.min.js"></script>
-<!-- 5. Подключить js-файл фреймворка Bootstrap 3 -->
 <script src="js/bootstrap.min.js"></script>
-<!-- 6. Подключить js-файл библиотеки Bootstrap 3 DateTimePicker -->
 <script src="js/bootstrap-datetimepicker.min.js"></script>
+
+<link  href="{{ url_for('static', filename='dist/picker.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='dist/picker.js') }}"></script>
 
     <style>
         #map {
@@ -52,60 +47,127 @@
     <div class="row vh-100 ">
 
         <div class="col main h-100 overflow-auto border-left ">
+          
             <table height="70">
             </table>
+
             <div id="messages">
             </div>
             
             <div class="jumbotron p-3 ">
-                <table class="table table-borderless">
-                    <tr>
-                      <td class="align-middle"> 
-                         Локация
-                      </td>
-                      <td class="align-middle"><div id=" location_select_btn"></div></td>
-                      <td class="align-middle"> 
-                        Группа
-                      </td>
-                      <td class="align-middle"><div id="group_select_btn"></div></td>
-                      <td class="align-middle"> 
-                        Метка
-                      </td>
-                      <td class="align-middle"><div id="marker_select_btn"></div></td>
-                      <td class="align-middle"> 
-                        От
-                      </td>
-                        <td class="align-middle"> 
-                        <input id="datetime_begin" type="datetime-local">
-                      </td>
-                      <td class="align-middle"> 
-                        До
-                      </td>
-                      <td class="align-middle">
-                        <input id="datetime_end" type="datetime-local">
-                      </td>
-                      <td class="align-middle"><div id="show_path_btn"></div></td>
-                    </tr>
-                    <tr>
-                    </tr>                    
-                  </table>
+              <table class="table table-borderless">
+                  <tr>
 
-            </div>
+                    <td class="align-middle"> 
+                       Локация
+                    </td>
+                    <td class="align-middle">
+                      <div id="location_select_btn">
+                      </div>
+                    </td>
+
+                    <td class="align-middle"> 
+                      Группа
+                   </td>
+                   <td class="align-middle">
+                     <div id="group_select_btn">
+                     </div>
+                   </td>
+
+                   <td class="align-middle">
+                   </td>
+                   <td class="align-middle">
+                  </td>
+                  <td class="align-middle">
+                    
+                  </tr>   
+              </table>
+            
+              
+               
+            <table class="table ">
+            <thead class="thead-dark ">
+              <tr>
+                  
+                  <th scope="col ">Наименование метки</th>
+                  <th scope="col ">Отображать траекторию</th>
+                  <th scope="col ">Цвет траектории</th>
+                  <th scope="col "></th>
+              </tr>
+            </thead>
+            <tbody id="tabel_mark_select">
+            </tbody>
+          </table>
 
 
+            <p class="align-middle"> 
+              Глубина траектории
+            </p>
+
+            <table class="table table-borderless">
+
+              <tr>
+                
+                <td class="align-middle"> 
+                  Д
+                </td>
+
+                <td class="align-middle"> 
+                  Ч
+                </td>
+
+                <td class="align-middle"> 
+                  М
+                </td>
+
+                <td class="align-middle"> 
+                  C
+                </td>
+              </tr>  
+              <tr>
+               
+                <td class="align-middle">
+                    <input type="text" id="dd-picker" class="form-control sr-only js-mini-picker" value="0">
+                      <div class="dd-picker"></div>
+                  <span class="font-weight-bold text-primary ml-2 mt-1 valueSpan"></span>
+                </td>
+                <td class="align-middle"> 
+                    <input type="text" id="hh-picker" class="form-control sr-only js-mini-picker" value="1">
+                      <div class="hh-picker"></div>
+                  <span class="font-weight-bold text-primary ml-2 mt-1 valueSpan"></span>
+                </td>
+
+                <td class="align-middle"> 
+                    <input type="text" id="mm-picker" class="form-control sr-only js-mini-picker" value="0">
+                      <div class="mm-picker"></div>
+                  <span class="font-weight-bold text-primary ml-2 mt-1 valueSpan"></span>
+                </td>
+
+                <td class="align-middle"> 
+                    <input type="text" id="ss-picker" class="form-control sr-only js-mini-picker" value="0">
+                      <div class="ss-picker"></div>
+                  <span class="font-weight-bold text-primary ml-2 mt-1 valueSpan"></span>
+                </td>
+              </tr>  
+          </table>
+
+          <a id="show_path_btn">
+          </a>
+          <a id="show_path_stop_btn">
+          </a>
+          <a id="test_btn">
+          </a>
+
+          <br>
+          <br>
             <div class="jumbotron p-3 ">
                 <div style="display: flex; justify-content: flex-end">
                     <div id="location_name"> 
                     </div>
-                  </div>                         
-                <div id="map"></div>
-            </div>
-            <div class="jumbotron p-3 d-flex justify-content-center my-4">
-              <form class="range-field w-75">
-                <input type="range" class="custom-range" min="0" max="1000" step="1" id="slider11">
-              </form>
-              <span class="font-weight-bold text-primary ml-2 mt-1 valueSpan"></span>
-        </div>
+                </div>                         
+                <div id="map">                  
+                </div>
+            </div>            
     </div>
 </div>
 {% endblock %}

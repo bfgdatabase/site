@@ -76,6 +76,8 @@ docs.register(find_marklog)
 @resp.check_user_permission(dbName = "MarklocDB", method = 'GET')
 @marshal_with(MarklogSchema())
 def get_marklog_path(id, begin, end):
+    begin = begin.replace("T", " ").replace(".000Z", "")
+    end = end.replace("T", " ").replace(".000Z", "")
     query = MarklogDB.query.filter(MarklogDB.timeis.between(begin, end)).filter_by(id_mark = id).order_by("timeis").all()
     query_schema = MarklogSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})

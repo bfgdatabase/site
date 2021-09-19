@@ -12,23 +12,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script type="module" src="{{ url_for('static', filename='js/marklog_path.js') }}"></script>
 
-    <script type="text/javascript">
-        var id_location = '{{id_location}}'
-    </script>
-
 <!-- 1. Подключить CSS-файл Bootstrap 3 -->  
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
 <!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->  
 <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
 
-<!-- 3. Подключить библиотеку jQuery -->
 <script src="js/jquery.min.js"></script>
-<!-- 4. Подключить библиотеку moment -->
 <script src="js/moment-with-locales.min.js"></script>
-<!-- 5. Подключить js-файл фреймворка Bootstrap 3 -->
 <script src="js/bootstrap.min.js"></script>
-<!-- 6. Подключить js-файл библиотеки Bootstrap 3 DateTimePicker -->
 <script src="js/bootstrap-datetimepicker.min.js"></script>
+
+<link  href="{{ url_for('static', filename='dist/picker.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='dist/picker.js') }}"></script>
 
     <style>
         #map {
@@ -43,6 +38,9 @@
             padding: 0 !important;
             margin: 0 !important;
         }
+
+       .c_width {width: 100%;}
+
     </style>
 </head>
 
@@ -52,51 +50,93 @@
     <div class="row vh-100 ">
 
         <div class="col main h-100 overflow-auto border-left ">
+          
             <table height="70">
             </table>
+
             <div id="messages">
             </div>
             
-
-
             <div class="jumbotron p-3 ">
-                <table class="table table-borderless">
-                    <tr>
-                        <td class="align-middle"> 
-                          Группа
-                        </td>
-                      <td class="align-middle"><div id="group_select_btn"></div></td>
-                      <td class="align-middle"> 
-                        Метка
-                      </td>
-                      <td class="align-middle"><div id="marker_select_btn"></div></td>
-                      <td class="align-middle"> 
-                        От
-                      </td>
-                        <td class="align-middle"> 
-                        <input id="datetime_begin" type="datetime-local">
-                      </td>
-                      <td class="align-middle"> 
-                        До
-                      </td>
-                      <td class="align-middle">
-                        <input id="datetime_end" type="datetime-local">
-                      </td>
-                      <td class="align-middle"><div id="show_path_btn"></div></td>
-                    </tr>
-                    <tr>
-                    </tr>
-                  </table>
+              <table class="table table-borderless">
+                  <tr>
 
-            </div>
+                    <td class="align-middle"> 
+                       Локация
+                    </td>
+                    <td class="align-middle">
+                      <div id="location_select_btn">
+                      </div>
+                    </td>
+
+                    <td class="align-middle"> 
+                      Группа
+                   </td>
+                   <td class="align-middle">
+                     <div id="group_select_btn">
+                     </div>
+                   </td>
+
+                   <td class="align-middle">
+                   </td>
+                   <td class="align-middle">
+                  </td>
+                  <td class="align-middle">
+                    
+                  <td class="align-middle"> 
+                    От
+                  </td>
+                    <td class="align-middle"> 
+                    <input id="datetime_begin" type="datetime-local">
+                  </td>
+                  <td class="align-middle"> 
+                    До
+                  </td>
+                  <td class="align-middle">
+                    <input id="datetime_end" type="datetime-local">
+                  </td>
+                  <td class="align-middle"><div id="show_path_btn"></div></td>
+                  
+                  </tr>   
+              </table>
+            
+              
+               
+            <table class="table ">
+            <thead class="thead-dark ">
+              <tr>
+                  
+                  <th scope="col ">Наименование метки</th>
+                  <th scope="col ">Отображать траекторию</th>
+                  <th scope="col ">Цвет траектории</th>
+                  <th scope="col "></th>
+              </tr>
+            </thead>
+            <tbody id="tabel_mark_select">
+            </tbody>
+          </table>
+
+          <br>
             <div class="jumbotron p-3 ">
                 <div style="display: flex; justify-content: flex-end">
                     <div id="location_name"> 
                     </div>
-                  </div>                         
-                <div id="map"></div>
-            </div>
-        </div>
+                </div>                         
+                <div id="map">                  
+                </div>
+            </div>   
+            
+
+        <label id="time_val" value="0"> 0 </label>
+
+        <div>
+          <input type="range" id="time_pos" name="volume" class="c_width";
+                min="0" max="1000" value="0">
+        </div>  
+
+        
+
     </div>
 </div>
+
 {% endblock %}

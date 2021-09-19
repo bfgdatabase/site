@@ -7,29 +7,9 @@ jQuery.noConflict()
 let marklog = [];
 let location_ids = [];
 let location_names = [];
-let lr;
+
 let markgroups = new Array();
-let markDict = {};
 
-class mark {
-    constructor(id, name) {
-        this.id = id;
-        this.name = name;
-        this.selected = false;
-        this.color = "#" + Math.floor(Math.random()*16777215).toString(16);
-        this.leaflet_polyline;
-        this.leaflet_point_array = []
-        this.marklog = []
-    }
-}
-
-class markgroup {
-    constructor(id, name) {
-        this.id = id;
-        this.name = name;
-        this.marks = [];
-    }
-}
 
 class mapObj {
     constructor(obj, id, name) {
@@ -47,18 +27,11 @@ let editableLayers = []
 let scale = 1
 let selectedFeature = null;
 
-let location_select_btn;
 let group_select_btn;
 let marker_select_btn;
 let show_path_btn;
-let show_path_stop_btn;
-let test_btn;
 
 let map;
-var picker_dd;
-var picker_hh;
-var picker_mm;
-var picker_ss;
 
 let polyline_style = {
     color: 'red',
@@ -99,66 +72,67 @@ function addZoneToMap(zone) {
     L.polygon(ans).addTo(editableLayers).bindPopup(zone.name);
 }
 
-
-function createCheckbox_(value) {
-
-    let td = document.createElement('td');
-    td.style = "vertical-align:middle; ";
-    let element = document.createElement('input');
-    element.type = "checkbox";
-    element.style = "margin:0";
-    element.checked = value.selected;    
-    element.addEventListener("click", function() {
-        value.selected = element.checked
-    });
-    td.appendChild(element);
-    return td;
-}
-
-function createColorInput(obj) {
-    let td = document.createElement('td');
-    td.style = "vertical-align:middle";
-    td.className = "px-1";
-    let element = document.createElement('input');
-    element.type = "color";
-    element.className = "form-control form-control-sm";
-    element.value = obj.color;
-    element.addEventListener("input", function() {
-        obj.color = element.value;
-    });
-    td.appendChild(element);
-    return td;
-}
-
-function createDMarkerTable(items) {
+function createDropdownMenuGroup(id, variants, ids) {
 
     let td = document.createElement('td');
     td.style = "vertical-align:middle";
     td.className = "px-1";
 
-    //tabel_mark_select
+    let buttonSelect = document.createElement('button');
+    buttonSelect.className = "btn btn-primary btn-sm dropdown-toggle btn-block";
+    buttonSelect.id = "";
 
-    let table = document.getElementById('tabel_mark_select');
-    table.className = "table table-hover table-striped";
-    table.innerHTML = "";
+    buttonSelect.setAttribute("data-toggle", "dropdown");
 
-    for (var i = 0; i < items.length; i++) {
+    let menuSelect = document.createElement('div');
+    menuSelect.className = "dropdown-menu";
 
-        let tr = document.createElement('tr');
+    for (let i = 0; i < variants.length; ++i) {
 
-        let name = createText(items[i].name)
-        tr.appendChild(name);
+        if (id == ids[i]) {
+            buttonSelect.id = ids[i];
+            buttonSelect.innerHTML = variants[i];
+        }
+        let el = document.createElement('a');
+        el.className = "dropdown-item";
+        el.innerHTML = variants[i];
+        el.id = ids[i];
 
-        let get = createCheckbox_(items[i])
-        tr.appendChild(get);
+        el.addEventListener("click", function() {
+            buttonSelect.id = el.id;
+            buttonSelect.innerHTML = el.innerHTML;
+            
+            // Create marker select btn
+            let marker_variants = []
+            let marker_ids = []
 
-        let color = createColorInput(items[i])
-        tr.appendChild(color);
+            for (let i in markgroups[el.id].group)
+            {
+                marker_variants.push(markgroups[el.id].group[i].name)
+                marker_ids.push(markgroups[el.id].group[i].id_mark)
+            }
 
-        table.appendChild(tr);
+            marker_select_btn = createDropdownMenuMarker(marker_ids[0], marker_variants, marker_ids);
+            let elt = document.getElementById('marker_select_btn');
+            elt.innerHTML = "";
+            elt.appendChild(marker_select_btn);
+            
+
+        });
+
+        menuSelect.appendChild(el);
     }
+    td.appendChild(buttonSelect);
+    td.appendChild(menuSelect);
+    return td;
+}
 
-/*
+function createDropdownMenuMarker(id, variants, ids) {
+
+    let td = document.createElement('td');
+    td.style = "vertical-align:middle";
+    td.className = "px-1";
+
     let buttonSelect = document.createElement('button');
     buttonSelect.className = "btn btn-primary btn-sm dropdown-toggle btn-block";
     buttonSelect.id = "";
@@ -190,50 +164,7 @@ function createDMarkerTable(items) {
     td.appendChild(buttonSelect);
     td.appendChild(menuSelect);
     return td;
-    */
 }
-
-function createDropdownMenuGroup(items) {
-
-    let td = document.createElement('td');
-    td.style = "vertical-align:middle";
-    td.className = "px-1";
-
-    let buttonSelect = document.createElement('button');
-    buttonSelect.className = "btn btn-primary btn-sm dropdown-toggle btn-block";
-    buttonSelect.id = "";
-
-    buttonSelect.setAttribute("data-toggle", "dropdown");
-
-    let menuSelect = document.createElement('div');
-    menuSelect.className = "dropdown-menu";
-
-    for (let i = 0; i < items.length; ++i) {
-
-        if (i == 0) {
-            buttonSelect.id = items[i].id;
-            buttonSelect.innerHTML = items[i].name;
-            createDMarkerTable(items[i].marks);  
-        }
-        
-        let el = document.createElement('a');
-        el.className = "dropdown-item";
-        el.innerHTML = items[i].name;
-        el.id = items[i].id;
-
-        el.addEventListener("click", function() {  
-            buttonSelect.id = el.id;
-            buttonSelect.innerHTML = el.innerHTML;  
-            createDMarkerTable(items[i].marks);  
-        });
-
-        menuSelect.appendChild(el);
-    }
-    td.appendChild(buttonSelect);
-    td.appendChild(menuSelect);
-    return td;
-}
-
 
 function createDropdownMenuLocations(id, variants, ids) {
 
@@ -278,131 +209,16 @@ function createDropdownMenuLocations(id, variants, ids) {
     return td;
 }
 
-function sec2time(timeInSeconds) {
-    var pad = function(num, size) { return ('000' + num).slice(size * -1); },
-    time = parseFloat(timeInSeconds).toFixed(3),
-    hours = Math.floor(time / 60 / 60),
-    minutes = Math.floor(time / 60) % 60,
-    seconds = Math.floor(time - minutes * 60),
-    milliseconds = time.slice(-3);
-
-    return pad(hours, 2) + ' ч ' + pad(minutes, 2) + ' м';
-}
-
 function createPage() { 
-
-    var input_dd = document.getElementById('dd-picker');
-    picker_dd = new Picker(input_dd, {container: '.dd-picker',
-        format: 'SSS',
-        inline: true,
-        rows: 1,
-        });
-    
-    var input_hh = document.getElementById('hh-picker');
-    picker_hh = new Picker(input_hh, {container: '.hh-picker',
-        format: 'HH',
-        inline: true,
-        rows: 1,
-        });
-
-    var input_mm = document.getElementById('mm-picker');
-    picker_mm = new Picker(input_mm, {container: '.mm-picker',
-        format: 'mm',
-        inline: true,
-        rows: 1,
-        });
-
-    var input_ss = document.getElementById('ss-picker');
-    picker_ss = new Picker(input_ss, {container: '.ss-picker',
-        format: 'mm',
-        inline: true,
-        rows: 1,
-        });
-
-
-    const $valueSpan = $('.valueSpan');
-    const $value = $('#slider11');
-    $valueSpan.html($value.val());
-    $value.on('input change', () => {
-        let a = $value.val();
-        $valueSpan.html(sec2time(a*a));
-    });
+     
 
     var socket = io();
-
+    
     socket.on('connect', function() {
+        socket.emit('my_event', {data: 'I\'m connected!'});
     });
 
-    socket.on('on_message', function(msg, cb) {        
-        let val = markDict[msg.mark_id]  
-        
-        if(msg.id_location == location.id_location)     
-        {
-            let val = markDict[msg.mark_id]
-            
-            let style = {
-                color: val.color,
-                fillColor: val.color,
-                fillOpacity: 0.5,
-                radius: 0.002
-            };
-
-            let text = JSON.stringify({"Метка: ": msg.name, "UTC TIME: ": msg.timeis})
-            let l_pt = L.circle([msg.pos_y/scale, msg.pos_x/scale], style).bindPopup(text);
-            
-            map.addLayer(l_pt);
-
-            msg.leaflet_point = l_pt;
-
-            if (val.marklog.length != 0)
-            {
-                if (val.marklog[val.marklog.length-1].id_location == location.id_location)
-                {
-
-                    var polylinePoints = [];
-                    polylinePoints.push([msg.pos_y / scale, msg.pos_x / scale]); 
-                    polylinePoints.push([val.marklog[val.marklog.length-1].pos_y / scale, val.marklog[val.marklog.length-1].pos_x / scale]); 
-                    let line_style = {
-                        color: val.color,
-                        opacity: 0.5,
-                        smoothFactor: 1
-                    };
-                    let ln  = L.polyline(polylinePoints, line_style);
-                    msg.leaflet_line = ln;
-
-                    map.addLayer(ln)
-
-                }
-            }
-
-
-            val.marklog.push(msg)
-            
-            let timeInterval = document.getElementById('dd-picker').value * 60*60*24 + document.getElementById('hh-picker').value * 60*60 + document.getElementById('mm-picker').value * 60 + document.getElementById('ss-picker').value;
-            var nowTime  = new Date();
-            var seconds = (nowTime.getTime() + nowTime.getTimezoneOffset()*60*1000);
-
-            let vv = ((seconds - new Date(val.marklog[0].timeis).getTime())/1000);
-
-            while (true)
-            {
-                if (val.marklog.length == 0)
-                {
-                    break
-                }                
-                if(((seconds - new Date(val.marklog[0].timeis).getTime())/1000) > timeInterval)
-                {
-                    map.removeLayer(val.marklog[0].leaflet_point);
-                    if (val.marklog[0].hasOwnProperty('leaflet_line') )
-                        map.removeLayer(val.marklog[0].leaflet_line);
-                    val.marklog.shift();
-                } else
-                {
-                    break
-                }
-            }
-        }
-    });
+    socket.emit('addWatchingMark', {data: 'id_anchor_8'});
 
     {
         var xhr = new XMLHttpRequest();
@@ -410,151 +226,73 @@ function createPage() {
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         xhr.onload = function() {
             if (xhr.readyState == 4 && xhr.status == "200") {
-                all_locations = JSON.parse(xhr.response).query;                
-            } else 
-            { 
-                showMessage(xhr.response, "danger"); 
-            }
+                all_locations = JSON.parse(xhr.response).query;
+            } else { showMessage(xhr.response, "danger"); }
         }
         xhr.send();
-
-
-        for (let i in all_locations)
-        {
-            location_ids.push(all_locations[i].id_location)
-            location_names.push(all_locations[i].name)
-        }
-
-        location_select_btn = createDropdownMenuLocations(location_ids[0], location_names, location_ids)
-        let tmp = document.getElementById('location_select_btn');
-        tmp.appendChild(location_select_btn);        
-
     }
-    
-    {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/markgroups/', false);
+    xhr.send();
+    if (xhr.status != 200) {
+        showMessage(xhr.response, "danger");
+    } else {
+
+
+        markgroups = JSON.parse(xhr.responseText).query;
+        markgroups.unshift({markgroup_id: 0, markgroup_name:"null"})
+
+        let params = {}
+        params["markgroup_id"] = null;
+        let json = JSON.stringify(params);
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/api/markgroups/', false);
-        xhr.send();
-        if (xhr.status != 200) {
-            showMessage(xhr.response, "danger");
-        } else {
+        xhr.open('POST', '/api/markers/', false);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.onload = function() {
+            if (xhr.readyState == 4 && xhr.status == "200") {
+                let group = JSON.parse(xhr.response).query;
+                markgroups[0].group = group;
 
-            let res = JSON.parse(xhr.responseText).query;
-            markDict = [];
+            } else { showMessage(xhr.response, "danger"); }
+        }
+        xhr.send(json);
 
-            markgroups.push(new markgroup(0, "null"))
-            for(let m in res)
-            {   
-                markgroups.push(new markgroup(res[m].markgroup_id, res[m].markgroup_name))
-            }
-
+        for (let i = 1; i < markgroups.length; i++)
+        {
             let params = {}
-            params["markgroup_id"] = null;
+            params["markgroup_id"] = markgroups[i].markgroup_id;
             let json = JSON.stringify(params);
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/api/markers/', false);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.onload = function() {
                 if (xhr.readyState == 4 && xhr.status == "200") {
-                    let res = JSON.parse(xhr.response).query;
-                    let marks = []
-                    for(let m in res)
-                    {   
-                        let mm = new mark(res[m].id_mark, res[m].name)
-                        marks.push(mm)
-                        markDict["id_mark_" + res[m].id_mark] = marks[marks.length - 1]
-                    }
-                    markgroups[0].marks = marks;
+                    let group = JSON.parse(xhr.response).query;
+                    markgroups[i].group = group;
+
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
-
-            for (let i = 1; i < markgroups.length; i++)
-            {
-                let params = {}
-                params["markgroup_id"] = markgroups[i].id;
-                let json = JSON.stringify(params);
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/api/markers/', false);
-                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                xhr.onload = function() {
-                    if (xhr.readyState == 4 && xhr.status == "200") {
-                        let res = JSON.parse(xhr.response).query;
-                        let marks = []
-                        for(let m in res)
-                        {   
-                            let mm = new mark(res[m].id_mark, res[m].name)
-                            marks.push(mm)
-                            markDict["id_mark_" + res[m].id_mark] = marks[marks.length - 1]
-                            //marks.push(new mark(res[m].id_mark, res[m].name))
-                        }
-                        markgroups[i].marks = marks;
-                    } else { showMessage(xhr.response, "danger"); }
-                }
-                xhr.send(json);
-            }         
         }
-
-        group_select_btn = createDropdownMenuGroup(markgroups)
-        let tmp = document.getElementById('group_select_btn');
-        tmp.appendChild(group_select_btn);
         
     }
 
+    // Create  group delect btn
+    let variants = []
+    let ids = []
 
-    show_path_btn = createButton("Старт", "btn-primary");
-    show_path_btn.addEventListener("click", function() {    
+    for (let i in markgroups)
+    {
+        variants.push(markgroups[i].markgroup_name)
+        ids.push(markgroups[i].markgroup_id)
+    }
 
-        socket.emit('stopMarkWatching')
-        
-        for (var j = 0; j < markgroups.length; j++)
-        {
-            for (var i = 0; i < markgroups[j].marks.length; i++) {
-                if(markgroups[j].marks[i].selected)
-                    socket.emit('addWatchingMark', {data: "id_mark_" + (markgroups[j].marks[i].id)})
-            }
-        }       
+    group_select_btn = createDropdownMenuGroup(ids[0], variants, ids)
+    let tmp = document.getElementById('group_select_btn');
+    tmp.appendChild(group_select_btn);
 
-    });        
-    let tmp = document.getElementById('show_path_btn');
-    tmp.appendChild(show_path_btn);
-
-    
-    show_path_stop_btn = createButton("Стоп", "btn-secondary");
-    show_path_stop_btn.addEventListener("click", function() {  
-        socket.emit('stopMarkWatching') 
-        /*
-        var polylinePoints = []; 
-
-        for (let i = 0; i < 10; ++i)
-        {        
-             l_pt = L.circle([5.0 / scale, i / scale], last_mark_style).bindPopup(('sdfsdf'));
-             map.addLayer(l_pt);
-             polylinePoints.push([5.0 / scale, i / scale]);            
-        }    
-
-        lr = L.polyline(polylinePoints, polyline_style);
-        for (let i = 0; i < lr._latlngs.length; ++i)
-        {        
-            lr._latlngs[i].timestamp = 'This is timestamp';        
-        }  
-        map.addLayer(lr);*/
-
-    });  
-
-    tmp = document.getElementById('show_path_stop_btn');
-    tmp.appendChild(show_path_stop_btn);
-    
-    test_btn = createButton("Сброс", "btn-secondary");
-    test_btn.addEventListener("click", function() {          
-        createMap(location.id_location)
-    });  
-
-    tmp = document.getElementById('test_btn');
-    tmp.appendChild(test_btn);
-    /*
     // Create marker select btn
-
     let marker_variants = []
     let marker_ids = []
 
@@ -619,7 +357,18 @@ function createPage() {
                         }                        
                     }
                 }
-                          
+                                
+                if(location_ids.length > 0)
+                {
+                    let location_name = document.getElementById('location_name');
+                    location_name.innerHTML = ""
+                    let loc_menu = createDropdownMenuLocations(location_ids[0], location_names, location_ids) 
+                    location_name.appendChild(loc_menu);
+                } else {
+                    let location_name = document.getElementById('location_name');
+                    location_name.innerHTML = "Нет меток за заданный период"
+                }
+
 
             } else { showMessage(xhr.response, "danger"); }
         }
@@ -628,15 +377,11 @@ function createPage() {
     });    
     tmp = document.getElementById('show_path_btn');
     tmp.appendChild(show_path_btn);
-    */
-    
+
+
 }
 
 function createMap(loc_id) {  
-
-    for (var i in markDict) {
-        markDict[i].marklog = [];
-    }
 
     if(map != undefined)
         map.remove();
@@ -703,6 +448,26 @@ function createMap(loc_id) {
     let params = {}
     params["id_location"] = loc_id;
     let json = JSON.stringify(params);
+
+    /*
+    {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/anchors/', false);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.onload = function() {
+            if (xhr.status != 200) {
+                showMessage(xhr.response, "danger");
+            } else {
+                anchors = JSON.parse(xhr.response).query
+                for (let anchor of anchors) {
+                    addAnchorToMap(anchor.x_pos, anchor.y_pos, anchor.name, anchor.id_anchor);
+                }
+            }
+        }
+        xhr.send(json);
+    }
+    */
+
     {
         let xhr1 = new XMLHttpRequest();
         xhr1.open('POST', '/api/zones/', false);
@@ -719,6 +484,30 @@ function createMap(loc_id) {
         }
         xhr1.send(json);
     }
+
+    var polylinePoints = []; 
+    var times = []; 
+
+    for (let i = 0; i < marklog.length; ++i)
+    {
+        if( marklog[i].id_location == loc_id)
+        {
+            let pt = [marklog[i].pos_x/ scale, marklog[i].pos_y/ scale]
+            polylinePoints.push(pt);
+            times.push(marklog[i].timeis);
+        }
+    }
+
+    for (let i = 0; i < polylinePoints.length; ++i)
+    {        
+        if(i == polylinePoints.length - 1)
+            L.circle(polylinePoints[i], last_mark_style).addTo(map).bindPopup(times[i]);
+        else
+            L.circle(polylinePoints[i], mark_style).addTo(map).bindPopup(times[i]);
+        
+    }    
+    L.polyline(polylinePoints, polyline_style).addTo(map);
+    
 
 }
 

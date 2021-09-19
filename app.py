@@ -16,7 +16,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 
 from flask_script import Manager
 from flask_migrate import Migrate
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 
 from socketio import *
 import dbm
@@ -24,6 +24,7 @@ import dbm
 import paho.mqtt.client as paho
 import threading
 import time
+import json
 
 clients = []
 
@@ -60,11 +61,10 @@ manager = Manager(app)
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 
-async_mode = None
+async_mode = "threading"
 
 socketio = SocketIO(app, async_mode=async_mode)
 
-opopo = 0
 
 from models import *
 from schemas import *
@@ -115,7 +115,6 @@ if(len(users) == 0):
     db.session.add(admin)
     db.session.commit()       
 
-
 ## -------------------------------------------------------------------------
 ## -------------------------------------------------------------------------
 ## -------------------------------------------------------------------------
@@ -165,17 +164,23 @@ class Mark_dict(object):
                 print("unsubscribe", key)
 
     def on_message(self, client, userdata, message):
-        mes = str(message.payload.decode("utf-8"))
+        mes = str(message.payload.decode("utf-8")) 
+        mes = json.loads(mes)
+        mes["mark_id"] = message.topic
         res = self.mark_storage.get(message.topic)
         if res is not None:
             for n in self.mark_storage[message.topic]:
                 print ('send: ', mes, '  to client: ', n)  
+                socketio.emit('on_message', mes, room = n)
 
 
-watchingMarks = Mark_dict() 
-watchingMarks.client.loop_start() 
-    
-    
+def background_thread():
+    global watchingMarks
+    watchingMarks = Mark_dict() 
+    watchingMarks.client.loop_forever() 
+
+thread = socketio.start_background_task(background_thread)
+
 @socketio.on('disconnect')
 def disconnected():
     print('Client disconnected', request.sid)
@@ -201,3 +206,4 @@ def stopMarkWatching():
 @socketio.event
 def handle_my_custom_event(json):
     print('received json: ' + str(json))
+
