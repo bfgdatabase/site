@@ -320,13 +320,14 @@ function createPage() {
         });
 
 
+        /*
     const $valueSpan = $('.valueSpan');
     const $value = $('#slider11');
     $valueSpan.html($value.val());
     $value.on('input change', () => {
         let a = $value.val();
         $valueSpan.html(sec2time(a*a));
-    });
+    });*/
 
     var socket = io();
 
@@ -374,7 +375,6 @@ function createPage() {
 
                 }
             }
-
 
             val.marklog.push(msg)
             
@@ -506,6 +506,71 @@ function createPage() {
     show_path_btn.addEventListener("click", function() {    
 
         socket.emit('stopMarkWatching')
+
+        /////////////////////////////
+        /////////////////////////////
+        /////////////////////////////
+        
+        var now = new Date();
+        var interval = new Date();
+        let timeInterval = parseInt(document.getElementById('dd-picker').value * 60*60*24) + parseInt(document.getElementById('hh-picker').value * 60 * 60) +  parseInt(document.getElementById('mm-picker').value * 60) + parseInt(document.getElementById('ss-picker').value);
+        interval.setSeconds(interval.getSeconds() - timeInterval);
+    
+        for(let i in markDict)
+        {  
+            if(markDict[i].selected == true)
+            {
+                var xhr = new XMLHttpRequest();               
+                xhr.open('GET', '/api/marklog_path/' + markDict[i].id + '/' + interval.toISOString() + '/' + now.toISOString(), false);
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhr.onload = function() {
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+        
+                        marklog = JSON.parse(xhr.response).query;
+                        
+                        for(let m in marklog)
+                        {   
+                            if(marklog[m].id_location == location.id_location)  
+                            { 
+                                let val = markDict["id_mark_" + marklog[m].id_mark] 
+                                let style = {
+                                    color: val.color,
+                                    fillColor: val.color,
+                                    fillOpacity: 0.5,
+                                    radius: 0.002
+                                };
+
+                                let text = JSON.stringify({"Метка: ": val.name, "UTC TIME: ": marklog[m].timeis})
+                                let l_pt = L.circle([marklog[m].pos_y/scale, marklog[m].pos_x/scale], style).bindPopup(text);
+                                
+                                marklog[m].leaflet_point = l_pt;
+                                map.addLayer(l_pt);
+                                if(m != 0)
+                                {
+                                    var polylinePoints = [];
+                                    polylinePoints.push([marklog[m].pos_y/scale, marklog[m].pos_x/scale]); 
+                                    polylinePoints.push([marklog[m-1].pos_y/scale, marklog[m-1].pos_x/scale]); 
+                                    let line_style = {
+                                        color: val.color,
+                                        opacity: 0.5,
+                                        smoothFactor: 1
+                                    };    
+                                    let ln  = L.polyline(polylinePoints, line_style);
+                                    marklog[m].leaflet_line = ln;
+                                    map.addLayer(ln)
+                                }                            
+                                val.marklog.push(marklog[m])
+                            }                            
+                        }                                 
+        
+                    } else { showMessage(xhr.response, "danger"); }
+                }
+                xhr.send();
+            } 
+        }
+        /////////////////////////////
+        /////////////////////////////
+        /////////////////////////////
         
         for (var j = 0; j < markgroups.length; j++)
         {

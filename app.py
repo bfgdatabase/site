@@ -136,7 +136,7 @@ class Mark_dict(object):
             self.mark_storage[name] = [val]
             ## create thread  
             self.client.subscribe(name) 
-            print("subscribe", name)   
+            #print("subscribe", name)   
         else:
             self.mark_storage[name].append(val)
         
@@ -147,7 +147,7 @@ class Mark_dict(object):
                 del self.mark_storage[name] 
                 ## delete thread   
                 self.client.unsubscribe(name)    
-                print("unsubscribe", name)      
+                #print("unsubscribe", name)      
             else:
                 try:
                     self.mark_storage[name].remove(val)
@@ -161,7 +161,7 @@ class Mark_dict(object):
                 del self.mark_storage[key] 
                 ## delete thread     
                 self.client.unsubscribe(key)   
-                print("unsubscribe", key)
+                #print("unsubscribe", key)
 
     def on_message(self, client, userdata, message):
         mes = str(message.payload.decode("utf-8")) 
@@ -170,7 +170,7 @@ class Mark_dict(object):
         res = self.mark_storage.get(message.topic)
         if res is not None:
             for n in self.mark_storage[message.topic]:
-                print ('send: ', mes, '  to client: ', n)  
+                #print ('send: ', mes, '  to client: ', n)  
                 socketio.emit('on_message', mes, room = n)
 
 
