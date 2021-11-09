@@ -1,0 +1,126 @@
+{% extends 'base_template.html' %} {% block title %} Спецификации {% endblock %} {% block head %}
+
+<head>
+
+    <script type="module" src="{{ url_for('static', filename='js/specs_new.js') }}"></script>
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+            <div class="jumbotron p-3 ">
+                <h2> Спецификации
+                </h2>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">Код</th>
+                            <th scope="col ">Наименование</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBtns">
+                    </tbody>
+                    <tbody id="tableBody">
+                    </tbody>
+                    <tbody id="tableAdd">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="jumbotron p-3 ">
+                <h2> Маршрут
+                </h2>
+                <h6 id="specName">
+                </h6>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">№</th>
+                            <th scope="col ">Тип</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="routeTableBtns">
+                        <!-- <tr>
+                            <th scope="col ">
+                                <h7 tyle="margin:0" class="px-1">1</h7>
+                            </th>
+                            <th scope="col ">
+                                <h7 style="margin:0" class="px-1">Основной</h7>
+                            </th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-primary btn-block">Создать</button></th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-warning btn-block">Дублировать</button> </th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-secondary btn-block">Редактировать</button></th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-danger btn-block">Удалить</button> </th>
+                        </tr>
+
+                        <tr>
+                            <th scope="col ">2</th>
+                            <th scope="col "> Альтернативный</th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-primary btn-block">Создать</button></th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-warning btn-block">Дублировать</button> </th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-secondary btn-block">Редактировать</button></th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-danger btn-block">Удалить</button> </th>
+                        </tr>
+
+                        <tr>
+                            <th scope="col "> <button style="vertical-align:middle" type="button" class="px-1 form-control form-control-sm"></button></th>
+                            <th scope="col "> <button style="vertical-align:middle" type="button" class="px-1 form-control form-control-sm"></button></th>
+                            <th scope="col "> <button style="margin:0" type="button" class="px-1 btn btn-sm btn-primary btn-block"> Добавить</button></th>
+                        </tr> -->
+                    </tbody>
+                    <tbody id="routeTableBody">
+                    </tbody>
+                    <tbody id="routeTableAdd">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="jumbotron p-3 ">
+                <h2> Технология
+                </h2>
+                <h6> Маршрут: основной
+                </h6>
+                <h6 id="techName">
+                </h6>
+                <br>
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">№</th>
+                            <th scope="col ">Код</th>
+                            <th scope="col ">Наименование</th>
+                            <th scope="col ">оборудование</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tech_tableBtns">
+                    </tbody>
+                    <tbody id="tech_tableBody">
+                    </tbody>
+                    <tbody id="tech_tableAdd">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

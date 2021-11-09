@@ -194,6 +194,52 @@ function createDropdownMenu(id, variants, ids) {
     return td;
 }
 
+function createDropdownMenu_(id, variants, ids) {
+
+    let td = document.createElement('td');
+    td.style = "vertical-align:middle";
+    td.className = "px-1";
+
+    let buttonSelect = document.createElement('button');
+    buttonSelect.className = "btn btn-primary btn-sm dropdown-toggle btn-block";
+    buttonSelect.id = "";
+
+    buttonSelect.setAttribute("data-toggle", "dropdown");
+
+    let menuSelect = document.createElement('div');
+    menuSelect.className = "dropdown-menu";
+
+    let el = document.createElement('a');
+    el.addEventListener("click", function() {
+        buttonSelect.id = "";
+        buttonSelect.innerHTML = "-";
+        drawPath();
+    });
+    menuSelect.appendChild(el);
+
+    for (let i = 0; i < variants.length; ++i) {
+
+        if (id == ids[i]) {
+            buttonSelect.id = ids[i];
+            buttonSelect.innerHTML = variants[i];
+        }
+        let el = document.createElement('a');
+        el.className = "dropdown-item";
+        el.innerHTML = variants[i];
+        el.id = ids[i];
+
+        el.addEventListener("click", function() {
+            buttonSelect.id = el.id;
+            buttonSelect.innerHTML = el.innerHTML;
+        });
+
+        menuSelect.appendChild(el);
+    }
+    td.appendChild(buttonSelect);
+    td.appendChild(menuSelect);
+    return td;
+}
+
 function createTextFromVariants(id, variants, ids) {
 
     let td = document.createElement('td');

@@ -41,9 +41,9 @@ class reportpart(db.Model):
 class BatchDB(db.Model):
     __tablename__ = 'batch'
     batch_id = db.Column(db.Integer(), primary_key=True, autoincrement=True) 
-    code = db.Column(db.Integer()) # [ref: > spec.code]
+    code = db.Column(db.Integer, db.ForeignKey('spec.code')) # [ref: > spec.code]
     created_at = db.Column(db.Text())
-    id_mark = db.Column(db.Integer())  #[ref: > markers.id_mark]
+    id_mark = db.Column(db.Integer, db.ForeignKey('markers.id_mark'))  #[ref: > markers.id_mark]
     batch_size = db.Column(db.Float()) 
     detail_name = db.Column(db.Text())
     product_name = db.Column(db.Text())
@@ -52,16 +52,16 @@ class BatchDB(db.Model):
     order_id  = db.Column(db.Integer()) 
     created = db.Column(db.Text())
     closed = db.Column(db.Text())
-    route_id = db.Column(db.Integer()) # [ref: > route.route_id]
+    route_id = db.Column(db.Integer, db.ForeignKey('route.route_id')) # [ref: > route.route_id]
     
 class BatchlocDB(db.Model):
     __tablename__ = 'batchloc'
     batchloc_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    batch_id = db.Column(db.Integer())  #[ref: > batch.batch_id]
-    route_id = db.Column(db.Integer())  #[ref: > route.route_id]
+    batch_id = db.Column(db.Integer, db.ForeignKey('batch.batch_id')) #[ref: > batch.batch_id]
+    route_id = db.Column(db.Integer, db.ForeignKey('route.route_id'))  #[ref: > route.route_id]
     timeis = db.Column(db.Text())
-    tech_id = db.Column(db.Integer()) # [ref: > techology.tech_id]
-    t_notch = db.Column(db.Integer())  #[ref: > notch.t_notch]
+    tech_id = db.Column(db.Integer, db.ForeignKey('technology.tech_id'))# [ref: > techology.tech_id]
+    t_notch = db.Column(db.Integer, db.ForeignKey('notch.t_notch'))  #[ref: > notch.t_notch]
     batch_size = db.Column(db.Float()) 
     nop = db.Column(db.Integer()) 
     active = db.Column(db.Boolean()) 
@@ -69,17 +69,17 @@ class BatchlocDB(db.Model):
 class MarklocDB(db.Model):
     __tablename__ = 'markloc'
     markloc_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    id_mark = db.Column(db.Integer())  #[ref:> markers.id_mark]
+    id_mark = db.Column(db.Integer, db.ForeignKey('markers.id_mark')) #[ref:> markers.id_mark]
     timeis = db.Column(db.DateTime())
-    equipment_id = db.Column(db.Integer())  #[ref: > equipment.equipment_id]
-    t_notch = db.Column(db.Integer())  #[ref: > notch.t_notch]
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.equipment_id')) #[ref: > equipment.equipment_id]
+    t_notch = db.Column(db.Integer, db.ForeignKey('notch.t_notch')) #[ref: > notch.t_notch]
     arcive = db.Column(db.Boolean()) 
 
 class MarklogDB(db.Model):
     __tablename__ = 'marklog'
     marklog_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
-    id_mark = db.Column(db.Integer())  #[ref:> markers.id_mark]
+    id_mark = db.Column(db.Integer, db.ForeignKey('markers.id_mark'))   #[ref:> markers.id_mark]
     pos_x = db.Column(db.Float())  
     pos_y = db.Column(db.Float()) 
     timeis = db.Column(db.Text())
@@ -110,6 +110,7 @@ class SpecDB(db.Model):
     __tablename__ = 'spec'
     spec_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     code = db.Column(db.Text())
+    name = db.Column(db.Text())
     detailname = db.Column(db.Text())
     parent_code = db.Column(db.Text())
     parent_name = db.Column(db.Text())
@@ -120,14 +121,14 @@ class SpecDB(db.Model):
 class RouteDB(db.Model):
     __tablename__ = 'route'
     route_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    code = db.Column(db.Integer())  #[ref:> spec.code]
-    alter = db.Column(db.Integer()) 
+    name = db.Column(db.Text())
+    type = db.Column(db.Text()) 
+    spec_id = db.Column(db.Integer, db.ForeignKey('spec.spec_id')) 
 
 class TechDB(db.Model):
     __tablename__ = 'technology'
     tech_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    spec_id = db.Column(db.Integer())
-    route_id = db.Column(db.Integer())  #[ref:> route.route_id]
+    route_id = db.Column(db.Integer, db.ForeignKey('route.route_id'))   #[ref:> route.route_id]
     name = db.Column(db.Text())
     code = db.Column(db.Integer())
     nop = db.Column(db.Integer()) 
@@ -140,7 +141,7 @@ class TechDB(db.Model):
 class BatchpauseDB(db.Model):
     __tablename__ = 'batchpause'
     batchpause_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    batch_id = db.Column(db.Integer()) # [ref: > batch.batch_id]
+    batch_id = db.Column(db.Integer, db.ForeignKey('batch.batch_id')) # [ref: > batch.batch_id]
     beginpause = db.Column(db.Text())
     endpause = db.Column(db.Text())
 
@@ -148,32 +149,50 @@ class RmetricDB(db.Model):
     __tablename__ = 'rmetric'
     rmetric_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     metricname = db.Column(db.Text())
-    route_id = db.Column(db.Integer())  #[ref: > route.route_id] //какому маршруту принадлежат
-    t_metric = db.Column(db.Integer())  #[ref: > tmetric.t_metric]
-    tech_ida = db.Column(db.Integer()) # [ref: > techology.tech_id]
-    t_notcha = db.Column(db.Integer()) # [ref: > notch.t_notch]
-    tech_idb = db.Column(db.Integer())  #[ref: > techology.tech_id]
-    t_notchb = db.Column(db.Integer()) # [ref: > notch.t_notch]
+    route_id = db.Column(db.Integer, db.ForeignKey('route.route_id'))  #[ref: > route.route_id] //какому маршруту принадлежат
+    t_metric = db.Column(db.Integer, db.ForeignKey('tmetric.tmetric_id'))  #[ref: > tmetric.t_metric]
+    tech_ida = db.Column(db.Integer, db.ForeignKey('techology.tech_id')) # [ref: > techology.tech_id]
+    t_notcha = db.Column(db.Integer, db.ForeignKey('notch.t_notch')) # [ref: > notch.t_notch]
+    tech_idb = db.Column(db.Integer, db.ForeignKey('technology.tech_id'))  #[ref: > techology.tech_id]
+    t_notchb = db.Column(db.Integer, db.ForeignKey('notch.t_notch')) # [ref: > notch.t_notch]
     norma = db.Column(db.Integer())   
 
 class BmetricDB(db.Model):
     __tablename__ = 'bmetric'
     bmetric_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    rmetric_id = db.Column(db.Integer())  #[ref:> Rmetric.rmetric_id]
-    route_id = db.Column(db.Integer())  #[ref: > route.route_id]
-    batch_id = db.Column(db.Integer())  #[ref: > batch.batch_id]
-    t_metric = db.Column(db.Integer())  #[ref: > tmetric.t_metric]
-    tech_ida = db.Column(db.Integer())  #[ref: > techology.tech_id]
-    t_notcha = db.Column(db.Integer())  #[ref: > notch.t_notch]
-    tech_idb = db.Column(db.Integer())  #[ref: > techology.tech_id]
-    t_notchb = db.Column(db.Integer())  #[ref: > notch.t_notch]
+    rmetric_id = db.Column(db.Integer, db.ForeignKey('rmetric.rmetric_id')) #[ref:> rmetric.rmetric_id]
+    batch_id = db.Column(db.Integer, db.ForeignKey('batch.batch_id'))  #[ref: > batch.batch_id]    
+    route_id = db.Column(db.Integer, db.ForeignKey('route.route_id'))  #[ref: > route.route_id] //какому маршруту принадлежат
+    t_metric = db.Column(db.Integer, db.ForeignKey('tmetric.tmetric_id'))  #[ref: > tmetric.t_metric]
+    tech_ida = db.Column(db.Integer, db.ForeignKey('techology.tech_id')) # [ref: > techology.tech_id]
+    t_notcha = db.Column(db.Integer, db.ForeignKey('notch.t_notch')) # [ref: > notch.t_notch]
+    tech_idb = db.Column(db.Integer, db.ForeignKey('technology.tech_id'))  #[ref: > techology.tech_id]
+    t_notchb = db.Column(db.Integer, db.ForeignKey('notch.t_notch')) # [ref: > notch.t_notch]
     norma = db.Column(db.Integer())   #erval
     value = db.Column(db.Integer())   #erval
     metricname = db.Column(db.Text())
 
+
+'''
+/home/timur/.local/lib/python3.8/site-packages/marshmallow_sqlalchemy/convert.py:134: 
+SAWarning: relationship 'ZonesDB.locations' will copy column locations.id_location to column zones.id_location,
+
+ which conflicts with relationship(s): 'ZonesDB.location' 
+ (copies locations.id_location to zones.id_location). 
+ If this is not the intention, consider if these relationships should be linked with back_populates, 
+ or if viewonly=True should be applied to one or more if they are read-only. 
+ For the less common case that foreign key constraints are partially overlapping, the orm.foreign() 
+ annotation can be used to isolate the columns that should be written towards.   
+ To silence this warning, add the parameter 'overlaps="location"' to the 'ZonesDB.locations' relationship.
+  for prop in model.__mapper__.iterate_properties:
+'''
+
 class ZonesDB(db.Model):
     __tablename__ = 'zones'
     id_zone = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.equipment_id'))
+    tzone = db.Column(db.Integer, db.ForeignKey('tzones.tzone')) # [ref: > tzones.tzone]
     created = db.Column(db.DateTime())
     modified = db.Column(db.DateTime())
     name = db.Column(db.Text())
@@ -181,17 +200,16 @@ class ZonesDB(db.Model):
     weight = db.Column(db.Float())
     sharp = db.Column(db.Float())
     type = db.Column(db.Integer)
-    tzone = db.Column(db.Integer()) # [ref: > tzones.tzone]
     threshold_in = db.Column(db.Integer)
     threshold_out = db.Column(db.Integer)
 
-    id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))
-    equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.equipment_id'))
+    '''
     id_anchor = db.Column(db.Integer, db.ForeignKey('anchors.id_anchor'))
     
     location = db.relationship("LocationsDB", foreign_keys = [id_location])
     equipment = db.relationship("EquipmentDB", foreign_keys = [equipment_id])
     anchor = db.relationship("AnchorsDB", foreign_keys = [id_anchor])
+    '''
 
 
 class LocationsDB(db.Model):
@@ -209,23 +227,26 @@ class LocationsDB(db.Model):
     dept_id = db.Column(db.Integer, db.ForeignKey('department.dept_id'))
     imageurl= db.Column(db.Text())
 
+    '''
     marklogs = db.relationship("MarklogDB", backref=db.backref('locations'), lazy=True)
     anchors = db.relationship("AnchorsDB", backref=db.backref('locations'), lazy=True)
     zones = db.relationship("ZonesDB", backref=db.backref('locations'), lazy=True)
     equipment = db.relationship("EquipmentDB", backref=db.backref('locations'), lazy=True)
+    '''
 
 class EquipmentDB(db.Model):
     __tablename__ = 'equipment'
     equipment_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))   
-    id_zone = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))    
     equipment_name = db.Column(db.Text())
     equipment_model = db.Column(db.Text())
     equipment_type = db.Column(db.Text())
-    equipment_class = db.Column(db.Integer())  #[ref: > equipment_class.equipment_class_id]    
+    #equipment_class = db.Column(db.Integer, db.ForeignKey('equipment_class.equipment_class_id'))      #[ref: > equipment_class.equipment_class_id]    
 
+    '''
     location = db.relationship("LocationsDB", foreign_keys = [id_location])
     zone = db.relationship("ZonesDB", foreign_keys = [id_zone])
+    '''
 
 class AnchorsDB(db.Model):
     __tablename__ = 'anchors'
@@ -240,15 +261,18 @@ class AnchorsDB(db.Model):
     z_pos = db.Column(db.Float()) 
     created = db.Column(db.Text())
     modified = db.Column(db.Text())
+
+    '''
     zones = db.relationship("ZonesDB", backref=db.backref('anchors'), lazy=True)
+    '''
 
 class NotchDB(db.Model):
     __tablename__ = 'notch'
     notch_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    t_notch = db.Column(db.Integer())  #[ref: > tnotch.t_notch]
-    setnotch_id = db.Column(db.Integer())  #[ref: > setnotch.setnotch]
-    act = db.Column(db.Integer())  #[ref: > acts.act]
-    equipment_id = db.Column(db.Integer())  #[ref: > equipment.equipment_id]
+    t_notch = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))      #[ref: > tnotch.t_notch]
+    setnotch_id = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))      #[ref: > setnotch.setnotch]
+    act = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))      #[ref: > acts.act]
+    equipment_id = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))      #[ref: > equipment.equipment_id]
     namenotch = db.Column(db.Text())
     fol = db.Column(db.Text())
 
@@ -294,8 +318,8 @@ class MarkSettingsDB(db.Model):
 class TaglogDB(db.Model):
     __tablename__ = 'taglog'
     tag_idlog = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    tag_id = db.Column(db.Integer())  #[ref: > tag.tag_id]
-    gate_id = db.Column(db.Integer()) # [ref: > gate.gate_id]
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.tag_id'))      #[ref: > tags.tag_id]
+    gate_id = db.Column(db.Integer, db.ForeignKey('gates.gate_id'))     # [ref: > gates.gate_id]
     rx_power = db.Column(db.Integer()) 
     rx_time = db.Column(db.Text())
     cnt = db.Column(db.Integer()) 
@@ -312,7 +336,7 @@ class TagsDB(db.Model):
     uuid = db.Column(db.Text())
     tag_gain = db.Column(db.Float()) 
     created = db.Column(db.Text())
-    id_mark = db.Column(db.Integer()) # [ref: > markers.id_mark]
+    id_mark = db.Column(db.Integer, db.ForeignKey('markers.id_mark'))     # [ref: > markers.id_mark]
 
 class GatesDB(db.Model):
     __tablename__ = 'gates'
@@ -325,11 +349,11 @@ class TelemetrDB(db.Model):
     __tablename__ = 'telemetr'
     telemetr_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     timeis = db.Column(db.Text())
-    id_mark = db.Column(db.Integer())  #[ref: > markers.id_mark]
-    id_location = db.Column(db.Integer())  #[ref: > location.id_location]
+    id_mark = db.Column(db.Integer, db.ForeignKey('markers.id_mark'))      #[ref: > markers.id_mark]
+    id_location = db.Column(db.Integer, db.ForeignKey('location.id_location'))      #[ref: > location.id_location]
     xpos = db.Column(db.Float()) 
     ypos = db.Column(db.Float()) 
-    exttype = db.Column(db.Integer()) # [ref: > telecode.exttype]
+    exttype = db.Column(db.Integer, db.ForeignKey('telecode.exttype'))     # [ref: > telecode.exttype]
     extdata = db.Column(db.Text()) 
 
 class TelecodeDB(db.Model):

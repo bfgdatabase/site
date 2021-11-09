@@ -61,7 +61,7 @@ docs.register(update_specifications)
 @doc(description='Delete specification by id', tags=['specifications'])
 @resp.check_user_permission(dbName = "SpecDB", method = 'DELETE')
 def delete_specifications(id):
-    query = TechDB.query.filter_by(spec_id = id).all()
+    query = RouteDB.query.filter_by(spec_id = id).all()
     for item in query:
         db.session.delete(item)
         db.session.commit()  

@@ -36,6 +36,7 @@ def get_zone(id):
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_zone)
 
+
 @app.route('/api/zones/', methods=['POST'], provide_automatic_options=False)
 @doc(description='Find zone with params', tags=['zone'])
 @marshal_with(ZonesSchema(many=True))

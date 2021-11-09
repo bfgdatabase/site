@@ -6,16 +6,30 @@ jQuery.noConflict()
 
 let zones = []
 
-let location_names = []
 let location_ids = []
-let anchor_name = []
-let id_anchors = []
+let location_names = []
+
+let equipments_ids = []
+let equipments_names = []
 
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
-
 
 $(document).ready(function() {
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', '/api/equipments/', false);
+    xhr.send();
+    if (xhr.status != 200) {
+        showMessage(xhr.response, "danger");
+    } else {
+        var res = JSON.parse(xhr.responseText);
+        for (var i = 0; i < res.query.length; i++) {
+            equipments_ids.push(res.query[i].equipment_id)
+            equipments_names.push(res.query[i].equipment_name)
+        }
+    }
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/locations/', false);
@@ -29,18 +43,7 @@ $(document).ready(function() {
             location_names.push(res.query[i].name)
         }
     }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/anchors/', false);
-    xhr.send();
-    if (xhr.status != 200) {
-        showMessage(xhr.response, "danger");
-    } else {
-        var obj = JSON.parse(xhr.responseText);
-        for (var i = 0; i < obj.query.length; i++) {
-            id_anchors.push(obj.query[i].id_anchor)
-            anchor_name.push(obj.query[i].name)
-        }
-    }
+
     createPage()
 });
 
@@ -89,6 +92,9 @@ function createSortedTable(obj) {
         let id_location = createTextSw(obj[i]["id_location"], location_names, location_ids)
         tr.appendChild(id_location);
 
+        let equipment = createDropdownMenu(obj[i]["equipment_id"], equipments_names, equipments_ids);
+        tr.appendChild(equipment);
+
         let weight = createInput(obj[i]["weight"], "any")
         tr.appendChild(weight);
 
@@ -104,8 +110,6 @@ function createSortedTable(obj) {
         let threshold_out = createInput(obj[i]["threshold_out"], "any")
         tr.appendChild(threshold_out);
 
-        let anchor = createDropdownMenu(obj[i]["id_anchor"], anchor_name, id_anchors);
-        tr.appendChild(anchor);
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
@@ -113,12 +117,12 @@ function createSortedTable(obj) {
             let params = {}
             if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
             if (id_location.firstChild.id != '') { params["id_location"] = id_location.firstChild.id; }
+            if (equipment.firstChild.id != '') { params["equipment_id"] = equipment.firstChild.id; }
             if (weight.firstChild.value != '') { params["weight"] = weight.firstChild.value; }
             if (sharp.firstChild.value != '') { params["sharp"] = sharp.firstChild.value; }
             if (type.firstChild.value != '') { params["type"] = type.firstChild.value; }
             if (threshold_in.firstChild.value != '') { params["threshold_in"] = threshold_in.firstChild.value; }
             if (threshold_out.firstChild.value != '') { params["threshold_out"] = threshold_out.firstChild.value; }
-            if (anchor.firstChild.id != '') { params["id_anchor"] = anchor.firstChild.id; }
             var xhr = new XMLHttpRequest();
             xhr.open('PUT', '/api/zone/' + id_zone + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -128,12 +132,12 @@ function createSortedTable(obj) {
                     let res = JSON.parse(xhr.response).query
                     objRef.name = res.name;
                     objRef.id_location = res.id_location;
+                    objRef.equipment_id = res.equipment_id;
                     objRef.weight = res.weight;
                     objRef.sharp = res.sharp;
                     objRef.type = res.type;
                     objRef.threshold_in = res.threshold_in;
                     objRef.threshold_out = res.threshold_out;
-                    objRef.id_anchor = res.id_anchor;
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);

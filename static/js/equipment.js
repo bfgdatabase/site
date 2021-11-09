@@ -3,8 +3,6 @@
 })(jQuery);
 jQuery.noConflict()
 
-let id_zones = []
-let zone_names = []
 let equipments = []
 
 ///////////////////////////////////////////////////////////
@@ -12,18 +10,6 @@ let equipments = []
 
 $(document).ready(function() {
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/zones/', false);
-    xhr.send();
-    if (xhr.status != 200) {
-        showMessage(xhr.response, "danger");
-    } else {
-        var res = JSON.parse(xhr.responseText);
-        for (var i = 0; i < res.query.length; i++) {
-            id_zones.push(res.query[i].id_zone)
-            zone_names.push(res.query[i].name)
-        }
-    }
     createPage()
 });
 
@@ -48,8 +34,6 @@ function createTableBtns(obj) {
     let tr = document.createElement('tr');
     let bt = createSortButton(obj, "equipment_name", createSortedTable)
     tr.appendChild(bt);
-    let bt1 = createSortButton(obj, "id_zone", createSortedTable)
-    tr.appendChild(bt1);
     table.appendChild(tr);
 }
 
@@ -68,15 +52,12 @@ function createSortedTable(obj) {
         let equipment_name = createInput(obj[i]["equipment_name"], "any")
         tr.appendChild(equipment_name);
 
-        let id_zone = createDropdownMenu(obj[i]["id_zone"], zone_names, id_zones);
-        tr.appendChild(id_zone);
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
         btn_save.addEventListener("click", function() {
             let params = {}
             if (equipment_name.firstChild.value != '') { params["equipment_name"] = equipment_name.firstChild.value; }
-            if (id_zone.firstChild.id != '') { params["id_zone"] = id_zone.firstChild.id; }
             var xhr = new XMLHttpRequest();
             xhr.open('PUT', '/api/equipment/' + equipment_id + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -85,7 +66,6 @@ function createSortedTable(obj) {
                 if (xhr.readyState == 4 && xhr.status == "200") {
                     let res = JSON.parse(xhr.response).query
                     objRef.equipment_name = res.equipment_name;
-                    objRef.id_zone = res.id_zone;
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
@@ -119,16 +99,12 @@ function createSortedTable(obj) {
     let equipment_name = createInput("", "any")
     tr.appendChild(equipment_name);
 
-    let id_zone = createDropdownMenu("", zone_names, id_zones);
-    tr.appendChild(id_zone);
-
     let btn_save = createButton("Добавить", "btn-secondary");
     tr.appendChild(btn_save);
 
     btn_save.addEventListener("click", function() {
         let params = {}
         if (equipment_name.firstChild.value != '') { params["equipment_name"] = equipment_name.firstChild.value; }
-        if (id_zone.firstChild.id != '') { params["id_zone"] = id_zone.firstChild.id; }
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/equipment/', true);
@@ -147,14 +123,10 @@ function createSortedTable(obj) {
                 let equipment_name_new = createInput(result.query["equipment_name"], "any")
                 tr_new.appendChild(equipment_name_new);
 
-                let id_zone_new = createDropdownMenu(result.query["id_zone"], zone_names, id_zones);
-                tr_new.appendChild(id_zone_new);
-
                 let btn_save = createButton("Сохранить", "btn-warning");
                 tr_new.appendChild(btn_save);
                 btn_save.addEventListener("click", function() {
                     let params = {}
-                    if (id_zone_new.firstChild.id != '') { params["id_zone"] = id_zone_new.firstChild.id; }
                     if (equipment_name_new.firstChild.value != '') { params["equipment_name"] = equipment_name_new.firstChild.value; }
 
                     var xhr = new XMLHttpRequest();
@@ -165,7 +137,6 @@ function createSortedTable(obj) {
                         if (xhr.readyState == 4 && xhr.status == "200") {
                             let res = JSON.parse(xhr.response).query
                             objRef.equipment_name = res.equipment_name;
-                            objRef.id_zone = res.id_zone;
                         } else { showMessage(xhr.response, "danger"); }
                     }
                     xhr.send(json);

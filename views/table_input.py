@@ -43,6 +43,11 @@ def equipment_table():
 def spec_table():
     return render_template('spec_table.html', username = session["username"])
 
+@app.route('/tables/specs_new')
+@resp.check_user_authorization()
+def spec_table_new():
+    return render_template('spec_table_new.html', username = session["username"])
+
 @app.route('/tables/orders')
 @resp.check_user_authorization()
 def order_table():
