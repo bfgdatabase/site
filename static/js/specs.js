@@ -7,13 +7,18 @@ jQuery.noConflict()
 let equipments_names = []
 let equipments_ids = []
 
+let type_ids = ['primary', 'secondary']
+let type_names = ['Основной', 'Альтернативный']
+
 let specs = []
+let routes = []
 let techs = []
 
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
 $(document).ready(function() {
+
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/equipments/', false);
     xhr.send();
@@ -26,10 +31,12 @@ $(document).ready(function() {
             equipments_names.push(res.query[i].equipment_name)
         }
     }
+
     createPage()
 });
 
 function createPage() {
+
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/specifications/', false);
     xhr.send();
@@ -40,6 +47,7 @@ function createPage() {
         createTableBtns(specs)
         createSortedTable(specs)
     }
+
 }
 
 
@@ -74,37 +82,36 @@ function createSortedTable(obj) {
         let name = createInput(obj[i]["name"], "any")
         tr.appendChild(name);
 
-        let btn_select = createButton("Редактировать", "btn-secondary");
+        let btn_select = createButton("Маршруты", "btn-secondary");
         tr.appendChild(btn_select);
         btn_select.addEventListener("click", function() {
-            let techName = document.getElementById('techName');
-            techName.innerHTML = spec_name;
+
+            let route_specName = document.getElementById('specName');
+            route_specName.innerHTML = "Спецификация: " + spec_name;
+
             let params = {}
             params["spec_id"] = spec_id;
             let json = JSON.stringify(params);
-
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/technologies/', true);
+            xhr.open('POST', '/api/routes/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.onload = function() {
-                if (xhr.readyState == 4 && xhr.status == "200") {
-                    techs = JSON.parse(xhr.response).query
-                    createSortedTable_tech(techs, spec_id);
-                    createTableBtns_tech(techs);
+
+
+                if (xhr.readyState == 4 && xhr.status == "200") {                    
+                    
+                    routes = JSON.parse(xhr.response).query                    
+                    createRoutesTableBtns(routes)                    
+                    createRoutesTable(routes, spec_id) 
 
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
+
         });
 
-        let b1 = createButton("Шаблон маршрута", "btn-secondary");
-        tr.appendChild(b1);
-
-        let b2 = createButton("Нормативы времени", "btn-secondary");
-        tr.appendChild(b2);
-
-        let b3 = createButton("Создать партию", "btn-primary");
-        tr.appendChild(b3);
+        // let b3 = createButton("Создать партию", "btn-primary");
+        // tr.appendChild(b3);
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
@@ -126,6 +133,7 @@ function createSortedTable(obj) {
             }
             xhr.send(json);
         });
+
         let btn_delete = createButton("Удалить", "btn-danger");
         tr.appendChild(btn_delete);
         btn_delete.addEventListener("click", function() {
@@ -137,16 +145,7 @@ function createSortedTable(obj) {
                 if (xhr.readyState == 4 && xhr.status == "200") {
                     let idx = specs.indexOf(objRef)
                     specs.splice(idx, 1);
-                    tr.remove(); {
-                        let table = document.getElementById('tech_tableBody');
-                        table.innerHTML = '';
-                        let tableAdd = document.getElementById('tech_tableAdd');
-                        tableAdd.innerHTML = '';
-                        let tableBtn = document.getElementById('tech_tableBtns');
-                        tableBtn.innerHTML = '';
-                        let techName = document.getElementById('techName');
-                        techName.innerHTML = '';
-                    }
+                    tr.remove(); 
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
@@ -197,7 +196,7 @@ function createSortedTable(obj) {
                 tr_new.appendChild(name);
 
 
-                let btn_select = createButton("Редактировать", "btn-secondary");
+                let btn_select = createButton("Маршруты", "btn-secondary");
                 tr_new.appendChild(btn_select);
                 btn_select.addEventListener("click", function() {
                     let techName = document.getElementById('techName');
@@ -274,6 +273,170 @@ function createSortedTable(obj) {
 
     tableAdd.appendChild(tr);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function createRoutesTableBtns(obj) {
+    let table = document.getElementById('tableBtns');
+    table.className = "table table-hover table-striped";
+    table.innerHTML = "";
+    let tr = document.createElement('tr');
+    let bt = createSortButton(obj, "name", createSortedTable)
+    tr.appendChild(bt);
+    let bt1 = createSortButton(obj, "type", createSortedTable)
+    tr.appendChild(bt1);
+    table.appendChild(tr);
+}
+
+function createRoutesTable(obj, specID) {
+
+    let table = document.getElementById('routeTableBody');
+    table.className = "table table-hover table-striped";
+    table.innerHTML = "";
+
+    for (var i = 0; i < obj.length; i++) {
+
+        let objRef = obj[i];
+
+        let tr = document.createElement('tr');
+        
+        let spec_name = obj[i]["name"];
+
+        let name = createInput(obj[i]["name"], "any")
+        tr.appendChild(name);
+
+        let type = createDropdownMenu_(obj[i]["type"], type_names, type_ids);
+        tr.appendChild(type);
+
+
+        let btn_select = createButton("Технология", "btn-secondary");
+        tr.appendChild(btn_select);
+        btn_select.addEventListener("click", function() {
+
+            // let route_specName = document.getElementById('specName');
+            // route_specName.innerHTML = "Спецификация: " + spec_name;
+
+            // let params = {}
+            // params["spec_id"] = spec_id;
+            // let json = JSON.stringify(params);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('POST', '/api/routes/', true);
+            // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            // xhr.onload = function() {
+
+
+            //     if (xhr.readyState == 4 && xhr.status == "200") {                    
+                    
+            //         routes = JSON.parse(xhr.response).query
+                    
+            //         // </tbody>
+            //         // <tbody id="routeTableBody">
+            //         // </tbody>
+            //         // <tbody id="routeTableAdd">
+
+            //         createSortedTable_tech(techs, spec_id);
+            //         // createTableBtns_tech(techs);
+
+            //     } else { showMessage(xhr.response, "danger"); }
+            // }
+            // xhr.send(json);
+
+        });
+
+        let btn_save = createButton("Сохранить", "btn-warning");
+        tr.appendChild(btn_save);
+        btn_save.addEventListener("click", function() {
+            let params = {}
+            if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
+            params["type"] = type.firstChild.id; 
+            params["spec_id"] = specID;    
+            var xhr = new XMLHttpRequest();
+            xhr.open('PUT', '/api/route/'+ objRef.route_id + '/', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            let json = JSON.stringify(params);
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let idx = routes.indexOf(objRef)
+                    objRef.name = params["name"]
+                    objRef.type = params["type"]
+                } else { showMessage(xhr.response, "danger"); }
+            }
+            xhr.send(json);
+         
+        });
+
+        let btn_delete = createButton("Удалить", "btn-danger");
+        tr.appendChild(btn_delete);
+        btn_delete.addEventListener("click", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('DELETE', '/api/route/' + objRef.route_id + '/', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            let json = JSON.stringify();
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let idx = routes.indexOf(objRef)
+                    routes.splice(idx, 1);
+                    tr.remove(); 
+                } else { showMessage(xhr.response, "danger"); }
+            }
+            xhr.send(json);
+        });
+
+        table.appendChild(tr);
+    }
+
+    let tableAdd = document.getElementById('routeTableAdd');
+    tableAdd.className = "table table-hover table-striped";
+    tableAdd.innerHTML = "";
+
+    let tr = document.createElement('tr');
+
+    let name = createInput("", "any")
+    tr.appendChild(name);
+
+    let type_new;
+    if (obj.length == 0)
+        type_new = 'primary'
+    else
+        type_new = 'secondary'
+
+    let type = createDropdownMenu_(type_new, type_names, type_ids);
+    tr.appendChild(type);
+
+    let btn_save = createButton("Добавить", "btn-secondary");
+    tr.appendChild(btn_save);
+    btn_save.addEventListener("click", function() {
+
+        let params = {}
+        if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
+        params["type"] = type.firstChild.id; 
+        params["spec_id"] = specID;         
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/route/', true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        let json = JSON.stringify(params);
+
+        xhr.onload = function() {
+            if (xhr.readyState == 4 && xhr.status == "200") {
+                 
+                var result = JSON.parse(xhr.responseText);
+                routes.push(result.query)
+                createRoutesTable(routes, specID) 
+
+            } else { showMessage(xhr.response, "danger"); }
+        }
+        xhr.send(json);
+    });
+
+    tableAdd.appendChild(tr);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function createTableBtns_tech(obj) {
     let table = document.getElementById('tech_tableBtns');
