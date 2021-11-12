@@ -1,4 +1,6 @@
 from flask import Flask, session
+from sqlalchemy import Index
+
 from app import *
 from marshmallow import fields
 from flask_jwt_extended import create_access_token
@@ -393,3 +395,48 @@ class UsersDB(db.Model):
         session["login"] = query[0].login
         session["role"] = query[0].role
         return query[0]
+
+
+class GroupDB(db.Model):
+    """Группы.
+    Группа - это таблица связей id метки c id правила.
+    То есть, значения от данной метки, будут проверяться по указанным правилам."""
+    batch_id = db.Column(db.Integer, db.ForeignKey('type.type_id'))
+    rule_id = db.Column(db.Integer, db.ForeignKey('rule.rule_id'))
+    group_batch_index = Index('group_batch_idx', GroupDB.batch_id)
+
+
+class RuleDB(db.Model):
+    """Правила для величин.
+    Например,
+    Вычислять среднюю температуру раз в 10 минут и если не в жиапозоне 0 - 50, тогда ошибка."""
+    __tablename__ = 'rule'
+    rule_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    type_id = db.Column(db.Integer, db.ForeignKey('type.type_id'))
+    periodicity = db.Column(db.DateTime())
+    min = db.Column(db.Float())
+    max = db.Column(db.Float())
+
+
+class TypeDB(db.Model):
+    """Тип величины.
+    Название велчины и размерность.
+    Например, Температура C."""
+    __tablename__ = 'type'
+    type_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    name = db.Column(db.Text())
+    dimension = db.Column(db.Text())
+
+
+class LogRulesDB(db.Model):
+    """Журнал проверки величин.
+    Например,
+    11.11.2021 13:37 Температура 41.
+    11.11.2021 13:47 Температура 39.
+    11.11.2021 13:57 Температура 40.
+    """
+    __tablename__ = 'logrules'
+    logrules_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    time = db.Column(db.DateTime())
+    type_id = db.Column(db.Integer, db.ForeignKey('type.type_id'))
+    value = db.Column(db.Float())

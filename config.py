@@ -18,9 +18,9 @@ class Configuration(object):
     '''
 
     POSTGRES_URL = "127.0.0.1:5432"
-    POSTGRES_USER = "bfg"
-    POSTGRES_PW = "123456"
-    POSTGRES_DB = "new"
+    POSTGRES_USER = "xrt"
+    POSTGRES_PW = "postgres"
+    POSTGRES_DB = "bortnik"
     
     SEKRET_KEY = "bfg-group"
 
