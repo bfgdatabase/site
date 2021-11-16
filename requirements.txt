@@ -4,7 +4,7 @@ flask_sqlalchemy
 flask_security 
 email_validator 
 flask_marshmallow 
-apispec 
+apispec~=4.0.0
 flask_apispec 
 apispec_webframeworks 
 flask_bcrypt 
@@ -13,3 +13,13 @@ flask_migrate
 flask_jwt_extended
 marshmallow-sqlalchemy
 psycopg2-binary
+Flask~=1.1.2
+Werkzeug~=0.16.1
+paho-mqtt~=1.6.1
+socketio~=0.2.1
+SQLAlchemy~=1.3.22
+marshmallow~=3.10.0
+alembic~=1.7.4
+redis~=3.5.3
+zmq~=0.0.0
+pyzmq~=22.3.0

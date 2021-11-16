@@ -401,15 +401,17 @@ class GroupDB(db.Model):
     """Группы.
     Группа - это таблица связей id метки c id правила.
     То есть, значения от данной метки, будут проверяться по указанным правилам."""
+    __tablename__ = 'group'
+    group_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     batch_id = db.Column(db.Integer, db.ForeignKey('type.type_id'))
     rule_id = db.Column(db.Integer, db.ForeignKey('rule.rule_id'))
-    group_batch_index = Index('group_batch_idx', GroupDB.batch_id)
+    group_batch_index = Index('group_batch_idx', batch_id)
 
 
 class RuleDB(db.Model):
     """Правила для величин.
     Например,
-    Вычислять среднюю температуру раз в 10 минут и если не в жиапозоне 0 - 50, тогда ошибка."""
+    Вычислять среднюю температуру раз в 10 минут и если не в диапозоне 0 - 50, тогда ошибка."""
     __tablename__ = 'rule'
     rule_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     type_id = db.Column(db.Integer, db.ForeignKey('type.type_id'))
@@ -430,13 +432,16 @@ class TypeDB(db.Model):
 
 class LogRulesDB(db.Model):
     """Журнал проверки величин.
+    + count - количество проверенных величин.
     Например,
-    11.11.2021 13:37 Температура 41.
-    11.11.2021 13:47 Температура 39.
-    11.11.2021 13:57 Температура 40.
+    11.11.2021 13:37 Температура 41, 50 значений.
+    11.11.2021 13:47 Температура 39, 133 значения.
+    11.11.2021 13:57 Температура 40, 4 значения.
     """
     __tablename__ = 'logrules'
     logrules_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    mark_id = db.Column(db.Integer, db.ForeignKey('markers.id_mark'))
     time = db.Column(db.DateTime())
     type_id = db.Column(db.Integer, db.ForeignKey('type.type_id'))
     value = db.Column(db.Float())
+    count = db.Column(db.Integer())
