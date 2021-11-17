@@ -6,7 +6,7 @@ import statistics
 from AlexeyService.main import timedelta_background_handler, redis_connection, types_list, rules_list, \
     last_time_check_rules
 from app import db
-from models import LogRulesDB
+from models import LogRulesDB, ErrorDB
 
 
 def run_telemetry_background_handler():
@@ -73,7 +73,13 @@ def run_rules_background_handler():
 
                     if avg < rule.min or avg > rule.max:
                         #Ошибка.
-                        print('Ошибка')
+                        err = ErrorDB()
+                        err.time = datetime.datetime.now()
+                        err.message = 'Ошибка по правилу ...'
+                        err.confirmed = False
+                        
+                        db.session.add(err)
+                        db.session.commit()
 
             sleep(timedelta_background_handler)
         except Exception as e:

@@ -445,3 +445,14 @@ class LogRulesDB(db.Model):
     type_id = db.Column(db.Integer, db.ForeignKey('type.type_id'))
     value = db.Column(db.Float())
     count = db.Column(db.Integer())
+
+
+class ErrorDB(db.Model):
+    """Ошибка связанная с правилами и нормативами."""
+    __tablename__ = 'error'
+    error_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    message = db.Column(db.Text())
+    time = db.Column(db.DateTime())
+    confirmed = db.Column(db.Boolean())
+    user_id = db.Column(db.Integer(), nullable=True)
+
