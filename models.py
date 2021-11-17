@@ -136,7 +136,10 @@ class TechDB(db.Model):
     t_nal = db.Column(db.Float()) 
     t_pz = db.Column(db.Float()) 
     t_sht = db.Column(db.Float()) 
-    t_oper = db.Column(db.Float()) 
+    first_zone_id = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))  
+    first_zone_type = db.Column(db.Text()) 
+    second_zone_id = db.Column(db.Integer, db.ForeignKey('zones.id_zone'))  
+    second_zone_type = db.Column(db.Text()) 
 
 class BatchpauseDB(db.Model):
     __tablename__ = 'batchpause'
@@ -187,6 +190,16 @@ SAWarning: relationship 'ZonesDB.locations' will copy column locations.id_locati
   for prop in model.__mapper__.iterate_properties:
 '''
 
+class EquipmentDB(db.Model):
+    __tablename__ = 'equipment'
+    equipment_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))   
+    equipment_name = db.Column(db.Text())
+    equipment_model = db.Column(db.Text())
+    equipment_type = db.Column(db.Text())
+    zones = db.relationship("ZonesDB")
+    
+
 class ZonesDB(db.Model):
     __tablename__ = 'zones'
     id_zone = db.Column(db.Integer(), primary_key=True, autoincrement=True)
@@ -202,14 +215,11 @@ class ZonesDB(db.Model):
     type = db.Column(db.Integer)
     threshold_in = db.Column(db.Integer)
     threshold_out = db.Column(db.Integer)
-
-    '''
-    id_anchor = db.Column(db.Integer, db.ForeignKey('anchors.id_anchor'))
     
-    location = db.relationship("LocationsDB", foreign_keys = [id_location])
-    equipment = db.relationship("EquipmentDB", foreign_keys = [equipment_id])
-    anchor = db.relationship("AnchorsDB", foreign_keys = [id_anchor])
-    '''
+    # equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.equipment_id'))
+    # equipment_ = db.relationship("equipment", back_populates="children")
+    # equipment = db.relationship("equipment", back_populates="zones")
+
 
 
 class LocationsDB(db.Model):
@@ -232,20 +242,6 @@ class LocationsDB(db.Model):
     anchors = db.relationship("AnchorsDB", backref=db.backref('locations'), lazy=True)
     zones = db.relationship("ZonesDB", backref=db.backref('locations'), lazy=True)
     equipment = db.relationship("EquipmentDB", backref=db.backref('locations'), lazy=True)
-    '''
-
-class EquipmentDB(db.Model):
-    __tablename__ = 'equipment'
-    equipment_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    id_location = db.Column(db.Integer, db.ForeignKey('locations.id_location'))   
-    equipment_name = db.Column(db.Text())
-    equipment_model = db.Column(db.Text())
-    equipment_type = db.Column(db.Text())
-    #equipment_class = db.Column(db.Integer, db.ForeignKey('equipment_class.equipment_class_id'))      #[ref: > equipment_class.equipment_class_id]    
-
-    '''
-    location = db.relationship("LocationsDB", foreign_keys = [id_location])
-    zone = db.relationship("ZonesDB", foreign_keys = [id_zone])
     '''
 
 class AnchorsDB(db.Model):

@@ -167,7 +167,7 @@ function createDropdownMenu(id, variants, ids) {
     el.addEventListener("click", function() {
         buttonSelect.id = "";
         buttonSelect.innerHTML = "-";
-        drawPath();
+        // drawPath();
     });
     menuSelect.appendChild(el);
 
@@ -213,7 +213,7 @@ function createDropdownMenu_(id, variants, ids) {
     el.addEventListener("click", function() {
         buttonSelect.id = "";
         buttonSelect.innerHTML = "-";
-        drawPath();
+        // drawPath();
     });
     menuSelect.appendChild(el);
 

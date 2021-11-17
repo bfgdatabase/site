@@ -6,29 +6,53 @@ jQuery.noConflict()
 
 let equipments_names = []
 let equipments_ids = []
+let equipments = []
 
 let type_ids = ['primary', 'secondary']
 let type_names = ['Основной', 'Альтернативный']
+let type_zone = ['Вход', 'Выход']
 
 let specs = []
 let routes = []
 let techs = []
+let zones = []
+let zones_names = []
+let zones_ids = []
+
+
 
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
 $(document).ready(function() {
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/equipments/', false);
-    xhr.send();
-    if (xhr.status != 200) {
-        showMessage(xhr.response, "danger");
-    } else {
-        var res = JSON.parse(xhr.responseText);
-        for (var i = 0; i < res.query.length; i++) {
-            equipments_ids.push(res.query[i].equipment_id)
-            equipments_names.push(res.query[i].equipment_name)
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/equipments/', false);
+        xhr.send();
+        if (xhr.status != 200) {
+            showMessage(xhr.response, "danger");
+        } else {
+            var res = JSON.parse(xhr.responseText);
+            equipments = res.query
+            for (var i = 0; i < res.query.length; i++) {
+                equipments_ids.push(res.query[i].equipment_id)
+                equipments_names.push(res.query[i].equipment_name)
+            }
+        }
+    }
+        {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/zones/', false);
+        xhr.send();
+        if (xhr.status != 200) {
+            showMessage(xhr.response, "danger");
+        } else {
+            var res = JSON.parse(xhr.responseText);
+            zones = res.query
+            for (var i = 0; i < res.query.length; i++) {
+                zones_names.push(res.query[i].name)
+                zones_ids.push(res.query[i].id_zone)
+            }
         }
     }
 
@@ -107,6 +131,7 @@ function createSortedTable(obj) {
                 } else { showMessage(xhr.response, "danger"); }
             }
             xhr.send(json);
+            
 
         });
 
@@ -200,19 +225,19 @@ function createSortedTable(obj) {
                 tr_new.appendChild(btn_select);
                 btn_select.addEventListener("click", function() {
                     let techName = document.getElementById('techName');
-                    techName.innerHTML = spec_name;
+                    techName.innerHTML = spec_name;            
                     let params = {}
                     params["spec_id"] = spec_id;
                     let json = JSON.stringify(params);
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', '/api/technologies/', true);
+                    xhr.open('POST', '/api/routes/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     xhr.onload = function() {
                         if (xhr.readyState == 4 && xhr.status == "200") {
-                            techs = JSON.parse(xhr.response).query
-                            createSortedTable_tech(techs, spec_id);
-                            createTableBtns_tech(techs);
+                            routes = JSON.parse(xhr.response).query                    
+                            createRoutesTableBtns(routes)                    
+                            createRoutesTable(routes, spec_id) 
                         } else { showMessage(xhr.response, "danger"); }
                     }
                     xhr.send(json);
@@ -279,7 +304,7 @@ function createSortedTable(obj) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function createRoutesTableBtns(obj) {
-    let table = document.getElementById('tableBtns');
+    let table = document.getElementById('routeTableBtns');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
     let tr = document.createElement('tr');
@@ -303,6 +328,7 @@ function createRoutesTable(obj, specID) {
         let tr = document.createElement('tr');
         
         let spec_name = obj[i]["name"];
+        let route_id = obj[i]["route_id"];
 
         let name = createInput(obj[i]["name"], "any")
         tr.appendChild(name);
@@ -315,34 +341,25 @@ function createRoutesTable(obj, specID) {
         tr.appendChild(btn_select);
         btn_select.addEventListener("click", function() {
 
-            // let route_specName = document.getElementById('specName');
-            // route_specName.innerHTML = "Спецификация: " + spec_name;
+            let route_specName = document.getElementById('techName');
+            route_specName.innerHTML = "Маршрут: " + spec_name;
 
-            // let params = {}
-            // params["spec_id"] = spec_id;
-            // let json = JSON.stringify(params);
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', '/api/routes/', true);
-            // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-            // xhr.onload = function() {
+            let params = {}
+            params["route_id"] = route_id;
+            let json = JSON.stringify(params);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/technologies/', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.onload = function() {
 
+                if (xhr.readyState == 4 && xhr.status == "200") {   
+                    techs = JSON.parse(xhr.response).query                    
+                    createTableBtns_tech(techs)                    
+                    createSortedTable_tech(techs, route_id) 
 
-            //     if (xhr.readyState == 4 && xhr.status == "200") {                    
-                    
-            //         routes = JSON.parse(xhr.response).query
-                    
-            //         // </tbody>
-            //         // <tbody id="routeTableBody">
-            //         // </tbody>
-            //         // <tbody id="routeTableAdd">
-
-            //         createSortedTable_tech(techs, spec_id);
-            //         // createTableBtns_tech(techs);
-
-            //     } else { showMessage(xhr.response, "danger"); }
-            // }
-            // xhr.send(json);
-
+                } else { showMessage(xhr.response, "danger"); }
+            }
+            xhr.send(json);
         });
 
         let btn_save = createButton("Сохранить", "btn-warning");
@@ -439,7 +456,7 @@ function createRoutesTable(obj, specID) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function createTableBtns_tech(obj) {
-    let table = document.getElementById('tech_tableBtns');
+    let table = document.getElementById('techtableBtns');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
     let tr = document.createElement('tr');
@@ -452,9 +469,10 @@ function createTableBtns_tech(obj) {
     table.appendChild(tr);
 }
 
-function createSortedTable_tech(obj, spec_id) {
 
-    let table = document.getElementById('tech_tableBody');
+function createSortedTable_tech(obj, route_id) {
+
+    let table = document.getElementById('techtableBody');
     table.className = "table table-hover table-striped";
     table.innerHTML = "";
 
@@ -474,53 +492,73 @@ function createSortedTable_tech(obj, spec_id) {
         let name = createInput(obj[i]["name"], "any")
         tr.appendChild(name);
 
-        let equipment_id = createDropdownMenu(obj[i]["equipment_id"], equipments_names, equipments_ids);
-        tr.appendChild(equipment_id);
+
+        let first_zone_id = createDropdownMenu(obj[i]["first_zone_id"], zones_names, zones_ids);
+        tr.appendChild(first_zone_id);
+
+        let type_1 = createInput(obj[i]["first_zone_type"], "any")
+        tr.appendChild(type_1);
+
+        let fsecond_zone_id = createDropdownMenu(obj[i]["fsecond_zone_id"], zones_names, zones_ids);
+        tr.appendChild(fsecond_zone_id);
+
+        let type_2 = createInput(obj[i]["second_zone_type"], "any")
+        tr.appendChild(type_2);
+
+        let t_pz = createInput(obj[i]["t_pz"], "any")
+        tr.appendChild(t_pz);
+
+        let t_sht = createInput(obj[i]["t_sht"], "any")
+        tr.appendChild(t_sht);
+
+        let t_nal = createInput(obj[i]["t_nal"], "any")
+        tr.appendChild(t_nal);
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
         btn_save.addEventListener("click", function() {
-            let params = {}
-            if (nop.firstChild.value != '') { params["nop"] = nop.firstChild.value; }
-            if (code.firstChild.value != '') { params["code"] = code.firstChild.value; }
-            if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
-            if (equipment_id.firstChild.id != '') { params["equipment_id"] = equipment_id.firstChild.id; }
-            var xhr = new XMLHttpRequest();
-            xhr.open('PUT', '/api/technology/' + id_techop + '/', true);
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-            let json = JSON.stringify(params);
-            xhr.onload = function() {
-                if (xhr.readyState == 4 && xhr.status == "200") {
-                    let res = JSON.parse(xhr.response).query
-                    objRef.nop = res.nop;
-                    objRef.code = res.code;
-                    objRef.name = res.name;
-                    objRef.equipment_id = res.equipment_id;
-                } else { showMessage(xhr.response, "danger"); }
-            }
-            xhr.send(json);
+
+            // let params = {}
+            // if (nop.firstChild.value != '') { params["nop"] = nop.firstChild.value; }
+            // if (code.firstChild.value != '') { params["code"] = code.firstChild.value; }
+            // if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
+            // if (equipment_id.firstChild.id != '') { params["equipment_id"] = equipment_id.firstChild.id; }
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('PUT', '/api/technology/' + id_techop + '/', true);
+            // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            // let json = JSON.stringify(params);
+            // xhr.onload = function() {
+            //     if (xhr.readyState == 4 && xhr.status == "200") {
+            //         let res = JSON.parse(xhr.response).query
+            //         objRef.nop = res.nop;
+            //         objRef.code = res.code;
+            //         objRef.name = res.name;
+            //         objRef.equipment_id = res.equipment_id;
+            //     } else { showMessage(xhr.response, "danger"); }
+            // }
+            // xhr.send(json);
         });
         let btn_delete = createButton("Удалить", "btn-danger");
         tr.appendChild(btn_delete);
         btn_delete.addEventListener("click", function() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('DELETE', '/api/technology/' + id_techop + '/', true);
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-            let json = JSON.stringify();
-            xhr.onload = function() {
-                if (xhr.readyState == 4 && xhr.status == "200") {
-                    let idx = techs.indexOf(objRef)
-                    techs.splice(idx, 1);
-                    tr.remove();
-                } else { showMessage(xhr.response, "danger"); }
-            }
-            xhr.send(json);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('DELETE', '/api/technology/' + id_techop + '/', true);
+            // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            // let json = JSON.stringify();
+            // xhr.onload = function() {
+            //     if (xhr.readyState == 4 && xhr.status == "200") {
+            //         let idx = techs.indexOf(objRef)
+            //         techs.splice(idx, 1);
+            //         tr.remove();
+            //     } else { showMessage(xhr.response, "danger"); }
+            // }
+            // xhr.send(json);
         });
 
         table.appendChild(tr);
     }
 
-    let tableAdd = document.getElementById('tech_tableAdd');
+    let tableAdd = document.getElementById('techtableAdd');
     tableAdd.className = "table table-hover table-striped";
     tableAdd.innerHTML = "";
 
@@ -534,93 +572,190 @@ function createSortedTable_tech(obj, spec_id) {
 
     let name = createInput("", "any")
     tr.appendChild(name);
+    
+    let td1 = document.createElement('td');
+    td1.style = "vertical-align:middle";
+    td1.className = "px-1";
 
-    let equipment_id = createDropdownMenu("", equipments_names, equipments_ids);
+    let td2 = document.createElement('td');
+    td2.style = "vertical-align:middle";
+    td2.className = "px-1";
+
+    let first_zone_id = td1;
+    let fsecond_zone_id = td2;
+    
+    /////////////////////////
+
+    let equipment_id = document.createElement('td');
+    equipment_id.style = "vertical-align:middle";
+    equipment_id.className = "px-1";
+
+    let buttonSelect = document.createElement('button');
+    buttonSelect.className = "btn btn-primary btn-sm dropdown-toggle btn-block";
+    buttonSelect.id = "";
+
+    buttonSelect.setAttribute("data-toggle", "dropdown");
+
+    let menuSelect = document.createElement('div');
+    menuSelect.className = "dropdown-menu";
+
+    let el = document.createElement('a');
+    el.className = "dropdown-item";
+    el.innerHTML = "-";
+    el.id = "";
+
+    el.addEventListener("click", function() {
+        buttonSelect.id = "";
+        buttonSelect.innerHTML = "-";
+    });
+    menuSelect.appendChild(el);
+
+    for (let i = 0; i < equipments.length; ++i) {
+
+        // if (id == equipments_ids[i]) {
+        //     buttonSelect.id = equipments_ids[i];
+        //     buttonSelect.innerHTML = equipments_names[i];
+        // }
+
+        let el = document.createElement('a');
+        el.className = "dropdown-item";
+        el.innerHTML = equipments[i].equipment_name;
+        el.id = i;
+
+        el.addEventListener("click", function() {
+            // let zones_names = []
+            // let zones_ids = []
+            // for (let j = 0; j < equipments[el.id].zones.length; ++j)
+            // {
+            //     zones_ids.push(equipments[el.id].zones[j])
+            // }
+
+            let t_el = createDropdownMenu("", zones_ids, zones_ids);
+            
+            first_zone_id = t_el;
+            // first_zone_id = createDropdownMenu("", zones_ids, zones_ids);
+            fsecond_zone_id = createDropdownMenu("", zones_ids, zones_ids);
+            // let ch = createDropdownMenu("", zones_names, zones_ids);
+
+            // tableAdd.children[0].children[4] = Object.assign({}, tableAdd.children[0].children[3])
+            // tableAdd.children[0].children[6] = createDropdownMenu("", zones_names, zones_ids);
+
+            buttonSelect.id = el.id;
+            buttonSelect.innerHTML = el.innerHTML;
+        });
+
+        menuSelect.appendChild(el);
+    }
+    equipment_id.appendChild(buttonSelect);
+    equipment_id.appendChild(menuSelect);
+    
     tr.appendChild(equipment_id);
+    
+    /////////////////////////
+
+    tr.appendChild(first_zone_id);
+  
+    let type_1 = createDropdownMenu("", type_zone, type_zone);
+    tr.appendChild(type_1);
+
+    tr.appendChild(fsecond_zone_id);
+
+    let type_2 = createDropdownMenu("", type_zone, type_zone);
+    tr.appendChild(type_2);
+
+    let t_pz = createInput("", "any")
+    tr.appendChild(t_pz);
+
+    let t_sht = createInput("", "any")
+    tr.appendChild(t_sht);
+
+    let t_nal = createInput("", "any")
+    tr.appendChild(t_nal);
+
 
 
     let btn_save = createButton("Добавить", "btn-secondary");
     tr.appendChild(btn_save);
     btn_save.addEventListener("click", function() {
-        let params = {}
-        params["spec_id"] = spec_id;
-        if (nop.firstChild.value != '') { params["nop"] = nop.firstChild.value; }
-        if (code.firstChild.value != '') { params["code"] = code.firstChild.value; }
-        if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
-        if (equipment_id.firstChild.id != '') { params["equipment_id"] = equipment_id.firstChild.id; }
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/technology/', true);
-        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        let json = JSON.stringify(params);
+        // let params = {}
+        // params["spec_id"] = spec_id;
+        // if (nop.firstChild.value != '') { params["nop"] = nop.firstChild.value; }
+        // if (code.firstChild.value != '') { params["code"] = code.firstChild.value; }
+        // if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
+        // if (equipment_id.firstChild.id != '') { params["equipment_id"] = equipment_id.firstChild.id; }
+        // var xhr = new XMLHttpRequest();
+        // xhr.open('POST', '/api/technology/', true);
+        // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        // let json = JSON.stringify(params);
 
-        xhr.onload = function() {
-            if (xhr.readyState == 4 && xhr.status == "200") {
-                var result = JSON.parse(xhr.responseText);
+        // xhr.onload = function() {
+        //     if (xhr.readyState == 4 && xhr.status == "200") {
+        //         var result = JSON.parse(xhr.responseText);
 
-                obj.push(result.query);
-                let objRef = obj[obj.length - 1];
+        //         obj.push(result.query);
+        //         let objRef = obj[obj.length - 1];
 
-                let tr_new = document.createElement('tr');
-                let id_techop = result.query["id_techop"];
+        //         let tr_new = document.createElement('tr');
+        //         let id_techop = result.query["id_techop"];
 
-                let nop = createInput(result.query["nop"], "any")
-                tr_new.appendChild(nop);
+        //         let nop = createInput(result.query["nop"], "any")
+        //         tr_new.appendChild(nop);
 
-                let code = createInput(result.query["code"], "any")
-                tr_new.appendChild(code);
+        //         let code = createInput(result.query["code"], "any")
+        //         tr_new.appendChild(code);
 
-                let name = createInput(result.query["name"], "any")
-                tr_new.appendChild(name);
+        //         let name = createInput(result.query["name"], "any")
+        //         tr_new.appendChild(name);
 
-                let equipment_id = createDropdownMenu(result.query["equipment_id"], equipments_names, equipments_ids);
-                tr_new.appendChild(equipment_id);
+        //         let equipment_id = createDropdownMenu(result.query["equipment_id"], equipments_names, equipments_ids);
+        //         tr_new.appendChild(equipment_id);
 
-                let btn_save = createButton("Сохранить", "btn-warning");
-                tr_new.appendChild(btn_save);
-                btn_save.addEventListener("click", function() {
-                    let params = {}
-                    if (nop.firstChild.value != '') { params["nop"] = nop.firstChild.value; }
-                    if (code.firstChild.value != '') { params["code"] = code.firstChild.value; }
-                    if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
-                    if (equipment_id.firstChild.id != '') { params["equipment_id"] = equipment_id.firstChild.id; }
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('PUT', '/api/technology/' + id_techop + '/', true);
-                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                    let json = JSON.stringify(params);
-                    xhr.onload = function() {
-                        if (xhr.readyState == 4 && xhr.status == "200") {
-                            let res = JSON.parse(xhr.response).query
-                            objRef.nop = res.nop;
-                            objRef.code = res.code;
-                            objRef.name = res.name;
-                            objRef.equipment_id = res.equipment_id;
-                        } else { showMessage(xhr.response, "danger"); }
-                    }
-                    xhr.send(json);
-                });
+        //         let btn_save = createButton("Сохранить", "btn-warning");
+        //         tr_new.appendChild(btn_save);
+        //         btn_save.addEventListener("click", function() {
+        //             let params = {}
+        //             if (nop.firstChild.value != '') { params["nop"] = nop.firstChild.value; }
+        //             if (code.firstChild.value != '') { params["code"] = code.firstChild.value; }
+        //             if (name.firstChild.value != '') { params["name"] = name.firstChild.value; }
+        //             if (equipment_id.firstChild.id != '') { params["equipment_id"] = equipment_id.firstChild.id; }
+        //             var xhr = new XMLHttpRequest();
+        //             xhr.open('PUT', '/api/technology/' + id_techop + '/', true);
+        //             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        //             let json = JSON.stringify(params);
+        //             xhr.onload = function() {
+        //                 if (xhr.readyState == 4 && xhr.status == "200") {
+        //                     let res = JSON.parse(xhr.response).query
+        //                     objRef.nop = res.nop;
+        //                     objRef.code = res.code;
+        //                     objRef.name = res.name;
+        //                     objRef.equipment_id = res.equipment_id;
+        //                 } else { showMessage(xhr.response, "danger"); }
+        //             }
+        //             xhr.send(json);
+        //         });
 
-                let btn_delete = createButton("Удалить", "btn-danger");
-                tr_new.appendChild(btn_delete);
-                btn_delete.addEventListener("click", function() {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('DELETE', '/api/technology/' + id_techop + '/', true);
-                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                    let json = JSON.stringify();
-                    xhr.onload = function() {
-                        if (xhr.readyState == 4 && xhr.status == "200") {
-                            let idx = techs.indexOf(objRef)
-                            techs.splice(idx, 1);
-                            tr_new.remove()
-                        } else { showMessage(xhr.response, "danger"); }
-                    }
-                    xhr.send(json);
-                });
+        //         let btn_delete = createButton("Удалить", "btn-danger");
+        //         tr_new.appendChild(btn_delete);
+        //         btn_delete.addEventListener("click", function() {
+        //             var xhr = new XMLHttpRequest();
+        //             xhr.open('DELETE', '/api/technology/' + id_techop + '/', true);
+        //             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        //             let json = JSON.stringify();
+        //             xhr.onload = function() {
+        //                 if (xhr.readyState == 4 && xhr.status == "200") {
+        //                     let idx = techs.indexOf(objRef)
+        //                     techs.splice(idx, 1);
+        //                     tr_new.remove()
+        //                 } else { showMessage(xhr.response, "danger"); }
+        //             }
+        //             xhr.send(json);
+        //         });
 
-                table.appendChild(tr_new);
+        //         table.appendChild(tr_new);
 
-            } else { showMessage(xhr.response, "danger"); }
-        }
-        xhr.send(json);
+        //     } else { showMessage(xhr.response, "danger"); }
+        // }
+        // xhr.send(json);
     });
 
     tableAdd.appendChild(tr);

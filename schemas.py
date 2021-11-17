@@ -126,6 +126,7 @@ class EquipmentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = EquipmentDB
         include_fk = True
+        include_relationships = True
 
 class SpecSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
