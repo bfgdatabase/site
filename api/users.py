@@ -35,7 +35,7 @@ def get_permissions():
         return response_with(FORBIDDEN_403)
     if not (session["role"] == 'administrator'):
         return response_with(FORBIDDEN_403)
-    query = PermissionsDB.query.order_by("role").order_by("table").all()
+    query = UserPermissionsDB.query.order_by("role").order_by("table").all()
     query_schema = PermissionsSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_permissions)
@@ -50,7 +50,7 @@ def update_permission(id, **kwargs):
         return response_with(FORBIDDEN_403)
     if not (session["role"] == 'administrator'):
         return response_with(FORBIDDEN_403)
-    query = PermissionsDB.query.get_or_404(id)
+    query = UserPermissionsDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.commit()
@@ -65,7 +65,7 @@ def get_roless():
         return response_with(FORBIDDEN_403)
     if not (session["role"] == 'administrator'):
         return response_with(FORBIDDEN_403)
-    query = RolesDB.query.order_by("role").all()
+    query = UserRolesDB.query.order_by("role").all()
     query_schema = RolesSchema(many=True)
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
 docs.register(get_roless)
@@ -77,11 +77,11 @@ def delete_role(id):
         return response_with(FORBIDDEN_403)
     if not (session["role"] == 'administrator'):
         return response_with(FORBIDDEN_403)
-    query = RolesDB.query.get_or_404(id)
+    query = UserRolesDB.query.get_or_404(id)
     name = query.role
     db.session.delete(query)
     db.session.commit()  
-    query = PermissionsDB.query.filter_by(role = name)
+    query = UserPermissionsDB.query.filter_by(role = name)
     for q in query:
         db.session.delete(q)
         db.session.commit()          
@@ -97,19 +97,19 @@ def create_role(**kwargs):
         return response_with(FORBIDDEN_403)
     if not (session["role"] == 'administrator'):
         return response_with(FORBIDDEN_403)
-    query = RolesDB()
+    query = UserRolesDB()
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
     db.session.commit()
     schema = RolesSchema()
-    roles = RolesDB.query.all()
+    roles = UserRolesDB.query.all()
     for role in roles:
         for table in editableTables:
-            query = PermissionsDB.query.all()
-            permissions = PermissionsDB.query.filter_by(table = table[0], role = role.role)
+            query = UserPermissionsDB.query.all()
+            permissions = UserPermissionsDB.query.filter_by(table = table[0], role = role.role)
             if(permissions.count() == 0):
-                item = PermissionsDB(
+                item = UserPermissionsDB(
                     table = table[0], 
                     role = role.role,
                     get = False,

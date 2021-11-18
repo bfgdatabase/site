@@ -24,7 +24,7 @@ docs.register(get_markgroupsettings)
 def delete_markgroupsetting(id):
     query = MarkSettingsDB.query.get_or_404(id)
     db.session.delete(query)
-    query_marks = MarksDB.query.filter_by(markgroup_id = query.markgroup_id).all()
+    query_marks = MarkersDB.query.filter_by(markgroup_id = query.markgroup_id).all()
     for q in query_marks:
         q.set_settings = True
     db.session.commit()  
@@ -61,7 +61,7 @@ def update_markgroupsetting(id, **kwargs):
     query = MarkSettingsDB.query.get_or_404(id)
     for key, value in kwargs.items():
         setattr(query, key, value)
-    query_marks = MarksDB.query.filter_by(markgroup_id = query.markgroup_id).all()
+    query_marks = MarkersDB.query.filter_by(markgroup_id = query.markgroup_id).all()
     for q in query_marks:
         q.set_settings = True
     db.session.commit()
@@ -79,7 +79,7 @@ def create_markgroupsetting(**kwargs):
     for key, value in kwargs.items():
         setattr(query, key, value)
     db.session.add(query)
-    query_marks = MarksDB.query.filter_by(markgroup_id = query.markgroup_id).all()
+    query_marks = MarkersDB.query.filter_by(markgroup_id = query.markgroup_id).all()
     for q in query_marks:
         q.set_settings = True
     db.session.commit()

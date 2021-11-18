@@ -30,7 +30,7 @@ function createSortedTable(obj) {
     for (var i = 0; i < obj.length; i++) {
 
         let tr = document.createElement('tr');
-        let id_role = obj[i]["id_role"];
+        let id_role = obj[i]["role_id"];
 
         let role = createInput(obj[i]["role"], "any")
         tr.appendChild(role);

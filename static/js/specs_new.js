@@ -421,7 +421,7 @@ function createRoutesTable(obj, specID) {
 
         xhr.onload = function() {
             if (xhr.readyState == 4 && xhr.status == "200") {
-                 
+                
                 var result = JSON.parse(xhr.responseText);
                 routes.push(result.query)
                 createRoutesTable(routes, specID) 
