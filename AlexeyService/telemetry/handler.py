@@ -1,12 +1,11 @@
 import datetime
 from time import sleep
-from flask_sqlalchemy import SQLAlchemy
 import statistics
 
 from AlexeyService.main import timedelta_background_handler, redis_connection, types_list, rules_list, \
     last_time_check_rules
 from app import db
-from models import LogRulesDB, ErrorDB
+from models import LogRulesDB, ErrorDB, TypeDB
 
 
 def run_telemetry_background_handler():
@@ -62,24 +61,33 @@ def run_rules_background_handler():
                 if datetime.datetime.now() - last_time > rule.periodicity:
                     data = LogRulesDB.query.filter(LogRulesDB.type_id == rule.type_id and
                                                    LogRulesDB.time > last_time
-                                                   ).all()
-                    sum = 0
-                    count = 0
-                    for i in data:
-                        sum += i.value * i.count
-                        count += i.count
+                                                   ).order_by(LogRulesDB.mark_id).all()
 
-                    avg = sum/count
+                    i = 0
+                    while i < len(data):
+                        sum = data[i].value
+                        count = data[i].count
+                        tmp = data[i].mark_id
+                        i += 1
+                        while i < len(data) and data[i].mark_id == tmp:
+                            sum += data[i].value
+                            count += data[i].count
 
-                    if avg < rule.min or avg > rule.max:
-                        #Ошибка.
-                        err = ErrorDB()
-                        err.time = datetime.datetime.now()
-                        err.message = 'Ошибка по правилу ...'
-                        err.confirmed = False
-                        
-                        db.session.add(err)
-                        db.session.commit()
+                        avg = sum / count
+
+                        if avg < rule.min or avg > rule.max:
+                            # Ошибка.
+                            err = ErrorDB()
+                            now = datetime.datetime.now()
+                            err.time = now
+                            type_data = TypeDB.query.get(rule.type_id)
+                            err.message = f'Ошибка по правилу: {type_data.name} должна принадлежать отрезку ' \
+                                          f'[ {rule.min} ; {rule.max} ].\nID метки: {tmp},' \
+                                          f' значение: {avg} {type_data.dimension}, время {now}.'
+                            err.confirmed = False
+
+                            db.session.add(err)
+                            db.session.commit()
 
             sleep(timedelta_background_handler)
         except Exception as e:
