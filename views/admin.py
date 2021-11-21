@@ -38,3 +38,8 @@ def downloadFile ():
     filename = app.root_path + '/' +  path
     if os.path.isfile(filename):
         return send_file(path, as_attachment=True)
+
+@app.route('/admin/errors')
+@resp.check_user_authorization()
+def error_table():
+    return render_template('error_table.html', username = session["username"])

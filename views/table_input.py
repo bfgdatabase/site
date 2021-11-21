@@ -52,3 +52,9 @@ def order_table():
 @resp.check_user_authorization()
 def structure_table():
     return render_template('structure_table.html', username = session["username"])
+
+@app.route('/tables/batches')
+@resp.check_user_authorization()
+def batches_table():
+    return render_template('batches_table.html', username = session["username"])
+    

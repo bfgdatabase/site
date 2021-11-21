@@ -17,3 +17,4 @@ def marks_params():
 @resp.check_user_authorization()
 def marks_group():
     return render_template('marks_group.html', username = session["username"])
+
