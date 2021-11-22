@@ -28,7 +28,8 @@ __all__ = [
     "tmetric",
     "tnotch",
     "users",
-    "zones" 
+    "zones" ,
+    "errors" 
     ]
 
 

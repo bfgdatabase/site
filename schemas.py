@@ -35,6 +35,7 @@ editableTables = ['TnotchDB',
 'EnterpriseDB'
 'DepartmentDB', 
 'UsersDB', 
+'ErrorsDB', 
 ]
 
 class BatchSchema(ma.SQLAlchemyAutoSchema):
@@ -201,4 +202,9 @@ class TmetricSchema(ma.SQLAlchemyAutoSchema):
 class MarkGroupSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = MarkGroupDB
+        include_fk = True
+
+class ErrorSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = ErrorDB
         include_fk = True
