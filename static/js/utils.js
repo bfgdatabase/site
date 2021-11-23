@@ -89,6 +89,18 @@ function createCheckbox(value) {
     td.appendChild(element);
     return td;
 }
+code: "2"
+equipment_id: 1
+first_zone_id: "3"
+first_zone_type: "ВХОД"
+name: "3"
+nop: "1"
+second_zone_id: "1"
+second_zone_type: "3"
+t_nal: "3"
+t_pz: "1"
+t_sht: "2"
+v_route_id: 1
 
 function createSortButton(elements, type, createSortedTable) {
     let td = document.createElement('td');
@@ -167,7 +179,7 @@ function createDropdownMenu(id, variants, ids) {
     el.addEventListener("click", function() {
         buttonSelect.id = "";
         buttonSelect.innerHTML = "-";
-        drawPath();
+        // drawPath();
     });
     menuSelect.appendChild(el);
 
@@ -213,7 +225,7 @@ function createDropdownMenu_(id, variants, ids) {
     el.addEventListener("click", function() {
         buttonSelect.id = "";
         buttonSelect.innerHTML = "-";
-        drawPath();
+        // drawPath();
     });
     menuSelect.appendChild(el);
 

@@ -78,6 +78,16 @@ def delete_orders(id):
     return response_with(resp.SUCCESS_200)
 docs.register(delete_orders)
 
+@app.route('/api/order_path/<int:id>/', methods=['GET'], provide_automatic_options=False)
+@doc(description='Get order path by id', tags=['orders'])
+@marshal_with(OrdersSchema())
+@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
+def get_order_path(id):
+    query = OrdersDB.query.get_or_404(id)
+    query_schema = OrdersSchema()
+    return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
+docs.register(get_order_path)
+
 
 
 

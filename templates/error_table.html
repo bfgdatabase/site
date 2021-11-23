@@ -1,0 +1,105 @@
+{% extends 'base_template.html' %} {% block title %} Ошибки {% endblock %} {% block head %}
+
+<head>
+    <!-- <script type="module" src="{{ url_for('static', filename='js/orders.js') }}"></script> -->
+</head>
+{% endblock %} {% block body %}
+
+<div class="container-fluid" id="my_content">
+    <div class="row row-offcanvas row-offcanvas-left vh-100 ">
+        <!--/col-->
+        <main class="col main h-100 overflow-auto border-left ">
+            <table height="70">
+            </table>
+            <div id="messages">
+            </div>
+            <div class="jumbotron p-3 ">
+                <h2> Ошибки
+                </h2>
+                <br>
+
+                <tr>
+                    <td>                             
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              Подтвержденные
+                            </label>
+                        </div>          
+                    </td>
+                    <td>                             
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              Закрытые
+                            </label>
+                        </div>          
+                    </td>
+                    <td class="align-middle"> 
+                        От
+                    </td>
+                    <td class="align-middle"> 
+                        <input id="datetime_begin" type="datetime-local">
+                    </td>
+                    <td class="align-middle"> 
+                        До
+                    </td>
+                    <td class="align-middle">
+                        <input id="datetime_end" type="datetime-local">
+                    </td>
+                    <td class="align-middle">
+                        <button type="button" class="btn btn-primary">Найти</button>
+                    </td>                
+                </tr>     
+
+                <table class="table ">
+                    <thead class="thead-dark ">
+                        <tr>
+                            <th scope="col ">Сообщение</th>
+                            <th scope="col ">Время ошибки</th>
+                            <th scope="col ">Время подтверждения</th>
+                            <th scope="col ">Статус</th>
+                            <th scope="col ">Пользователь</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">   <tr>
+                        <th scope="col ">Тра та та</th>
+                        <th scope="col ">Время ошибки</th>
+                        <th scope="col ">Время подтверждения</th>
+                        <th scope="col "></th>
+                        <th scope="col ">Админ</th>
+                        <th scope="col "><button type="button" class="btn btn-warning">Подтвердить ошибку</button></th>
+                        <th scope="col "></th>
+                        <th scope="col "></th>
+                    </tr>
+                        <tr>
+                            <th scope="col ">Тра та та</th>
+                            <th scope="col ">Время ошибки</th>
+                            <th scope="col ">Время подтверждения</th>
+                            <th scope="col ">Подтверждено</th>
+                            <th scope="col ">Админ</th>
+                            <th scope="col "><button type="button" class="btn btn-warning">Закрыть ошибку</button></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                        <tr>
+                            <th scope="col ">Тра та та</th>
+                            <th scope="col ">Время ошибки</th>
+                            <th scope="col ">Время подтверждения</th>
+                            <th scope="col ">Исправлено</th>
+                            <th scope="col ">Админ</th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                            <th scope="col "></th>
+                        </tr>
+                    </tbody>
+                    <tbody id="tableAdd">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>{% endblock %}
