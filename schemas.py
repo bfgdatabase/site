@@ -1,6 +1,6 @@
-
 from app import *
 from models import *
+
 editableTables = ['TnotchDB',
 'SetnotchDB',
 'TmetricDB',
