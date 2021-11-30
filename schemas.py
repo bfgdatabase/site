@@ -35,7 +35,8 @@ editableTables = ['TnotchDB',
 'EnterpriseDB'
 'DepartmentDB', 
 'UsersDB', 
-'ErrorsDB', 
+'ErrorsDB',
+'LogBathcesLagDB'
 ]
 
 class BatchSchema(ma.SQLAlchemyAutoSchema):
@@ -207,4 +208,9 @@ class MarkGroupSchema(ma.SQLAlchemyAutoSchema):
 class ErrorSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ErrorDB
+        include_fk = True
+
+class LogBatchesLagSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = LogBathcesLagDB
         include_fk = True

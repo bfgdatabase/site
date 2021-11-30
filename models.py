@@ -529,7 +529,7 @@ class PauseDB(db.Model):
     user_id = db.Column(db.Integer(), db.ForeignKey('users.user_id'))
 
 
-class LogBatchesLag(db.Model):
+class LogBatchesLagDB(db.Model):
     """
         Журнал отставания\опережения партий.
 
