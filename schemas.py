@@ -210,7 +210,7 @@ class ErrorSchema(ma.SQLAlchemyAutoSchema):
         model = ErrorDB
         include_fk = True
 
-class LogBatchesLagSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = LogBathcesLagDB
-        include_fk = True
+# class LogBatchesLagSchema(ma.SQLAlchemyAutoSchema):
+#     class Meta:
+#         model = LogBathcesLagDB
+#         include_fk = True
