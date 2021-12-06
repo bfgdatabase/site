@@ -7,7 +7,7 @@ from utils.responses import response_with
 
 
 @app.route('/api/report/<int:id>/', methods=['GET'], provide_automatic_options=False)
-@doc(description='report описание', tags=['report'])
+@doc(description='Отчёт о местоположении партии и её последних перемещениях.', tags=['report'])
 @marshal_with(OrdersSchema())
 @resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
 def get_report_batch(id, time_start=None, time_end=None):

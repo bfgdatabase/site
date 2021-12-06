@@ -7,7 +7,7 @@ from models import *
 from schemas import *
 from flask_sqlalchemy import SQLAlchemy
 from app import *
-from test_data.python_data import technology
+from test_data.python_data import technology, batches
 from utils.responses import response_with
 from utils import responses as resp
 from flask_apispec import use_kwargs, marshal_with, doc
@@ -37,7 +37,8 @@ def get_batches():
 
     TODO Убрать тестовые данные.
     """
-    query = BatchDB.query.all()
+    # query = BatchDB.query.all()
+    query = batches
     matrix = list()
     index = 0
     for i in query:
@@ -57,11 +58,20 @@ def get_batches():
         else:
             location = f'На станке №{second}'
 
+        """
         metrics = metrics_lag(datetime(2021, 11, 29, hour, 0, 0), (first, second), technology, i.batch_size)
         critics = criterion_lag(metrics[0])
         matrix[index].append([i.batch_id, i.code, i.created_at, i.id_mark, i.batch_size, i.product_name, i.closed,
-                             i.i.route_id, metrics[0], critics, metrics[1], metrics[2], location])
-    return response_with(resp.SUCCESS_200, value={"query": matrix})
+                             i.route_id, metrics[0], critics, metrics[1], metrics[2], location])
+        """
+
+        metrics = metrics_lag(datetime(2021, 11, 29, hour, 0, 0), (first, second), technology, i[4])
+        critics = criterion_lag(metrics[0])
+        matrix[index] = [i[0], i[1], i[2], i[3], i[4], i[5], i[6],
+                         i[7], metrics[0], critics, metrics[1], metrics[2], location]
+
+        index += 1
+    return response_with(resp.SUCCESS_200, value={"query": json.dump(matrix)})
 
 
 docs.register(get_batches)
