@@ -67,12 +67,13 @@ def get_batches():
 
         metrics = metrics_lag(datetime(2021, 11, 29, hour, 0, 0), (first, second), technology, i[4])
         critics = criterion_lag(metrics[0])
+        # matrix[index] = [i[0], i[1], i[2], i[3], i[4], i[5], i[6],
+        #                  i[7], metrics[0], critics, metrics[1], metrics[2], location]
         matrix[index] = [i[0], i[1], i[2], i[3], i[4], i[5], i[6],
-                         i[7], metrics[0], critics, metrics[1], metrics[2], location]
+                         i[7], metrics[0], critics, location]
 
         index += 1
-    return response_with(resp.SUCCESS_200, value={"query": json.dump(matrix)})
-
+    return response_with(resp.SUCCESS_200, value={"query": json.dumps(matrix)})
 
 docs.register(get_batches)
 
