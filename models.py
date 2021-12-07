@@ -1,12 +1,4 @@
-from flask import Flask, session
-from sqlalchemy import Index
-
 from app import *
-from marshmallow import fields
-from flask_jwt_extended import create_access_token
-from datetime import timedelta
-from flask_bcrypt import Bcrypt
-from sqlalchemy.dialects.postgresql import ARRAY
 
 
 class TnotchDB(db.Model):
@@ -525,7 +517,7 @@ class PauseDB(db.Model):
     pause_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     comment = db.Column(db.Text(), nullable=False)
     create_time = db.Column(db.DateTime())
-    pause_time = db.Column(db.Integer())
+    end_time = db.Column(db.DateTime())
     user_id = db.Column(db.Integer(), db.ForeignKey('users.user_id'))
 
 

@@ -3,11 +3,11 @@ from datetime import datetime, timedelta
 from test_data.python_data import in_out_events
 
 
-def create_report_on_batch_by_filters(id, time_start, time_end):
+def create_report_on_batch_by_filters(id):
     query = list()
 
     for i in in_out_events:
-        if i[0] == id and (time_start is None or i[1] >= time_start) and (time_end is None or i[1] <= time_end):
+        if i[0] == id: # and (time_start is None or i[1] >= time_start) and (time_end is None or i[1] <= time_end):
             if i[2]:
                 event = 'in'
             else:
@@ -20,14 +20,14 @@ def create_report_on_batch_by_filters(id, time_start, time_end):
         return {
             'batch_id': id,
             'current_location': '',
-            'last_events': list(),
+            'events': list(),
         }
-    if time_end is None or time_start is None:
-        current_location = query[0]['location']
+    #if time_end is None or time_start is None:
+    #    current_location = query[0]['location']
     else:
         tmp = list()
         for i in in_out_events:
-            if i[0] == id and (time_start is None or i[1] > time_start):
+            if i[0] == id: # and (time_start is None or i[1] > time_start):
                 if i[2]:
                     event = 'in'
                 else:
@@ -36,7 +36,7 @@ def create_report_on_batch_by_filters(id, time_start, time_end):
 
         tmp.reverse()  # сортировка по времени, чтобы выше было актуальное время.
         current_location = tmp[0]
-    result = {'batch_id': id, 'current_location': current_location, 'last_events': query[:4]}
+    result = {'batch_id': id, 'current_location': current_location, 'events': query}
     return result
 
 

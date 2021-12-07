@@ -8,20 +8,16 @@ from utils.responses import response_with
 
 @app.route('/api/report/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Отчёт о местоположении партии и её последних перемещениях.', tags=['report'])
-@marshal_with(OrdersSchema())
-@resp.check_user_permission(dbName = "OrdersDB", method = 'GET')
-def get_report_batch(id, time_start=None, time_end=None):
-    query = create_report_on_batch_by_filters(id, time_start, time_end)
+@resp.check_user_permission(dbName="OrdersDB", method='GET')
+def get_report_batch_movement(id):
+    query = create_report_on_batch_by_filters(id)
     # {
     # 'batch_id',
     # 'current_location',
-    # 'last_events' : [ {'time', 'location'} ]
+    # 'events' : [ {'time', 'location'} ]
     # }
     #
-    return response_with(resp.SUCCESS_200, value=query)
-docs.register(get_report_batch)
+    return response_with(resp.SUCCESS_200, value=json.dumps(query))
 
 
-
-
-
+docs.register(get_report_batch_movement)
