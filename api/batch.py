@@ -156,11 +156,10 @@ docs.register(delete_batch)
 @app.route('/api/batches/<int:id>/', methods=['DELETE'], provide_automatic_options=False)
 @doc(description='Close batch by id', tags=['batch'])
 @resp.check_user_permission(dbName="BatchDB", method='DELETE')
-def delete_batch(id):
+def close_batch(id):
     query = BatchDB.query.get_or_404(id)
     query.closed = str(datetime.now())
     db.session.commit()
     return response_with(resp.SUCCESS_200)
 
-
-docs.register(delete_batch)
+docs.register(close_batch)

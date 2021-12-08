@@ -30,7 +30,8 @@ __all__ = [
     "users",
     "zones",
     "errors",
-    "report" 
+    "report",
+    "pause" 
     ]
 
 
