@@ -75,6 +75,7 @@ def get_batches():
         index += 1
     return response_with(resp.SUCCESS_200, value={"query": json.dumps(matrix)})
 
+
 docs.register(get_batches)
 
 
@@ -161,5 +162,6 @@ def close_batch(id):
     query.closed = str(datetime.now())
     db.session.commit()
     return response_with(resp.SUCCESS_200)
+
 
 docs.register(close_batch)

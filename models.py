@@ -1,3 +1,5 @@
+from flask import session
+
 from app import *
 
 
