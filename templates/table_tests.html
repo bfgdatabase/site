@@ -9,7 +9,42 @@
     <script type="module" src="{{ url_for('static', filename='js/tests.js') }}"></script>
 </head>
 {% endblock %} {% block body %}
+<style>
+    .dropbtn {
+        background-color: #007BFF;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
 
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content button {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content button:hover {background-color: #ddd;}
+    .dropdown:hover .dropdown-content {display: block;}
+    .dropdown:hover .dropbtn {background-color: #3e8e41;}
+</style>
 <div class="container-fluid" id="my_content">
     <div class="row row-offcanvas row-offcanvas-left vh-100 ">
         <!--/col-->
@@ -32,7 +67,15 @@
                             <th>Название маршрута</th>
                             <th>Метрика отставания</th>
                             <th>Критика отставания</th>
-                            <th>Actions</th>
+                            <div class="dropdown" style="float:right;">
+                                <button class="dropbtn">Actions</button>
+                                <div class="dropdown-content">
+                                    <button onClick="get_location()">Местоположение</button>
+                                    <button id="create_pause_batch">Поставить на паузу</button>
+                                    <button id="analitics_batch">Аналитика</button>
+                                </div>
+                            </div>
+
                         </tr>
                     </thead>
                     <tbody>

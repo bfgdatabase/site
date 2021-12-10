@@ -8,10 +8,13 @@ jQuery.noConflict()
 ///////////////////////////////////////////////////////////
 
 
-// $('#tableID tbody').on( 'click', 'tr', function () {
+// $('#batch_table tbody').on( 'click', 'tr', function () {
 //     console.log( table.row( this ).data() );
 // } );
-
+function get_location(){
+    var data = table.row( $(this).parents('tr') ).data();
+    alert( "Партия "  + data[0] +" это "+ data[ 5 ] );
+}
 
 
 $(document).ready(function() {
@@ -27,17 +30,23 @@ $(document).ready(function() {
 
         var table = $('#tableID').DataTable( {
            "data": res,
-           "columnDefs": [ {
-            "targets": -1,
-            "data": null,
-            "defaultContent": "<button>Click!</button>"
-            } ]          
+           //"columnDefs": [ {
+           // "targets": -1,
+           // "data": null,
+           // "defaultContent": "<div class=\"dropdown\"><button class=\"dropbtn\">Actions</button><div class=\"dropdown-content\"> <button onClick=\'get_location()\'>Местоположение</button> <button id=\"create_pause_batch\">Поставить на паузу</button> <button id=\"analitics_batch\">Аналитика</button></div></div>"
+           // } ]
         } );
 
-        $('#tableID tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
-            alert( "Партия "  + data[0] +" это "+ data[ 5 ] );
-        } );
+        //$('#batch_table tbody').on( 'click', 'button', function () {
+        //    var data = table.row( $(this).parents('tr') ).data();
+        //    alert( "Партия "  + data[0] +" это "+ data[ 5 ] );
+        //} );
+
+        //$('#tableID tbody').on( 'click', 'batchlocation', function () {
+        //   var data = table.row( $(this).parents('tr') ).data();
+        //    alert( "Партия "  + data[0] +" это "+ data[ 5 ] );
+        // });
+
         // for (var prop in res) {
         //     let a = res[prop];
         //     let b = res[prop];
@@ -50,7 +59,7 @@ $(document).ready(function() {
         //         let dd = 1;    
         //     });
 
-        //     $("#tableID").find('tbody')
+        //     $("#batch_table").find('tbody')
         //         .append($('<tr>')
         //             .append($('<td>')
         //                 .text(res[prop][0])                                       
