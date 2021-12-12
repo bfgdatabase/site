@@ -14,8 +14,6 @@ def get_pauses():
     query = PauseDB.query.all()
     query_schema = PauseSchema()
     return response_with(resp.SUCCESS_200, value={"query": query_schema.dump(query)})
-
-
 docs.register(get_pauses)
 
 
@@ -33,8 +31,6 @@ def create_pause(**kwargs):
     db.session.commit()
     schema = PauseSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
-
-
 docs.register(create_pause)
 
 
@@ -50,8 +46,6 @@ def update_pause(id, **kwargs):
     db.session.commit()
     schema = PauseSchema()
     return response_with(resp.SUCCESS_200, value={"query": schema.dump(query)})
-
-
 docs.register(update_pause)
 
 

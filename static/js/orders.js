@@ -5,7 +5,7 @@ jQuery.noConflict()
 
 let orders = []
 let spec_name = []
-let id_specs = []
+let spec_ids = []
 
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ function createPage() {
     } else {
         var res = JSON.parse(xhr.responseText);
         for (var i = 0; i < res.query.length; i++) {
-            id_specs.push(res.query[i].id_spec)
+            spec_ids.push(res.query[i].spec_id)
             spec_name.push(res.query[i].name)
         }
     }
@@ -76,7 +76,7 @@ function createSortedTable(obj) {
         let objRef = obj[i];
 
         let tr = document.createElement('tr');
-        let id_order = obj[i]["id_order"];
+        let order_id = obj[i]["order_id"];
 
         let order_name = createInput(obj[i]["order_name"], "any")
         tr.appendChild(order_name);
@@ -84,8 +84,8 @@ function createSortedTable(obj) {
         tr.appendChild(order_num);
         let customer = createInput(obj[i]["customer"], "any")
         tr.appendChild(customer);
-        let id_spec = createDropdownMenu(obj[i]["code_spec"], spec_name, id_specs);
-        tr.appendChild(id_spec);
+        let spec_id = createDropdownMenu(obj[i]["spec_id"], spec_name, spec_ids);
+        tr.appendChild(spec_id);
         let product_name = createInput(obj[i]["product_name"], "any")
         tr.appendChild(product_name);
         let created = createText(obj[i]["created"])
@@ -102,11 +102,11 @@ function createSortedTable(obj) {
             if (order_name.firstChild.value != '') { params["order_name"] = order_name.firstChild.value; }
             if (order_num.firstChild.value != '') { params["order_num"] = order_num.firstChild.value; }
             if (customer.firstChild.value != '') { params["customer"] = customer.firstChild.value; }
-            if (id_spec.firstChild.id != '') { params["code_spec"] = id_spec.firstChild.id; }
+            if (spec_id.firstChild.id != '') { params["spec_id"] = spec_id.firstChild.id; }
             if (product_name.firstChild.value != '') { params["product_name"] = product_name.firstChild.value; }
 
             var xhr = new XMLHttpRequest();
-            xhr.open('PUT', '/api/order/' + id_order + '/', true);
+            xhr.open('PUT', '/api/order/' + order_id + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify(params);
             xhr.onload = function() {
@@ -127,7 +127,7 @@ function createSortedTable(obj) {
         tr.appendChild(btn_delete);
         btn_delete.addEventListener("click", function() {
             var xhr = new XMLHttpRequest();
-            xhr.open('DELETE', '/api/order/' + id_order + '/', true);
+            xhr.open('DELETE', '/api/order/' + order_id + '/', true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             let json = JSON.stringify();
             xhr.onload = function() {
@@ -140,8 +140,8 @@ function createSortedTable(obj) {
             xhr.send(json);
         });
 
-        let bb = createButton("Движение партии", "btn-secondary");
-        tr.appendChild(bb);
+        // let bb = createButton("Движение партии", "btn-secondary");
+        // tr.appendChild(bb);
 
         table.appendChild(tr);
     }
@@ -158,8 +158,8 @@ function createSortedTable(obj) {
     tr.appendChild(order_num);
     let customer = createInput("", "any")
     tr.appendChild(customer);
-    let id_spec = createDropdownMenu("", spec_name, id_specs);
-    tr.appendChild(id_spec);
+    let spec_id = createDropdownMenu("", spec_name, spec_ids);
+    tr.appendChild(spec_id);
     let product_name = createInput("", "any")
     tr.appendChild(product_name);
 
@@ -171,7 +171,7 @@ function createSortedTable(obj) {
         if (order_name.firstChild.value != '') { params["order_name"] = order_name.firstChild.value; }
         if (order_num.firstChild.value != '') { params["order_num"] = order_num.firstChild.value; }
         if (customer.firstChild.value != '') { params["customer"] = customer.firstChild.value; }
-        if (id_spec.firstChild.id != '') { params["code_spec"] = id_spec.firstChild.id; }
+        if (spec_id.firstChild.id != '') { params["spec_id"] = spec_id.firstChild.id; }
         if (product_name.firstChild.value != '') { params["product_name"] = product_name.firstChild.value; }
 
         var xhr = new XMLHttpRequest();
@@ -186,7 +186,7 @@ function createSortedTable(obj) {
                 let objRef = obj[obj.length - 1];
 
                 let tr_new = document.createElement('tr');
-                let id_order = result.query["id_order"];
+                let order_id = result.query["order_id"];
 
                 let order_name = createInput(result.query["order_name"], "any")
                 tr_new.appendChild(order_name);
@@ -194,8 +194,8 @@ function createSortedTable(obj) {
                 tr_new.appendChild(order_num);
                 let customer = createInput(result.query["customer"], "any")
                 tr_new.appendChild(customer);
-                let id_spec = createDropdownMenu(result.query["code_spec"], spec_name, id_specs);
-                tr_new.appendChild(id_spec);
+                let spec_id = createDropdownMenu(result.query["spec_id"], spec_name, spec_ids);
+                tr_new.appendChild(spec_id);
                 let product_name = createInput(result.query["product_name"], "any")
                 tr_new.appendChild(product_name);
                 let created = createText(result.query["created"])
@@ -213,11 +213,11 @@ function createSortedTable(obj) {
                     if (order_name.firstChild.value != '') { params["order_name"] = order_name.firstChild.value; }
                     if (order_num.firstChild.value != '') { params["order_num"] = order_num.firstChild.value; }
                     if (customer.firstChild.value != '') { params["customer"] = customer.firstChild.value; }
-                    if (id_spec.firstChild.id != '') { params["code_spec"] = id_spec.firstChild.id; }
+                    if (spec_id.firstChild.id != '') { params["spec_id"] = spec_id.firstChild.id; }
                     if (product_name.firstChild.value != '') { params["product_name"] = product_name.firstChild.value; }
 
                     var xhr = new XMLHttpRequest();
-                    xhr.open('PUT', '/api/order/' + id_order + '/', true);
+                    xhr.open('PUT', '/api/order/' + order_id + '/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     let json = JSON.stringify(params);
                     xhr.onload = function() {
@@ -238,7 +238,7 @@ function createSortedTable(obj) {
                 tr_new.appendChild(btn_delete);
                 btn_delete.addEventListener("click", function() {
                     var xhr = new XMLHttpRequest();
-                    xhr.open('DELETE', '/api/order/' + id_order + '/', true);
+                    xhr.open('DELETE', '/api/order/' + order_id + '/', true);
                     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                     let json = JSON.stringify();
                     xhr.onload = function() {

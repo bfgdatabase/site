@@ -16,6 +16,21 @@ jQuery.noConflict()
 
 $(document).ready(function() {
 
+    var table = $('#lagTable').DataTable( {
+        "columnDefs": [ {
+         "targets": -1,
+         "data": null,
+          } ]          
+     } );
+     
+     var pauseTable = $('#pauseTable').DataTable( {
+        "columnDefs": [ {
+         "targets": -1,
+         "data": null,
+          } ]          
+     } );
+
+
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/batch/', false);
     xhr.send();
@@ -24,77 +39,49 @@ $(document).ready(function() {
     } else {
         let res = JSON.parse(JSON.parse(xhr.responseText).query);
 
-
-        var table = $('#tableID').DataTable( {
+        var table = $('#batchTable').DataTable( {
            "data": res,
            "columnDefs": [ {
             "targets": -1,
             "data": null,
-            "defaultContent": "<button>Click!</button>"
+            "defaultContent": '<button type="button" class="btn btn-primary btn-sm">Пауза</button>' +
+            '<button1 type="button1" class="btn btn-primary btn-sm">Лог</button1>'+
+            '<button1 type="button2" class="btn btn-primary btn-sm">Паузы</button2>'
             } ]          
         } );
 
-        $('#tableID tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
-            alert( "Партия "  + data[0] +" это "+ data[ 5 ] );
+        $('#batchTable tbody').on( 'click', 'button', function () {
+            var my_text=prompt('Причина остановки');
+            // batchpausees или pause ?????????
+            // pause должна иметь ссылку на батч
+            // надо наверно гдето статус партии отображать и список пауз
+            // в паузе ксть "end_time": "2021-12-12T18:54:13.553Z", но это конкретное время а не количество рабочих минут
+            // надо наверно когда на паузу поставили и на сколько сделать поля
+            //if(my_text) alert(my_text); // for example I've made an alert
         } );
-        // for (var prop in res) {
-        //     let a = res[prop];
-        //     let b = res[prop];
 
-        //     let btn_save = createButton("Добавить", "btn-primary");
-        //     btn_save.addEventListener("click", function() {
-        //         // let g = table.row( this ).data()
-        //         let a = 1;    
-        //         let g = table.row( 1 ).data()    
-        //         let dd = 1;    
-        //     });
+        $('#batchTable tbody').on( 'click', 'button1', function () {
 
-        //     $("#tableID").find('tbody')
-        //         .append($('<tr>')
-        //             .append($('<td>')
-        //                 .text(res[prop][0])                                       
-        //             )
-        //             .append($('<td>')
-        //                 .text(res[prop][1])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][2])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][3])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][4])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][5])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][6])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][7])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][8])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .text(res[prop][9])                                   
-        //             ) 
-        //             .append($('<td>')
-        //                 .append(btn_save)                                   
-        //             )                
-        //         );
-        // }
-
-        
+            var data = table.row( $(this).parents('tr') ).data();
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/log_batches_lag/' + data[0] + '/', true);
+            xhr.onload = function() {
+                if (xhr.status != 200) {
+                    showMessage(xhr.response, "danger");
+                } else {
+                     let res = JSON.parse(JSON.parse(xhr.responseText).query);
+                     var lag_table = $('#lagTable').DataTable( {
+                        "data": res,
+                        "columnDefs": [ {
+                        "targets": -1,
+                        "data": null,
+                        } ]          
+                    } );
+                } 
+            }
+            xhr.send();
+        } );
        
-    }
-    
-
-    
-    // $('#example1').text('Ура! Мы подключили Jquery!');
-
+    }    
 } );
 

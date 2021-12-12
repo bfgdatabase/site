@@ -31,7 +31,8 @@ __all__ = [
     "zones",
     "errors",
     "report",
-    "pause" 
+    "pause",
+    "log_batches_lag"
     ]
 
 
