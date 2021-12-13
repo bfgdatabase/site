@@ -47,9 +47,11 @@ $(document).ready(function() {
             "defaultContent": '<button type="button" class="btn btn-primary btn-sm">Пауза</button>' +
             '<button1 type="button1" class="btn btn-primary btn-sm">Лог</button1>'+
             '<button2 type="button2" class="btn btn-primary btn-sm">Аналитика</button2>'+
-            '<button3 type="button3" class="btn btn-primary btn-sm">Местоположение</button3>'
+            '<button3 type="button" class="btn btn-primary btn-sm"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></button3>'
             } ]          
         } );
+
+        
 
         $('#batchTable tbody').on( 'click', 'button', function () {
             var my_text=prompt('Причина остановки');
