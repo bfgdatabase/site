@@ -46,7 +46,8 @@ $(document).ready(function() {
             "data": null,
             "defaultContent": '<button type="button" class="btn btn-primary btn-sm">Пауза</button>' +
             '<button1 type="button1" class="btn btn-primary btn-sm">Лог</button1>'+
-            '<button2 type="button2" class="btn btn-primary btn-sm">Паузы</button2>'
+            '<button2 type="button2" class="btn btn-primary btn-sm">Аналитика</button2>'+
+            '<button3 type="button3" class="btn btn-primary btn-sm">Местоположение</button3>'
             } ]          
         } );
 
@@ -61,7 +62,7 @@ $(document).ready(function() {
             // Ответ:
             // Используемая модель PauseDB. Методы апи api/pause.
             // Мне просто сказали, что пауз нет и их надо создать - я создал. А оказалось, что они уже были. Ну типа пока пофиг, всё-равно потом надо будет базу править.
-            // Про статус партии - да, согласен, добавлю в вывод, будет ещё 1 столбик.
+            // Про статус партии - если стоит время окончания, то закрыта, если нет, то активная. Пока так.
             // Список пауз нужно отображать только в отдельной таблице. Либо через какой-то экшен(мол есть ли у данной партии паузы), но это не в ближайшем будущем.
             // Да, пока пусть будет, что пауза до такого-то числа. Сделано так, чтобы можно быть внести изменение в паузу. Мол всё, станок починили сегодня и продолжается
             // работа, а не через 3 дня, как планировали. Потому что вставить новую дату проще, чем вставить новое количество минут. А дальше уже эта дата будет расчитывать
@@ -88,6 +89,46 @@ $(document).ready(function() {
                         } ]          
                     } );
                 } 
+            }
+            xhr.send();
+        } );
+
+        $('#batchTable tbody').on( 'click', 'button2', function () {
+
+            var data = table.row( $(this).parents('tr') ).data();
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/analytics/' + data[0] + '/', true);
+            xhr.onload = function() {
+                if (xhr.status != 200) {
+                    showMessage(xhr.response, "danger");
+                } else {
+                    let res = JSON.parse(JSON.parse(xhr.responseText).query);
+                    alert(res)
+                  // Попап с информацией.
+                }
+            }
+            xhr.send();
+        } );
+
+        $('#batchTable tbody').on( 'click', 'button3', function () {
+
+            var data = table.row( $(this).parents('tr') ).data();
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/report/' + data[0] + '/', true);
+            xhr.onload = function() {
+                if (xhr.status != 200) {
+                    showMessage(xhr.response, "danger");
+                } else {
+                // Не знаю как сделать чтобы заработало. Ругается на получаемый тип.
+                     let res = JSON.parse(JSON.parse(xhr.responseText).query);
+                     var lag_table = $('#lagTable').DataTable( {
+                        "data": res['events'],
+                        "columnDefs": [ {
+                        "targets": -1,
+                        "data": null,
+                        } ]
+                    } );
+                }
             }
             xhr.send();
         } );
