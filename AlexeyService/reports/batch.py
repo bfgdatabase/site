@@ -12,7 +12,7 @@ def create_report_on_batch_by_filters(id):
                 event = 'in'
             else:
                 event = 'out'
-            query.append({'time': str(i[1]), 'location': f'{event} станок № {i[3]}'})
+            query.append([str(i[1]), event, i[3]])
 
     query.reverse()  # сортировка по времени, чтобы выше было актуальное время.
 

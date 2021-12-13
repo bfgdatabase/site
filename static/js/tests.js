@@ -53,22 +53,23 @@ $(document).ready(function() {
 
         $('#batchTable tbody').on( 'click', 'button', function () {
             var my_text=prompt('Причина остановки');
-            // batchpausees или pause ?????????
-            // pause должна иметь ссылку на батч
-            // надо наверно гдето статус партии отображать и список пауз
-            // в паузе ксть "end_time": "2021-12-12T18:54:13.553Z", но это конкретное время а не количество рабочих минут
-            // надо наверно когда на паузу поставили и на сколько сделать поля
 
-            // Ответ:
-            // Используемая модель PauseDB. Методы апи api/pause.
-            // Мне просто сказали, что пауз нет и их надо создать - я создал. А оказалось, что они уже были. Ну типа пока пофиг, всё-равно потом надо будет базу править.
-            // Про статус партии - если стоит время окончания, то закрыта, если нет, то активная. Пока так.
-            // Список пауз нужно отображать только в отдельной таблице. Либо через какой-то экшен(мол есть ли у данной партии паузы), но это не в ближайшем будущем.
-            // Да, пока пусть будет, что пауза до такого-то числа. Сделано так, чтобы можно быть внести изменение в паузу. Мол всё, станок починили сегодня и продолжается
-            // работа, а не через 3 дня, как планировали. Потому что вставить новую дату проще, чем вставить новое количество минут. А дальше уже эта дата будет расчитывать
-            // в дельту минуты, чтобы определить сколько времени осталось.
-            //
-            //if(my_text) alert(my_text); // for example I've made an alert
+            var data = table.row( $(this).parents('tr') ).data();
+            let params = {}
+            params["batch_id"] = data[0]
+            params["comment"] = my_text
+            // params["end_time"] = datetime
+            // params["user_id"] = my_text
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/pause/', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            let json = JSON.stringify(params);
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let res = JSON.parse(xhr.response).query
+                } else { showMessage(xhr.response, "danger"); }
+            }
+            xhr.send(json);
         } );
 
         $('#batchTable tbody').on( 'click', 'button1', function () {
@@ -84,8 +85,7 @@ $(document).ready(function() {
                      var lag_table = $('#lagTable').DataTable( {
                         "data": res,
                         "columnDefs": [ {
-                        "targets": -1,
-                        "data": null,
+                        "targets": -1
                         } ]          
                     } );
                 } 
@@ -113,19 +113,20 @@ $(document).ready(function() {
         $('#batchTable tbody').on( 'click', 'button3', function () {
 
             var data = table.row( $(this).parents('tr') ).data();
+            $( "#lagTableName" ).html('Местоположение партии ' + (data[0]));            
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/api/report/' + data[0] + '/', true);
             xhr.onload = function() {
                 if (xhr.status != 200) {
                     showMessage(xhr.response, "danger");
                 } else {
-                // Не знаю как сделать чтобы заработало. Ругается на получаемый тип.
+                    $('#lagTable').dataTable().fnClearTable();
+                    $('#lagTable').dataTable().fnDestroy();
                      let res = JSON.parse(JSON.parse(xhr.responseText).query);
                      var lag_table = $('#lagTable').DataTable( {
                         "data": res['events'],
                         "columnDefs": [ {
-                        "targets": -1,
-                        "data": null,
+                        "targets": -1
                         } ]
                     } );
                 }
