@@ -520,6 +520,7 @@ class PauseDB(db.Model):
     comment = db.Column(db.Text(), nullable=False)
     create_time = db.Column(db.DateTime())
     end_time = db.Column(db.DateTime())
+    batch_id = db.Column(db.Integer, db.ForeignKey('batch.batch_id'))
     user_id = db.Column(db.Integer(), db.ForeignKey('users.user_id'))
 
 
