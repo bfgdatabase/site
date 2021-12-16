@@ -1,4 +1,5 @@
 from models import *
+from app import ma
 
 editableTables = ['TnotchDB',
                   'SetnotchDB',

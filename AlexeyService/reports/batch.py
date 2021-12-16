@@ -18,8 +18,8 @@ def create_report_on_batch_by_filters(id):
 
     if len(query) == 0:
         return {
-            'batch_id': id,
-            'current_location': '',
+            'current_location_id': '',
+            'current_zone_name': '',
             'events': list(),
         }
     #if time_end is None or time_start is None:
@@ -32,22 +32,22 @@ def create_report_on_batch_by_filters(id):
                     event = 'in'
                 else:
                     event = 'out'
-                tmp.append(f'{event} станок № {i[3]}')
+                tmp.append(f'Зона № {i[3]}')
 
         tmp.reverse()  # сортировка по времени, чтобы выше было актуальное время.
-        current_location = tmp[0]
-    result = {'batch_id': id, 'current_location': current_location, 'events': query}
+        current_zone_name = tmp[0]
+    result = {'current_location_id': 1, 'current_zone_name': current_zone_name, 'events': query}
     return result
 
 
 """
 #Протестировал, всё работает.
-a = create_report_on_batch_by_filters(1, None, None)
-b = create_report_on_batch_by_filters(2, None, None)
-c = create_report_on_batch_by_filters(3, None, None)
+a = create_report_on_batch_by_filters(1)
+b = create_report_on_batch_by_filters(2)
+c = create_report_on_batch_by_filters(3)
 
-d = create_report_on_batch_by_filters(1, time + timedelta(minutes=35), None)
-e = create_report_on_batch_by_filters(1, time, time + timedelta(minutes=35))
+#d = create_report_on_batch_by_filters(1, time + timedelta(minutes=35), None)
+#e = create_report_on_batch_by_filters(1, time, time + timedelta(minutes=35))
 
 j = 1
 """

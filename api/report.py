@@ -13,8 +13,8 @@ from utils.responses import response_with
 def get_report_batch_movement(id):
     query = create_report_on_batch_by_filters(id)
     # {
-    # 'batch_id',
-    # 'current_location',
+    # 'current_location_id',
+    # 'current_zone_name',
     # 'events' : [ {'time', 'location'} ]
     # }
     #
