@@ -7,12 +7,12 @@ def create_report_on_batch_by_filters(id):
     query = list()
 
     for i in in_out_events:
-        if i[0] == id: # and (time_start is None or i[1] >= time_start) and (time_end is None or i[1] <= time_end):
+        if i[0] == id:  # and (time_start is None or i[1] >= time_start) and (time_end is None or i[1] <= time_end):
             if i[2]:
                 event = 'in'
             else:
                 event = 'out'
-            query.append([str(i[1]), event, i[3]])
+            query.append({'time': str(i[1]), 'event_type': event, 'zone_id': i[3]})
 
     query.reverse()  # сортировка по времени, чтобы выше было актуальное время.
 
@@ -22,21 +22,7 @@ def create_report_on_batch_by_filters(id):
             'current_zone_name': '',
             'events': list(),
         }
-    #if time_end is None or time_start is None:
-    #    current_location = query[0]['location']
-    else:
-        tmp = list()
-        for i in in_out_events:
-            if i[0] == id: # and (time_start is None or i[1] > time_start):
-                if i[2]:
-                    event = 'in'
-                else:
-                    event = 'out'
-                tmp.append(f'Зона № {i[3]}')
-
-        tmp.reverse()  # сортировка по времени, чтобы выше было актуальное время.
-        current_zone_name = tmp[0]
-    result = {'current_location_id': 1, 'current_zone_name': current_zone_name, 'events': query}
+    result = {'current_location_id': 1, 'events': query}
     return result
 
 

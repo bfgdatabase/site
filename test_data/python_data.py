@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 
-from models import BatchDB
-
 time = datetime(2021, 11, 23, 0, 0, 0)
 
 """

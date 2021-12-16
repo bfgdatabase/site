@@ -14,8 +14,7 @@ def get_report_batch_movement(id):
     query = create_report_on_batch_by_filters(id)
     # {
     # 'current_location_id',
-    # 'current_zone_name',
-    # 'events' : [ {'time', 'location'} ]
+    # 'events' : [ {'time', 'event_type' 'zone_id'} ]
     # }
     #
     return response_with(resp.SUCCESS_200, value={"query": json.dumps(query)})
