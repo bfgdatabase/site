@@ -6,13 +6,15 @@ from test_data.python_data import in_out_events
 def create_report_on_batch_by_filters(id):
     query = list()
 
-    for i in in_out_events:
-        if i[0] == id:  # and (time_start is None or i[1] >= time_start) and (time_end is None or i[1] <= time_end):
-            if i[2]:
-                event = 'in'
-            else:
-                event = 'out'
-            query.append({'time': str(i[1]), 'event_type': event, 'zone_id': i[3]})
+    for i in range(0, len(in_out_events)):
+        if in_out_events[i][0] == id:
+            if in_out_events[i][2]:
+                time_in = str(in_out_events[i][1])
+                time_out = None
+                if i + 1 < len(in_out_events) and not in_out_events[i + 1][2]:
+                    time_out = str(in_out_events[i + 1][1])
+                query.append({'zone_id': in_out_events[i][3], 'time_in': time_in, 'time_out': time_out})
+
 
     query.reverse()  # сортировка по времени, чтобы выше было актуальное время.
 

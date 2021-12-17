@@ -14,10 +14,10 @@ def get_report_batch_movement(id):
     query = create_report_on_batch_by_filters(id)
     # {
     # 'current_location_id',
-    # 'events' : [ {'time', 'event_type' 'zone_id'} ]
+    # 'events' : [ {'zone_id', 'time_in', 'time_out' } ]
     # }
     #
-    return response_with(resp.SUCCESS_200, value={"query": json.dumps(query)})
+    return response_with(resp.SUCCESS_200, value={"query": query})
 
 
 docs.register(get_report_batch_movement)
@@ -27,11 +27,10 @@ docs.register(get_report_batch_movement)
 @resp.check_user_permission(dbName="BatchDB", method='POST')
 def get_analytics(id):
     query = analytics[id-1]
-    return response_with(resp.SUCCESS_200, value={"query": json.dumps(query)})
+    return response_with(resp.SUCCESS_200, value={"query": query})
 
 
 docs.register(get_analytics)
-
 
 @app.route('/api/currentlocation/<int:id>/', methods=['GET'], provide_automatic_options=False)
 @doc(description='Получить текущее местоположение партии.', tags=['report'])
