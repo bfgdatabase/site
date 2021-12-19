@@ -65,6 +65,197 @@ function createTableBtns(obj) {
     table.appendChild(tr);
 }
 
+function createBatchTable(order_id, spec_id){
+    
+    let params = {}
+    params["spec_id"] = spec_id;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/routes/', false);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    let json = JSON.stringify(params);
+    let routes = []
+    let routes_ids = []
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == "200") {
+            
+            let res = (JSON.parse(xhr.responseText).query);
+            for (let route of res)
+            {
+                routes.push(route.name)
+                routes_ids.push(route.route_id)
+            }
+
+
+        } else { showMessage(xhr.response, "danger"); }
+    }
+    xhr.send(json);
+
+    xhr.open('GET', '/api/markers/', false);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    let markers = []
+    let markers_ids = []
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == "200") {
+            
+            let res = (JSON.parse(xhr.responseText).query);
+            for (let obj of res)
+            {
+                markers.push(obj.name)
+                markers_ids.push(obj.id_mark)
+            }
+
+
+        } else { showMessage(xhr.response, "danger"); }
+    }
+    xhr.send();
+
+    params = {}
+    params["order_id"] = order_id;
+    let batches_ = []
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/batches/', false);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    json = JSON.stringify(params);
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == "200") {
+            batches_ = JSON.parse(xhr.response).query               
+        } else { showMessage(xhr.response, "danger"); }
+    }
+    xhr.send(json);
+
+
+    let table = document.getElementById('tableBatch');
+    table.className = "table table-hover table-striped";
+    table.innerHTML = "";
+
+    for (let b of batches_)
+    {        
+        let tr = document.createElement('tr');
+
+        let free = createText(b.batch_id, "any")
+        tr.appendChild(free);
+
+        let route_id = createDropdownMenu(b.route_id, routes, routes_ids);
+        tr.appendChild(route_id);
+
+        let mark_id = createDropdownMenu(b.id_mark, markers, markers_ids);
+        tr.appendChild(mark_id);
+
+        let batch_size = createInput(b.batch_size, "any")
+        tr.appendChild(batch_size);
+
+        let created_at = createText(b.created_at, "any")
+        tr.appendChild(created_at);
+        
+        let btn_go = createButton("Запустить", "btn-primary");
+        tr.appendChild(btn_go);
+        btn_go.addEventListener("click", function() {
+        });
+
+        let btn_done = createButton("Завершить", "btn-primary");
+        tr.appendChild(btn_done);
+        btn_done.addEventListener("click", function() {
+        });
+
+        let btn_del = createButton("Удалить", "btn-danger");
+        tr.appendChild(btn_del);
+        btn_del.addEventListener("click", function() {
+        });
+
+
+        table.appendChild(tr);
+    }
+}
+
+function createBatchAddTable(order_id, spec_id){
+    
+    let params = {}
+    params["spec_id"] = spec_id;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/routes/', false);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    let json = JSON.stringify(params);
+    let routes = []
+    let routes_ids = []
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == "200") {
+            
+            let res = (JSON.parse(xhr.responseText).query);
+            for (let route of res)
+            {
+                routes.push(route.name)
+                routes_ids.push(route.route_id)
+            }
+
+
+        } else { showMessage(xhr.response, "danger"); }
+    }
+    xhr.send(json);
+
+    xhr.open('GET', '/api/markers/', false);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    let markers = []
+    let markers_ids = []
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == "200") {
+            
+            let res = (JSON.parse(xhr.responseText).query);
+            for (let obj of res)
+            {
+                markers.push(obj.name)
+                markers_ids.push(obj.id_mark)
+            }
+
+
+        } else { showMessage(xhr.response, "danger"); }
+    }
+    xhr.send();
+
+    let table = document.getElementById('tableBatchAdd');
+    table.className = "table table-hover table-striped";
+    table.innerHTML = "";
+    
+    let tr = document.createElement('tr');
+
+    let free = createText(" ", "any")
+    tr.appendChild(free);
+
+    let route_id = createDropdownMenu("", routes, routes_ids);
+    tr.appendChild(route_id);
+
+    let mark_id = createDropdownMenu("", markers, markers_ids);
+    tr.appendChild(mark_id);
+
+    let batch_size = createInput("", "any")
+    tr.appendChild(batch_size);
+
+    let btn_add = createButton("Добавить", "btn-primary");
+    tr.appendChild(btn_add);
+    btn_add.addEventListener("click", function() {
+        let params = {}
+
+        params["batch_size"] = batch_size.firstChild.value;;
+        params["id_mark"] = mark_id.children[0].id;
+        params["route_id"] = route_id.children[0].id;
+        params["spec_id"] = spec_id;
+        params["order_id"] = order_id;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/batch/', true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        let json = JSON.stringify(params);
+        xhr.onload = function() {
+            if (xhr.readyState == 4 && xhr.status == "200") {
+                createBatchTable(order_id, spec_id)
+                //////////////////                  
+            } else { showMessage(xhr.response, "danger"); }
+        }
+        xhr.send(json);
+    });
+
+    table.appendChild(tr);
+}
+
 function createSortedTable(obj) {
 
     let table = document.getElementById('tableBody');
@@ -84,7 +275,8 @@ function createSortedTable(obj) {
         tr.appendChild(order_num);
         let customer = createInput(obj[i]["customer"], "any")
         tr.appendChild(customer);
-        let spec_id = createDropdownMenu(obj[i]["spec_id"], spec_name, spec_ids);
+        let spec_id = createTextSw(obj[i]["spec_id"], spec_name, spec_ids);
+        // let spec_id = createDropdownMenu(obj[i]["spec_id"], spec_name, spec_ids);
         tr.appendChild(spec_id);
         let product_name = createInput(obj[i]["product_name"], "any")
         tr.appendChild(product_name);
@@ -94,6 +286,28 @@ function createSortedTable(obj) {
         tr.appendChild(started);
         let closed = createText(obj[i]["closed"])
         tr.appendChild(closed);
+
+
+        let btn_batch = createButton("Партии", "btn-secondary");
+        tr.appendChild(btn_batch);
+        btn_batch.addEventListener("click", function() {
+            let params = {}
+            params["order_id"] = order_id;
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/batches/', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            let json = JSON.stringify(params);
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && xhr.status == "200") {
+                    let res = JSON.parse(xhr.response).query
+                    createBatchTable(order_id, spec_id.firstChild.id)
+                    createBatchAddTable(order_id, spec_id.firstChild.id)                    
+                } else { showMessage(xhr.response, "danger"); }
+            }
+            xhr.send(json);
+        });
+
 
         let btn_save = createButton("Сохранить", "btn-warning");
         tr.appendChild(btn_save);
@@ -194,7 +408,7 @@ function createSortedTable(obj) {
                 tr_new.appendChild(order_num);
                 let customer = createInput(result.query["customer"], "any")
                 tr_new.appendChild(customer);
-                let spec_id = createDropdownMenu(result.query["spec_id"], spec_name, spec_ids);
+                let spec_id = createTextSw(result.query["spec_id"], spec_name, spec_ids);
                 tr_new.appendChild(spec_id);
                 let product_name = createInput(result.query["product_name"], "any")
                 tr_new.appendChild(product_name);

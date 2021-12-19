@@ -53,3 +53,8 @@ def marklog_path():
 def marklog_dynamic_path():
     return render_template('marklog_dynamic_path.html', user = session["username"])
     
+
+@app.route('/batch_path/<int:batch_id>/')
+@resp.check_user_authorization()
+def batch_path(batch_id):
+    return render_template('batch_path.html', user = session["username"], batch_id = batch_id)

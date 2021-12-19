@@ -42,7 +42,8 @@ class reportpart(db.Model):
 class BatchDB(db.Model):
     __tablename__ = 'batch'
     batch_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    code = db.Column(db.Integer, db.ForeignKey('spec.code'))  # [ref: > spec.code]
+    spec_id = db.Column(db.Integer, db.ForeignKey('spec.spec_id'))
+    route_id = db.Column(db.Integer, db.ForeignKey('route.route_id')) 
     created_at = db.Column(db.Text())
     id_mark = db.Column(db.Integer, db.ForeignKey('markers.id_mark'))  # [ref: > markers.id_mark]
     batch_size = db.Column(db.Float())
@@ -52,8 +53,7 @@ class BatchDB(db.Model):
     parentnum = db.Column(db.Text())
     order_id = db.Column(db.Integer())
     created = db.Column(db.Text())
-    closed = db.Column(db.Text())
-    route_id = db.Column(db.Integer, db.ForeignKey('route.route_id'))  # [ref: > route.route_id]
+    closed = db.Column(db.Text()) # [ref: > route.route_id]
 
 
 class BatchlocDB(db.Model):

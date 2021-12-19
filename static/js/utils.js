@@ -40,6 +40,18 @@ function createText(value) {
     return td;
 }
 
+function createTextWithID(value, id) {
+    let td = document.createElement('td');
+    td.style = "vertical-align:middle";
+    td.className = "px-1";
+    let element = document.createElement('a');
+    element.style = "margin:0";
+    element.innerHTML = value;
+    element.id = id;
+    td.appendChild(element);
+    return td;
+}
+
 function createInput(value, type) {
     let td = document.createElement('td');
     td.style = "vertical-align:middle";

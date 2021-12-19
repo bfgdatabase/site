@@ -1,0 +1,127 @@
+{% extends 'base_template.html' %} {% block title %} Движение партий {% endblock %} {% block head %}
+
+<head>
+    <script src="{{ url_for('static', filename='js/jquery-3.5.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.min.js') }}"></script>
+ 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script type="module" src="{{ url_for('static', filename='js/batch_path.js') }}"></script>
+
+<!-- 1. Подключить CSS-файл Bootstrap 3 -->  
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
+<!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->  
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+
+<script src="js/jquery.min.js"></script>
+<script src="js/moment-with-locales.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+
+<link  href="{{ url_for('static', filename='dist/picker.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='dist/picker.js') }}"></script>
+
+<script type="text/javascript">
+  var id_location = '{{id_location}}'
+</script>
+
+
+    <style>
+        .table-fit {
+            width: 1px;
+        }
+
+        #map {
+            height: 60vh;
+        }
+        
+        .top-offset {
+            margin-top: 80px;
+        }
+        
+        tr td {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+       .c_width {width: 100%;}
+
+    </style>
+</head>
+
+
+{% endblock %} {% block body %}
+<script type="text/javascript">
+  let batch_id = {{batch_id}}
+</script>
+
+<div class="container-fluid" id="my_content">
+    <div class="row vh-100 ">
+
+      
+        <div class="col main h-100 overflow-auto border-left ">
+          
+            <table height="70">
+            </table>
+
+            <div id="messages">
+            </div>
+            
+
+        <div class="jumbotron p-3 "> 
+
+
+          <table class="table table-borderless col-md-1">
+            <tr>
+              <td > 
+                <p>
+                 Партия
+                </p>
+              </td>
+              <td >
+                <div id="batch_select">
+                </div>
+              </td>              
+            </tr>   
+          </table>
+
+          <h4>
+            Аналлитика:
+          </h4>
+
+          <p id="batch_info">
+            Analytics
+          </p>
+
+          <div style="display: flex; justify-content: flex-end">            
+          </div>                         
+          
+          <div id="map">                  
+          </div>
+          <br>
+          <h4 id = "lagTableName"> Перемещение
+          </h4>
+          <div class="jumbothon p-3 ">
+              <table id="eventTable" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Zone</th>
+                          <th>Time IN</th>
+                          <th>Time OUT</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+    
+                  </tbody>
+              </table>
+          </div>
+      </div>     
+      
+    </div>
+</div>
+
+{% endblock %}
